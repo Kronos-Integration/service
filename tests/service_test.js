@@ -39,7 +39,14 @@ describe('service', function () {
 
     const s1 = service.createService('myService', {
       key1: "value1",
-      key2: 2
+      key2: 2,
+      _start() {
+        return new Promise((f, r) => {
+          setTimeout(() => {
+            f(this)
+          }, 10);
+        });
+      }
     });
 
     it('can be started', function (done) {
