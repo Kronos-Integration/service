@@ -21,6 +21,10 @@ describe('service', function () {
       assert.equal(s1.name, 'myService');
     });
 
+    it('has a toString', function () {
+      assert.equal(s1.toString(), 'myService');
+    });
+
     it('is stopped', function () {
       assert.equal(s1.state, 'stopped');
     });
@@ -29,6 +33,29 @@ describe('service', function () {
       assert.equal(s1.key1, 'value1');
       assert.equal(s1.key2, 2);
     });
+  });
+
+  describe('states', function () {
+
+    const s1 = service.createService('myService', {
+      key1: "value1",
+      key2: 2
+    });
+
+    it('can be started', function (done) {
+      s1.start().then(() => {
+        assert.equal(s1.state, 'running');
+        done();
+      }, done);
+    });
+
+    it('can be stopped', function (done) {
+      s1.stop().then(() => {
+        assert.equal(s1.state, 'stopped');
+        done();
+      }, done);
+    });
 
   });
+
 });

@@ -6,11 +6,20 @@
 const RootService = {
 
 	/**
-	 * Called when state transition is not allowed
-	 * @param {String} action
-	 * @return {Promise} rejecting with an Error
+	 * Sends a 'stepStateChanged' event to the manager.
+	 * arguments are:
+	 *  step,oldState,newState
+	 * @param {String} oldState
+	 * @param {String} newState
 	 */
-	rejectWrongState(action) {
+	_stateChanged(oldState, newState) {},
+
+		/**
+		 * Called when state transition is not allowed
+		 * @param {String} action
+		 * @return {Promise} rejecting with an Error
+		 */
+		rejectWrongState(action) {
 			return Promise.reject(new Error(`Can't ${action} ${this} in ${this.state} state`));
 		},
 
@@ -23,6 +32,12 @@ const RootService = {
 			return Promise.resolve(this);
 		},
 
+		start() {
+			return this._start().then(() => {
+				this.state = 'running';
+			});
+		},
+
 		/**
 		 * To be overwritten
 		 * Overwrite to implement the functionality to bring the step into the stopped state.
@@ -32,6 +47,12 @@ const RootService = {
 			return Promise.resolve(this);
 		},
 
+		stop() {
+			return this._stop().then(() => {
+				this.state = 'stopped';
+			});
+		},
+
 		/**
 		 * Returns the string representation of this step
 		 * @return {String} human readable name
@@ -39,6 +60,7 @@ const RootService = {
 		toString() {
 			return this.name;
 		}
+
 };
 
 function createService(name, values) {
