@@ -8,7 +8,7 @@ const chai = require('chai'),
   expect = chai.expect,
   should = chai.should(),
   //  events = require('events'),
-  service = require('../service');
+  service = require('../lib/service');
 
 describe('service', function () {
   describe('creation', function () {
