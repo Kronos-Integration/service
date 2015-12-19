@@ -77,11 +77,19 @@ describe('service', function () {
       }, done);
     });
 
+    const s2 = service.createService('myService2', {}, s1);
+    it('derived state untouced', function () {
+      assert.equal(s2.state, 'stopped');
+    });
+
     it('can be stopped', function (done) {
       s1.stop().then(() => {
         assert.equal(s1.state, 'stopped');
         done();
       }, done);
     });
+
+
+
   });
 });
