@@ -88,8 +88,5 @@ describe('service', function () {
         done();
       }, done);
     });
-
-
-
   });
 });
