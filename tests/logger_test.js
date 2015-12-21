@@ -12,18 +12,31 @@ const loggingSupport = require('../lib/loggingSupport');
 
 describe('logging', function () {
 
-  const someObject = {};
-  const someOtherObject = {};
-
   let value = 0;
 
-  loggingSupport.assignLoggerFunctions(someObject, (level, args) => {
-    value = args;
-  });
+  const someObject = {
+    log(level, args) {
+      value = args;
+    }
+  };
+  const someOtherObject = {
+    log(level, args) {
+      value = args;
+    }
+  };
 
-  loggingSupport.assignLoggerFunctions(someOtherObject, (level, args) => {
-    value = args;
-  });
+
+  loggingSupport.assignLoggerFunctions(someObject
+    /*, (level, args) => {
+       value = args;
+     }*/
+  );
+
+  loggingSupport.assignLoggerFunctions(someOtherObject
+    /*, (level, args) => {
+       value = args;
+     }*/
+  );
 
   describe('levels', function () {
     it('default info', function () {
