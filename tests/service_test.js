@@ -32,6 +32,21 @@ describe('service', function () {
       assert.equal(s1.key1, 'value1');
       assert.equal(s1.key2, 2);
     });
+
+    it('has default logLevel info', function () {
+      assert.equal(s1.logLevel, 'info');
+    });
+  });
+
+  describe('creation with logLevel', function () {
+    const s2 = service.createService('myService', {
+      key1: "value1",
+      logLevel: "trace"
+    });
+
+    it('has given logLevel', function () {
+      assert.equal(s2.logLevel, 'trace');
+    });
   });
 
   describe('derived creation', function () {

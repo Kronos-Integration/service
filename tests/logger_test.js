@@ -12,16 +12,19 @@ const loggingSupport = require('../lib/loggingSupport');
 
 describe('logging', function () {
 
-  let value = 0;
+  let theValue = 0;
+  let theLevel = "none";
 
   const someObject = {
     log(level, args) {
-      value = args;
+      theLevel = level;
+      theValue = args;
     }
   };
   const someOtherObject = {
     log(level, args) {
-      value = args;
+      theLevel = level;
+      theValue = args;
     }
   };
 
@@ -65,15 +68,18 @@ describe('logging', function () {
   describe('logging with levels', function () {
     it('info passes', function () {
       someObject.info(level => "info message");
-      assert.equal(value, 'info message');
+      assert.equal(theValue, 'info message');
+      assert.equal(theLevel, 'info');
     });
     it('trace ignored', function () {
       someObject.trace(level => "trace message");
-      assert.equal(value, 'info message');
+      assert.equal(theValue, 'info message');
+      assert.equal(theLevel, 'info');
     });
     it('error passes', function () {
       someObject.error(level => "error message");
-      assert.equal(value, 'error message');
+      assert.equal(theValue, 'error message');
+      assert.equal(theLevel, 'error');
     });
   });
 });
