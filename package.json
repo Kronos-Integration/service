@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/Kronos-Integration/kronos-service#readme",
   "dependencies": {
-    "loglevel-mixin": "^1.0.0"
+    "loglevel-mixin": "^1.1.0"
   },
   "devDependencies": {
     "chai": "3.4.1",
