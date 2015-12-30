@@ -47,6 +47,13 @@ describe('service', function () {
     it('has given logLevel', function () {
       assert.equal(s2.logLevel, 'trace');
     });
+
+    describe('can log', function () {
+      s2.error("some error");
+      s2.error({
+        key1: "value1"
+      });
+    });
   });
 
   describe('derived creation', function () {
