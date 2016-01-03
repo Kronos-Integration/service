@@ -19,7 +19,7 @@
   "homepage": "https://github.com/Kronos-Integration/kronos-service#readme",
   "dependencies": {
     "loglevel-mixin": "^1.1.0",
-    "statetransition-mixin": "^1.4.3"
+    "statetransition-mixin": "^1.4.4"
   },
   "devDependencies": {
     "chai": "3.4.1",
