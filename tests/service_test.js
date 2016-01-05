@@ -84,11 +84,7 @@ describe('service', function () {
       key1: "value1",
       key2: 2,
       _start() {
-        return new Promise((f, r) => {
-          setTimeout(() => {
-            f(this)
-          }, 10);
-        });
+        return new Promise((f, r) => setTimeout(() => f(this), 10));
       }
     });
 
