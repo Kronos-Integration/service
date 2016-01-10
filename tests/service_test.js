@@ -7,7 +7,7 @@ const chai = require('chai'),
   assert = chai.assert,
   expect = chai.expect,
   should = chai.should(),
-  Service = require('../lib/service');
+  Service = require('../lib/Service');
 
 describe('service', () => {
   const s1 = new Service({
