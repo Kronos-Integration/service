@@ -17,8 +17,10 @@ describe('service', () => {
 
   describe('plain creation', () => {
     it('has a type', () => assert.equal(s1.type, 'service'));
+    it('has a name', () => assert.equal(s1.name, 'service'));
     it('has a toString', () => assert.equal(s1.toString(), 'service'));
     it('is stopped', () => assert.equal(s1.state, 'stopped'));
+    it('autstart is off', () => assert.isFalse(s1.autostart));
     it('has default logLevel info', () => assert.equal(s1.logLevel, 'info'));
   });
 
