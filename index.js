@@ -6,4 +6,5 @@
 exports.Service = require('./lib/Service');
 exports.ServiceConsumerMixin = require('./lib/ServiceConsumerMixin');
 exports.ServiceProviderMixin = require('./lib/ServiceProviderMixin');
+exports.EndpointsMixin = require('./lib/EndpointsMixin');
 exports.defineRegistrarProperties = require('./lib/RegistrarMixin').defineRegistrarProperties;
