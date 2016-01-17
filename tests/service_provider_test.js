@@ -26,7 +26,7 @@ class ServiceTest extends Service {
 
   configure(config) {
     Object.assign(this, config);
-    return Promise.resolve(`${this.name} reconfigured`);
+    return this.restartIfRunning();
   }
 }
 
@@ -44,13 +44,13 @@ describe('service provider', () => {
   describe('change', () => {
     it('change', done => {
       sp.services.config.endpoints.config.receive({
+        "config": {},
         "test": {
           key1: 4711,
           key2: "2"
         }
       }).then(r => {
         assert.equal(sp.services.test.key1, 4711);
-        //console.log(`configured: ${r}`);
         done();
       }).
       catch(e => {
