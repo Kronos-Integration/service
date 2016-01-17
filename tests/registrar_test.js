@@ -10,15 +10,20 @@ const chai = require('chai'),
   rgm = require('../lib/RegistrarMixin');
 
 describe('RegistrarMixin', () => {
-  let object = {};
-
-  rgm.defineRegistrarProperties(object, 'Interceptor', 'interceptors');
 
   describe('empty', () => {
+    let object = {};
+
+    rgm.defineRegistrarProperties(object, 'Interceptor', 'interceptors');
+
     it('no entries', () => assert.deepEqual(object.interceptors, {}));
   });
 
   describe('add entry', () => {
+    let object = {};
+
+    rgm.defineRegistrarProperties(object, 'Interceptor', 'interceptors');
+
     const t1 = {get type() {
         return "t1";
       }
