@@ -102,7 +102,6 @@ describe('service', () => {
         key7: 1
       });
 
-
       const se = new endpoint.SendEndpoint('se', {get name() {
           return "a";
         }
@@ -119,7 +118,6 @@ describe('service', () => {
           }
         ).catch(done);
       });
-
     });
 
     describe('states', () => {
