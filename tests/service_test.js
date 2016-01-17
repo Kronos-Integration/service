@@ -72,7 +72,13 @@ describe('service', () => {
       }
 
       _start() {
-        return new Promise((f, r) => setTimeout(() => f(this), 10));
+        return new Promise((f, r) => setTimeout(() => f(), 10));
+      }
+
+      configure(config) {
+        Object.assign(this, config);
+        //this.key2 = config.key2;
+        return Promise.resolve();
       }
     };
 
@@ -83,13 +89,37 @@ describe('service', () => {
       });
 
       it('has a type', () => assert.equal(s2.type, 'my-service'));
-
       it('has a toString', () => assert.equal(s2.toString(), 'my-service'));
 
       it('has values', () => {
         assert.equal(s2.key3, 'value3');
         assert.equal(s2.key4, 4);
       });
+    });
+
+    describe('configuration', () => {
+      const s2 = new MyService({
+        key7: 1
+      });
+
+
+      const se = new endpoint.SendEndpoint('se', {get name() {
+          return "a";
+        }
+      });
+      se.connected = s2.endpoints.config;
+
+      it("re configure", done => {
+        se.receive({
+          key2: 77
+        }).then(
+          f => {
+            assert.equal(s2.key2, 77);
+            done();
+          }
+        ).catch(done);
+      });
+
     });
 
     describe('states', () => {
