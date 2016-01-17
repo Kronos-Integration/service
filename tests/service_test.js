@@ -7,6 +7,7 @@ const chai = require('chai'),
   assert = chai.assert,
   expect = chai.expect,
   should = chai.should(),
+  endpoint = require('kronos-endpoint'),
   Service = require('../lib/Service');
 
 describe('service', () => {
@@ -29,6 +30,17 @@ describe('service', () => {
       key1: "value1",
       logLevel: "trace"
     });
+
+    /*
+        const logReceiver = new endpoint.ReceiveEndpoint('logReceiver', s2);
+        logReceiver.receive = request => {
+          console.log(request);
+          return Promise.resolve();
+        };
+
+        s2.endpoints.log.connected = logReceiver;
+    */
+
 
     it('has given logLevel', () => assert.equal(s2.logLevel, 'trace'));
 
