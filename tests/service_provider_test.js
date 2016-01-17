@@ -24,8 +24,8 @@ class ServiceTest extends Service {
     return ServiceTest.name;
   }
 
-  reconfigure(config) {
-    console.log(`${config}`);
+  configure(config) {
+    Object.assign(this, config);
     return Promise.resolve(`${this.name} reconfigured`);
   }
 }
@@ -41,16 +41,21 @@ describe('service provider', () => {
     it('logger service', () => assert.equal(sp.services.logger, 'logger'));
   });
 
-  sp.services.config.endpoints.config.receive({
-    "test": {
-      key1: 1,
-      key2: "2"
-    }
-  }).then(r => {
-    console.log(`configured: ${r}`);
-  }).
-  catch(e => {
-    console.log(e);
+  describe('change', () => {
+    it('change', done => {
+      sp.services.config.endpoints.config.receive({
+        "test": {
+          key1: 4711,
+          key2: "2"
+        }
+      }).then(r => {
+        assert.equal(sp.services.test.key1, 4711);
+        //console.log(`configured: ${r}`);
+        done();
+      }).
+      catch(e => {
+        console.log(e);
+      });
+    });
   });
-
 });
