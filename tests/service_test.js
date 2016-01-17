@@ -31,17 +31,6 @@ describe('service', () => {
       logLevel: "trace"
     });
 
-    /*
-        const logReceiver = new endpoint.ReceiveEndpoint('logReceiver', s2);
-        logReceiver.receive = request => {
-          console.log(request);
-          return Promise.resolve();
-        };
-
-        s2.endpoints.log.connected = logReceiver;
-    */
-
-
     it('has given logLevel', () => assert.equal(s2.logLevel, 'trace'));
 
     describe('can log', () => {
