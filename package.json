@@ -19,11 +19,11 @@
   "homepage": "https://github.com/Kronos-Integration/kronos-service#readme",
   "dependencies": {
     "loglevel-mixin": "^1.2.0",
-    "statetransition-mixin": "^1.4.4"
+    "statetransition-mixin": "^2.0.0"
   },
   "devDependencies": {
     "chai": "3.4.1",
-    "istanbul": "^0.4.1",
+    "istanbul": "^0.4.2",
     "mocha": "^2.3.4",
     "semantic-release": "6.0.3"
   },
