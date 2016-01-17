@@ -38,6 +38,15 @@ describe('service', () => {
         key1: "value1"
       });
     });
+
+    describe('invalid loglevel', () => {
+      const s2 = new Service({
+        key1: "value1",
+        logLevel: "na sowas"
+      });
+
+      it('fallback to info logLevel', () => assert.equal(s2.logLevel, 'info'));
+    });
   });
 
   describe('derived service', () => {

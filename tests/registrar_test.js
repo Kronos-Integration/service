@@ -31,7 +31,10 @@ describe('RegistrarMixin', () => {
 
     object.registerInterceptor(t1);
 
-    it('on entry', () => assert.equal(object.interceptors.t1.type, "t1"));
+    it('one entry', () => assert.equal(object.interceptors.t1.type, "t1"));
+
+    object.registerInterceptor(t1);
+    it('one entry still there', () => assert.equal(object.interceptors.t1.type, "t1"));
   });
 
 });
