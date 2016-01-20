@@ -9,6 +9,16 @@ const chai = require('chai'),
   should = chai.should(),
   rgm = require('../lib/RegistrarMixin');
 
+class Interceptor {
+  static get name() {
+    return "t1";
+  }
+
+  constructor(arg1) {
+    this.arg1 = arg1;
+  }
+}
+
 describe('RegistrarMixin', () => {
 
   describe('empty', () => {
@@ -24,17 +34,17 @@ describe('RegistrarMixin', () => {
 
     rgm.defineRegistrarProperties(object, 'Interceptor', 'interceptors');
 
-    const t1 = {get type() {
-        return "t1";
-      }
-    };
+    object.registerInterceptor(Interceptor);
 
-    object.registerInterceptor(t1);
+    //console.log(`object keys: ${Interceptor.name} ${Object.keys(object.interceptors)}`);
 
-    it('one entry', () => assert.equal(object.interceptors.t1.type, "t1"));
+    it('one entry', () => assert.equal(object.interceptors.t1.name, "t1"));
 
-    object.registerInterceptor(t1);
-    it('one entry still there', () => assert.equal(object.interceptors.t1.type, "t1"));
+    const inst1 = object.createInterceptorInstance("t1", "arg1");
+    it('instance created', () => assert.equal(inst1.arg1, "arg1"));
+
+    object.registerInterceptor(Interceptor);
+    it('one entry still there', () => assert.equal(object.interceptors.t1.name, "t1"));
   });
 
 });
