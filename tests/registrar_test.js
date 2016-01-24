@@ -7,7 +7,8 @@ const chai = require('chai'),
   assert = chai.assert,
   expect = chai.expect,
   should = chai.should(),
-  rgm = require('../lib/RegistrarMixin');
+  rgm = require('../lib/RegistrarMixin'),
+  Service = require('../lib/Service');
 
 class Interceptor {
   static get name() {
@@ -22,17 +23,17 @@ class Interceptor {
 describe('RegistrarMixin', () => {
 
   describe('empty', () => {
-    let object = {};
+    let object = new Service();
 
-    rgm.defineRegistrarProperties(object, 'Interceptor', 'interceptors');
+    rgm.defineRegistrarProperties(object, 'interceptor');
 
     it('no entries', () => assert.deepEqual(object.interceptors, {}));
   });
 
   describe('add entry', () => {
-    let object = {};
+    let object = new Service();
 
-    rgm.defineRegistrarProperties(object, 'Interceptor', 'interceptors');
+    rgm.defineRegistrarProperties(object, 'interceptor');
 
     object.registerInterceptor(Interceptor);
 
