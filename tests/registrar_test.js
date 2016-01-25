@@ -23,7 +23,7 @@ class Interceptor {
 describe('RegistrarMixin', () => {
 
   describe('empty', () => {
-    let object = new Service();
+    const object = new Service();
 
     rgm.defineRegistrarProperties(object, 'interceptor');
 
@@ -31,26 +31,30 @@ describe('RegistrarMixin', () => {
   });
 
   describe('register entry', () => {
-    let object = new Service();
+    const object = new Service();
 
     rgm.defineRegistrarProperties(object, 'interceptor');
 
     object.registerInterceptor(Interceptor);
 
-    //console.log(`object keys: ${Interceptor.name} ${Object.keys(object.interceptors)}`);
+    it('has one entry', () => assert.equal(object.interceptors.t1.name, "t1"));
 
-    it('one entry', () => assert.equal(object.interceptors.t1.name, "t1"));
+    describe('create instance', () => {
+      const inst1 = object.createInterceptorInstance("t1", "arg1");
+      it('instance created', () => assert.equal(inst1.arg1, "arg1"));
+    });
 
-    const inst1 = object.createInterceptorInstance("t1", "arg1");
-    it('instance created', () => assert.equal(inst1.arg1, "arg1"));
+    describe('unregister', () => {
+      it('entry missing', () => {
+        let unregistered;
+        object.addListener('interceptorUnregistered', ur => unregistered = ur);
+        object.unregisterInterceptor("t1");
+        assert.equal(object.interceptors.t1, undefined);
+        assert.equal(unregistered, Interceptor);
+      });
+    });
 
     object.registerInterceptor(Interceptor);
     it('one entry still there', () => assert.equal(object.interceptors.t1.name, "t1"));
-
-    /*
-        describe('unregister', () => {
-          object.unregisterInterceptor("t1");
-        });
-        */
   });
 });
