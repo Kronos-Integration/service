@@ -24,6 +24,10 @@ class ServiceTest extends Service {
     return ServiceTest.name;
   }
 
+  get autostart() {
+    return true;
+  }
+
   configure(config) {
     Object.assign(this, config);
     return this.restartIfRunning();
