@@ -30,7 +30,7 @@ describe('RegistrarMixin', () => {
     it('no entries', () => assert.deepEqual(object.interceptors, {}));
   });
 
-  describe('add entry', () => {
+  describe('register entry', () => {
     let object = new Service();
 
     rgm.defineRegistrarProperties(object, 'interceptor');
@@ -46,6 +46,11 @@ describe('RegistrarMixin', () => {
 
     object.registerInterceptor(Interceptor);
     it('one entry still there', () => assert.equal(object.interceptors.t1.name, "t1"));
-  });
 
+    /*
+        describe('unregister', () => {
+          object.unregisterInterceptor("t1");
+        });
+        */
+  });
 });
