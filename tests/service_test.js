@@ -25,6 +25,13 @@ describe('service', () => {
     it('has default logLevel info', () => assert.equal(s1.logLevel, 'info'));
   });
 
+  describe('create with name', () => {
+    const s2 = new Service({
+      name: "myName"
+    });
+    it('has a name', () => assert.equal(s2.name, 'myName'));
+  });
+
   describe('creation with logLevel', () => {
     const s2 = new Service({
       key1: "value1",
