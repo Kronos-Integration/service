@@ -7,7 +7,7 @@ const chai = require('chai'),
   assert = chai.assert,
   expect = chai.expect,
   should = chai.should(),
-  rgm = require('../lib/RegistrarMixin'),
+  rgm = require('../lib/RegistryMixin'),
   Service = require('../lib/Service');
 
 class Interceptor {
@@ -25,7 +25,7 @@ describe('RegistrarMixin', () => {
   describe('empty', () => {
     const object = new Service();
 
-    rgm.defineRegistrarProperties(object, 'interceptor');
+    rgm.defineFactoryRegistryProperties(object, 'interceptor');
 
     it('no entries', () => assert.deepEqual(object.interceptors, {}));
   });
@@ -33,7 +33,7 @@ describe('RegistrarMixin', () => {
   describe('register entry', () => {
     const object = new Service();
 
-    rgm.defineRegistrarProperties(object, 'interceptor');
+    rgm.defineFactoryRegistryProperties(object, 'interceptor');
 
     object.registerInterceptor(Interceptor);
 
