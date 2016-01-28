@@ -20,6 +20,14 @@ class Interceptor {
   }
 }
 
+function InterceptorFactory(arg1) {
+  return {
+    arg1: arg1
+  };
+}
+InterceptorFactory.type = 't1';
+
+
 describe('RegistrarMixin', () => {
 
   describe('empty', () => {
@@ -30,25 +38,31 @@ describe('RegistrarMixin', () => {
     it('no entries', () => assert.deepEqual(object.interceptors, {}));
   });
 
-  describe('register entry', () => {
+  testRegistry('class', Interceptor, 'new');
+  testRegistry('function', InterceptorFactory, '');
+});
+
+
+function testRegistry(name, factory, type) {
+  describe(`${name} entries`, () => {
     const object = new Service();
 
-    rgm.defineFactoryRegistryProperties(object, 'interceptor');
+    rgm.defineFactoryRegistryProperties(object, 'interceptor', type);
 
     let registered;
     object.addListener('interceptorRegistered', r => registered = r);
 
-    object.registerInterceptor(Interceptor);
+    object.registerInterceptor(factory);
 
     describe('registered event', () => {
-      it('send', () => assert.equal(registered, Interceptor));
+      it('send', () => assert.equal(registered, factory));
     });
 
-    it('has one entry', () => assert.equal(object.interceptors.t1.name, "t1"));
+    it('has one entry', () => assert.equal(object.interceptors.t1, factory));
 
     describe('create instance', () => {
       const inst1 = object.createInterceptorInstance("t1", "arg1");
-      it('instance created', () => assert.equal(inst1.arg1, "arg1"));
+      it('created', () => assert.equal(inst1.arg1, "arg1"));
     });
 
     describe('unregister', () => {
@@ -57,11 +71,11 @@ describe('RegistrarMixin', () => {
         object.addListener('interceptorUnregistered', ur => unregistered = ur);
         object.unregisterInterceptor("t1");
         assert.equal(object.interceptors.t1, undefined);
-        assert.equal(unregistered, Interceptor);
+        assert.equal(unregistered, factory);
       });
     });
 
-    object.registerInterceptor(Interceptor);
-    it('one entry still there', () => assert.equal(object.interceptors.t1.name, "t1"));
+    object.registerInterceptor(factory);
+    it('one entry still there', () => assert.equal(object.interceptors.t1, factory));
   });
-});
+}
