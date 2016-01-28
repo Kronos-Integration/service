@@ -23,7 +23,7 @@
     "statetransition-mixin": "^2.0.0"
   },
   "devDependencies": {
-    "chai": "3.4.1",
+    "chai": "^3.5.0",
     "istanbul": "^0.4.2",
     "mocha": "^2.4.2",
     "semantic-release": "6.0.3"
