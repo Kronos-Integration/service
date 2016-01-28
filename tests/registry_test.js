@@ -35,7 +35,14 @@ describe('RegistrarMixin', () => {
 
     rgm.defineFactoryRegistryProperties(object, 'interceptor');
 
+    let registered;
+    object.addListener('interceptorRegistered', r => registered = r);
+
     object.registerInterceptor(Interceptor);
+
+    describe('registered event', () => {
+      it('send', () => assert.equal(registered, Interceptor));
+    });
 
     it('has one entry', () => assert.equal(object.interceptors.t1.name, "t1"));
 
