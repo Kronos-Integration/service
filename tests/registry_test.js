@@ -33,21 +33,31 @@ describe('RegistrarMixin', () => {
   describe('empty', () => {
     const object = new Service();
 
-    rgm.defineFactoryRegistryProperties(object, 'interceptor');
+    rgm.defineRegistryProperties(object, 'interceptor', {
+      withCreateInstance: true,
+      factoryType: 'new'
+    });
 
     it('no entries', () => assert.deepEqual(object.interceptors, {}));
   });
 
-  testRegistry('class', Interceptor, 'new');
-  testRegistry('function', InterceptorFactory, '');
+  testRegistry('class', Interceptor, {
+    withCreateInstance: true,
+    factoryType: 'new'
+  });
+
+  testRegistry('function', InterceptorFactory, {
+    withCreateInstance: true,
+    factoryType: 'function'
+  });
 });
 
 
-function testRegistry(name, factory, type) {
+function testRegistry(name, factory, registryOptions) {
   describe(`${name} entries`, () => {
     const object = new Service();
 
-    rgm.defineFactoryRegistryProperties(object, 'interceptor', type);
+    rgm.defineRegistryProperties(object, 'interceptor', registryOptions);
 
     let registered;
     object.addListener('interceptorRegistered', r => registered = r);
