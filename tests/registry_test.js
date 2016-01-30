@@ -15,17 +15,28 @@ class Interceptor {
     return "t1";
   }
 
-  constructor(arg1) {
-    this.arg1 = arg1;
+  constructor(arg1, arg2) {
+    if (arg2) {
+      this.arg1 = arg2;
+    } else
+      this.arg1 = arg1;
   }
 }
 
-function InterceptorFactory(arg1) {
-  return {
-    arg1: arg1
-  };
-}
-InterceptorFactory.type = 't1';
+const InterceptorFactory = {
+  type: 't1',
+  createInstance(arg1, arg2) {
+    if (arg2) {
+      return {
+        arg1: arg2
+      };
+    }
+
+    return {
+      arg1: arg1
+    };
+  }
+};
 
 
 describe('RegistrarMixin', () => {
@@ -48,7 +59,8 @@ describe('RegistrarMixin', () => {
 
   testRegistry('function', InterceptorFactory, {
     withCreateInstance: true,
-    factoryType: 'function'
+    factoryType: 'object',
+    'factoryMethod': 'createInstance'
   });
 });
 
@@ -72,6 +84,14 @@ function testRegistry(name, factory, registryOptions) {
 
     describe('create instance', () => {
       const inst1 = object.createInterceptorInstance("t1", "arg1");
+      it('created', () => assert.equal(inst1.arg1, "arg1"));
+    });
+
+    describe('create instance from config', () => {
+      const inst1 = object.createInterceptorInstanceFromConfig({
+        type: "t1",
+        "someOtherArgs": 1
+      }, "arg1");
       it('created', () => assert.equal(inst1.arg1, "arg1"));
     });
 
