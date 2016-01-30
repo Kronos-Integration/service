@@ -13,8 +13,7 @@ const chai = require('chai'),
   ServiceConfig = require('../lib/ServiceConfig'),
   ServiceLogger = require('../lib/ServiceLogger');
 
-class _ServiceProvider {}
-class ServiceProvider extends ServiceProviderMixin(_ServiceProvider) {}
+class ServiceProvider extends ServiceProviderMixin(Service) {}
 
 class ServiceTest extends Service {
   static get name() {
@@ -36,9 +35,9 @@ class ServiceTest extends Service {
 
 describe('service provider', () => {
   const sp = new ServiceProvider();
-  const serviceConfig = sp.addService(new ServiceConfig({}, sp));
-  sp.addService(new ServiceLogger({}));
-  sp.addService(new ServiceTest({}));
+  const serviceConfig = sp.registerService(new ServiceConfig({}, sp));
+  sp.registerService(new ServiceLogger({}));
+  sp.registerService(new ServiceTest({}));
 
   describe('initial setup', () => {
     it('config service', () => assert.equal(sp.services.config, 'config'));
