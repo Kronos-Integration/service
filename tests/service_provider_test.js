@@ -8,9 +8,9 @@ const chai = require('chai'),
   expect = chai.expect,
   should = chai.should(),
   Service = require('../lib/Service'),
-  ServiceProviderMixin = require('../lib/ServiceProviderMixin'),
   ServiceConfig = require('../lib/ServiceConfig'),
-  ServiceLogger = require('../lib/ServiceLogger');
+  ServiceLogger = require('../lib/ServiceLogger'),
+  ServiceProviderMixin = require('../lib/ServiceProviderMixin');
 
 class ServiceProvider extends ServiceProviderMixin(Service) {}
 
