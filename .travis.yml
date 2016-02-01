@@ -5,6 +5,7 @@ sudo: false
 branches:
   only:
     - master
+    - api_rework
 cache:
   directories:
     - node_modules

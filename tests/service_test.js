@@ -7,104 +7,152 @@ const chai = require('chai'),
   assert = chai.assert,
   expect = chai.expect,
   should = chai.should(),
-  service = require('../lib/service');
+  endpoint = require('kronos-endpoint'),
+  Service = require('../lib/Service');
 
-describe('service', function () {
-  const s1 = service.createService('myService', {
+describe('service', () => {
+  const s1 = new Service({
     key1: "value1",
     key2: 2
   });
 
-  describe('plain creation', function () {
-    it('has a name', function () {
-      assert.equal(s1.name, 'myService');
-    });
-
-    it('has a toString', function () {
-      assert.equal(s1.toString(), 'myService');
-    });
-
-    it('is stopped', function () {
-      assert.equal(s1.state, 'stopped');
-    });
-
-    it('has values', function () {
-      assert.equal(s1.key1, 'value1');
-      assert.equal(s1.key2, 2);
-    });
-
-    it('has default logLevel info', function () {
-      assert.equal(s1.logLevel, 'info');
-    });
+  describe('plain creation', () => {
+    it('has a type', () => assert.equal(s1.type, 'service'));
+    it('has a name', () => assert.equal(s1.name, 'service'));
+    it('has a toString', () => assert.equal(s1.toString(), 'service'));
+    it('is stopped', () => assert.equal(s1.state, 'stopped'));
+    it('autstart is off', () => assert.isFalse(s1.autostart));
+    it('has default logLevel info', () => assert.equal(s1.logLevel, 'info'));
   });
 
-  describe('creation with logLevel', function () {
-    const s2 = service.createService('myService', {
+  describe('create with name', () => {
+    const s2 = new Service({
+      name: "myName"
+    });
+    it('has a name', () => assert.equal(s2.name, 'myName'));
+  });
+
+  describe('creation with logLevel', () => {
+    const s2 = new Service({
       key1: "value1",
       logLevel: "trace"
     });
 
-    it('has given logLevel', function () {
-      assert.equal(s2.logLevel, 'trace');
-    });
+    it('has given logLevel', () => assert.equal(s2.logLevel, 'trace'));
 
-    describe('can log', function () {
+    describe('can log', () => {
       s2.error("some error");
       s2.error({
         key1: "value1"
       });
     });
-  });
 
-  describe('derived creation', function () {
-    const s2 = service.createService('myService2', {
-      name: "some name",
-      key3: "value3",
-      key4: 4
-    }, s1);
+    describe('invalid loglevel', () => {
+      const s2 = new Service({
+        key1: "value1",
+        logLevel: "na sowas"
+      });
 
-    it('has a name', function () {
-      assert.equal(s2.name, 'myService2');
-    });
-
-    it('has a toString', function () {
-      assert.equal(s2.toString(), 'myService2');
-    });
-
-    it('has values', function () {
-      assert.equal(s2.key1, 'value1');
-      assert.equal(s2.key2, 2);
-      assert.equal(s2.key3, 'value3');
-      assert.equal(s2.key4, 4);
+      it('fallback to info logLevel', () => assert.equal(s2.logLevel, 'info'));
     });
   });
 
-  describe('states', function () {
-    const s1 = service.createService('myService', {
-      key1: "value1",
-      key2: 2,
-      _start() {
-        return new Promise((f, r) => setTimeout(() => f(this), 10));
+  describe('derived service', () => {
+
+    class MyService extends Service {
+      static get type() {
+        return "my-service";
       }
+      get type() {
+        return MyService.type;
+      }
+
+      constructor(config) {
+        super(config);
+
+        Object.defineProperty(this, 'key3', {
+          value: config.key3
+        });
+        Object.defineProperty(this, 'key4', {
+          value: config.key4
+        });
+      }
+
+      _start() {
+        return new Promise((f, r) => setTimeout(() => f(), 10));
+      }
+
+      configure(config) {
+        Object.assign(this, config);
+        //this.key2 = config.key2;
+        return Promise.resolve();
+      }
+    };
+
+    describe('creation', () => {
+      const s2 = new MyService({
+        key3: "value3",
+        key4: 4
+      });
+
+      it('has a type', () => assert.equal(s2.type, 'my-service'));
+      it('has a toString', () => assert.equal(s2.toString(), 'my-service'));
+
+      it('has values', () => {
+        assert.equal(s2.key3, 'value3');
+        assert.equal(s2.key4, 4);
+      });
     });
 
-    it('can be started', function (done) {
-      s1.start().then(() => {
-        assert.equal(s1.state, 'running');
-        done();
-      }, done);
+    describe('configuration', () => {
+      const s2 = new MyService({
+        key7: 1
+      });
+
+      const se = new endpoint.SendEndpoint('se', {get name() {
+          return "a";
+        }
+      });
+      se.connected = s2.endpoints.config;
+
+      it("re configure", done => {
+        se.receive({
+          key2: 77
+        }).then(
+          f => {
+            assert.equal(s2.key2, 77);
+            done();
+          }
+        ).catch(done);
+      });
     });
 
-    const s2 = service.createService('myService2', {}, s1);
-    it('derived state untouced', function () {
-      assert.equal(s2.state, 'stopped');
-    });
+    describe('states', () => {
+      const s1 = new MyService({
+        key1: "value1",
+        key2: 2,
+      });
 
-    it('can be stopped', function (done) {
-      s1.stop().then(() => {
-        assert.equal(s1.state, 'stopped');
-        done();
-      }, done);
+      it('can be started', done => {
+        s1.start().then(() => {
+          assert.equal(s1.state, 'running');
+          done();
+        }, done);
+      });
+
+      const s2 = new MyService({
+        key1: "value1",
+        key2: 2,
+      });
+
+      it('derived state untouced', () => assert.equal(s2.state, 'stopped'));
+
+      it('can be stopped', done => {
+        s1.stop().then(() => {
+          assert.equal(s1.state, 'stopped');
+          done();
+        }, done);
+      });
     });
   });
 });
