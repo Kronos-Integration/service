@@ -39,8 +39,8 @@ describe('service provider', () => {
   sp.registerService(new ServiceTest({}));
 
   describe('initial setup', () => {
-    it('config service', () => assert.equal(sp.services.config, 'config'));
-    it('logger service', () => assert.equal(sp.services.logger, 'logger'));
+    it('config service', () => assert.equal(sp.services.config.name, 'config'));
+    it('logger service', () => assert.equal(sp.services.logger.name, 'logger'));
   });
 
   describe('change', () => {
