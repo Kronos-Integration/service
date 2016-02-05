@@ -36,9 +36,16 @@ class ServiceTest extends Service {
 describe('service provider', () => {
   const sp = new ServiceProvider({});
 
+
   describe('initial setup', () => {
     it('config service', () => assert.equal(sp.services.config.name, 'config'));
     it('logger service', () => assert.equal(sp.services.logger.name, 'logger'));
+    it('can be started', () => sp.start().then(() => assert.equal(sp.state, 'running')));
+  });
+
+  describe('logging', () => {
+    // TODO wait until logger service has fullfilled
+    sp.info(`logging`);
   });
 
   describe('additional service', () => {
