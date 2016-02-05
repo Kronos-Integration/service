@@ -11,14 +11,17 @@ const chai = require('chai'),
   Service = require('../lib/Service');
 
 describe('service', () => {
+  const owner = {};
+
   const s1 = new Service({
     key1: "value1",
     key2: 2
-  });
+  }, owner);
 
   describe('plain creation', () => {
     it('has a type', () => assert.equal(s1.type, 'service'));
     it('has a name', () => assert.equal(s1.name, 'service'));
+    it('has a owner', () => assert.equal(s1.owner, owner));
     it('has a toString', () => assert.equal(s1.toString(), 'service: stopped'));
     it('is stopped', () => assert.equal(s1.state, 'stopped'));
     it('autstart is off', () => assert.isFalse(s1.autostart));
@@ -67,8 +70,8 @@ describe('service', () => {
         return MyService.type;
       }
 
-      constructor(config) {
-        super(config);
+      constructor(config, owner) {
+        super(config, owner);
 
         Object.defineProperty(this, 'key3', {
           value: config.key3
@@ -133,12 +136,7 @@ describe('service', () => {
         key2: 2,
       });
 
-      it('can be started', done => {
-        s1.start().then(() => {
-          assert.equal(s1.state, 'running');
-          done();
-        }, done);
-      });
+      it('can be started', () => s1.start().then(() => assert.equal(s1.state, 'running')));
 
       const s2 = new MyService({
         key1: "value1",
@@ -147,12 +145,7 @@ describe('service', () => {
 
       it('derived state untouced', () => assert.equal(s2.state, 'stopped'));
 
-      it('can be stopped', done => {
-        s1.stop().then(() => {
-          assert.equal(s1.state, 'stopped');
-          done();
-        }, done);
-      });
+      it('can be stopped', () => s1.stop().then(() => assert.equal(s1.state, 'stopped')));
     });
   });
 });

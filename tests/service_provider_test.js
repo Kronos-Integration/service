@@ -42,10 +42,10 @@ describe('service provider', () => {
   });
 
   describe('additional service', () => {
-    sp.registerService(new ServiceTest({}));
+    sp.registerService(new ServiceTest({}, sp));
     sp.registerService(new ServiceTest({
       name: "t2"
-    }));
+    }, sp));
 
     it('test service', () => assert.equal(sp.services.test.name, 'test'));
 
@@ -70,4 +70,21 @@ describe('service provider', () => {
       );
     });
   });
+
+  describe('declare service', () => {
+    sp.registerServiceFactory(ServiceTest);
+
+    it('can be declared', () =>
+      sp.declareService({
+        name: 's2',
+        type: 'test'
+      }).then(
+        s => {
+          assert.equal(s.name, "s2");
+          assert.equal(s.owner, sp);
+        }
+      )
+    );
+  });
+
 });
