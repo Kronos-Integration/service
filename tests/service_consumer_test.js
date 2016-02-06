@@ -37,3 +37,17 @@ describe('service consumer', () => {
     )
   );
 });
+
+describe('service consumer with wait', () => {
+  const sp = new ServiceProvider({});
+  const object = {};
+
+  setTimeout(() => sp.registerServiceFactory(ServiceTest), 300);
+
+  it('defines', () => ServiceConsumerMixin.defineServiceConsumerProperties(object, {
+    'myTest': {
+      type: 'test'
+    }
+  }, sp, true).then(() =>
+    assert.equal(object.myTest.name, 'test')));
+});
