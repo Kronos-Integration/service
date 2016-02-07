@@ -20,7 +20,7 @@
   "dependencies": {
     "kronos-endpoint": "^2.0.1",
     "loglevel-mixin": "^1.2.0",
-    "registry-mixin": "^1.2.0",
+    "registry-mixin": "^1.3.0",
     "statetransition-mixin": "^2.0.0"
   },
   "devDependencies": {
