@@ -27,6 +27,7 @@ class ServiceTest extends Service {
   }
 
   configure(config) {
+    delete config.name;
     this.trace(config);
     Object.assign(this, config);
     return this.restartIfRunning();
@@ -34,8 +35,7 @@ class ServiceTest extends Service {
 }
 
 describe('service provider', () => {
-  const sp = new ServiceProvider({});
-
+  const sp = new ServiceProvider();
 
   describe('initial setup', () => {
     it('config service', () => assert.equal(sp.services.config.name, 'config'));
@@ -64,14 +64,15 @@ describe('service provider', () => {
       ));
 
       it('send change request over config service', () =>
-        sp.services.config.endpoints.config.receive({
-          "config": {},
-          "unknown": {},
-          "test": {
-            key1: 4711,
-            key2: "2"
-          }
-        }).then(() =>
+        sp.services.config.endpoints.config.receive([{
+          name: 'config'
+        }, {
+          name: 'unknown'
+        }, {
+          name: 'test',
+          key1: 4711,
+          key2: "2"
+        }]).then(() =>
           assert.equal(sp.services.test.key1, 4711)
         )
       );
@@ -93,5 +94,4 @@ describe('service provider', () => {
       )
     );
   });
-
 });
