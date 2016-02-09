@@ -29,6 +29,7 @@ class ServiceTest extends Service {
   configure(config) {
     delete config.name;
     this.trace(config);
+    console.log(`${JSON.stringify(config)}`);
     Object.assign(this, config);
     return this.restartIfRunning();
   }
@@ -80,18 +81,34 @@ describe('service provider', () => {
   });
 
   describe('declare service', () => {
-    sp.registerServiceFactory(ServiceTest);
-
     it('can be declared', () =>
       sp.declareService({
         name: 's2',
-        type: 'test'
-      }).then(
+        type: 'test',
+        key: 1
+      }, true).then(
         s => {
           assert.equal(s.name, "s2");
           assert.equal(s.owner, sp);
         }
       )
     );
+
+    it('can be declared again', () =>
+      sp.declareService({
+        name: 's2',
+        type: 'test',
+        key: 2
+      }, true).then(
+        s => {
+          assert.equal(s.name, "s2");
+          assert.equal(s.owner, sp);
+          assert.equal(s.key, 2);
+        }
+      )
+    );
+
+    setTimeout(() =>
+      sp.registerServiceFactory(ServiceTest), 200);
   });
 });
