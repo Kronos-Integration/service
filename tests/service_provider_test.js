@@ -29,17 +29,28 @@ class ServiceTest extends Service {
   configure(config) {
     delete config.name;
     this.trace(config);
-    console.log(`${JSON.stringify(config)}`);
+    //console.log(`${JSON.stringify(config)}`);
     Object.assign(this, config);
     return this.restartIfRunning();
   }
 }
 
 describe('service provider', () => {
-  const sp = new ServiceProvider();
+  const sp = new ServiceProvider([{
+    name: "a"
+  }, {
+    name: "test",
+    key3: 3
+  }]);
 
   describe('initial setup', () => {
-    it('config service', () => assert.equal(sp.services.config.name, 'config'));
+    describe('consig service', () => {
+      it('present', () => assert.equal(sp.services.config.name, 'config'));
+      it('preserved initial config', () => assert.deepEqual(Object.keys(sp.services.config.preservedConfigs), [
+        'a', 'test'
+      ]));
+    });
+
     it('logger service', () => assert.equal(sp.services.logger.name, 'logger'));
     it('can be started', () => sp.start().then(() => assert.equal(sp.state, 'running')));
   });
