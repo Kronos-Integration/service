@@ -55,6 +55,11 @@ describe('service provider', () => {
     it('can be started', () => sp.start().then(() => assert.equal(sp.state, 'running')));
   });
 
+  describe('without initial config', () => {
+    const sp = new ServiceProvider();
+    it('present', () => assert.equal(sp.services.config.name, 'config'));
+  });
+
   describe('logging', () => {
     // TODO wait until logger service has fullfilled
     sp.info(`logging`);
