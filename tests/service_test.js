@@ -90,7 +90,7 @@ describe('service', () => {
         //this.key2 = config.key2;
         return Promise.resolve();
       }
-    };
+    }
 
     describe('creation', () => {
       const s2 = new MyService({
@@ -118,16 +118,17 @@ describe('service', () => {
       });
       se.connected = s2.endpoints.config;
 
-      it("re configure", done => {
+      it("re configure", () =>
         se.receive({
+          logLevel: 'trace',
           key2: 77
         }).then(
           f => {
+            assert.equal(s2.logLevel, 'trace');
             assert.equal(s2.key2, 77);
-            done();
           }
-        ).catch(done);
-      });
+        )
+      );
     });
 
     describe('states', () => {
@@ -135,15 +136,18 @@ describe('service', () => {
         key1: "value1",
         key2: 2,
       });
+      it('can be restartIfRunning (when stopped)', () => s1.restartIfRunning().then(() => assert.equal(s1.state,
+        'stopped')));
 
       it('can be started', () => s1.start().then(() => assert.equal(s1.state, 'running')));
+      it('can be restartIfRunning', () => s1.restartIfRunning().then(() => assert.equal(s1.state, 'running')));
 
       const s2 = new MyService({
         key1: "value1",
         key2: 2,
       });
 
-      it('derived state untouced', () => assert.equal(s2.state, 'stopped'));
+      it('derived state untouched', () => assert.equal(s2.state, 'stopped'));
 
       it('can be stopped', () => s1.stop().then(() => assert.equal(s1.state, 'stopped')));
     });
