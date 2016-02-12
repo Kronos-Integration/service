@@ -44,7 +44,7 @@ describe('service provider', () => {
   }]);
 
   describe('initial setup', () => {
-    describe('consig service', () => {
+    describe('config service', () => {
       it('present', () => assert.equal(sp.services.config.name, 'config'));
       it('preserved initial config', () => assert.deepEqual(Object.keys(sp.services.config.preservedConfigs), [
         'a', 'test'
@@ -94,6 +94,10 @@ describe('service provider', () => {
         )
       );
     });
+
+    it('can be unregistered', () =>
+      sp.unregisterService('t2').then(s => assert.isUndefined(sp.services.t2))
+    );
   });
 
   describe('declare service', () => {
