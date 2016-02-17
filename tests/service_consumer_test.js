@@ -26,14 +26,35 @@ describe('service consumer', () => {
   const sp = new ServiceProvider({});
   const object = {};
 
-  it('defines', () =>
+  it('define with name and type', () =>
     sp.registerServiceFactory(ServiceTest).then(() =>
       ServiceConsumerMixin.defineServiceConsumerProperties(object, {
         'myTest': {
+          type: 'test',
+          name: 'n1'
+        }
+      }, sp).then(() =>
+        assert.equal(object.myTest.name, 'n1'))
+    )
+  );
+
+  it('define with type', () =>
+    sp.registerServiceFactory(ServiceTest).then(() =>
+      ServiceConsumerMixin.defineServiceConsumerProperties(object, {
+        'myTest2': {
           type: 'test'
         }
       }, sp).then(() =>
-        assert.equal(object.myTest.name, 'test'))
+        assert.equal(object.myTest2.name, 'test'))
+    )
+  );
+
+  it('define with type simple', () =>
+    sp.registerServiceFactory(ServiceTest).then(() =>
+      ServiceConsumerMixin.defineServiceConsumerProperties(object, {
+        'myTest3': 'test'
+      }, sp).then(() =>
+        assert.equal(object.myTest3.name, 'myTest3'))
     )
   );
 });
