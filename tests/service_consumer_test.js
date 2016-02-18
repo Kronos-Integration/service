@@ -45,7 +45,7 @@ describe('service consumer', () => {
           type: 'test'
         }
       }, sp).then(() =>
-        assert.equal(object.myTest2.name, 'test'))
+        assert.equal(object.myTest2.name, 'myTest2'))
     )
   );
 
@@ -70,5 +70,5 @@ describe('service consumer with wait', () => {
       type: 'test'
     }
   }, sp, true).then(() =>
-    assert.equal(object.myTest.name, 'test')));
+    assert.equal(object.myTest.name, 'myTest')));
 });
