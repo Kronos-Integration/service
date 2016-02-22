@@ -86,9 +86,12 @@ describe('service', () => {
       }
 
       configure(config) {
-        Object.assign(this, config);
-        //this.key2 = config.key2;
-        return Promise.resolve();
+        return super.configure(config).then(
+          () => {
+            Object.assign(this, config);
+            return Promise.resolve();
+          }
+        );
       }
     }
 
@@ -141,6 +144,7 @@ describe('service', () => {
 
       it('can be started', () => s1.start().then(() => assert.equal(s1.state, 'running')));
       it('can be restartIfRunning', () => s1.restartIfRunning().then(() => assert.equal(s1.state, 'running')));
+      it('can be restarted', () => s1.restart().then(() => assert.equal(s1.state, 'running')));
 
       const s2 = new MyService({
         key1: "value1",
