@@ -1,4 +1,4 @@
-/* global describe, it, xit */
+/* global describe, it, xit, before, beforeEach, after, afterEach */
 /* jslint node: true, esnext: true */
 
 "use strict";
@@ -100,16 +100,10 @@ describe('service provider', () => {
     );
   });
 
+  setTimeout(() =>
+    sp.registerServiceFactory(ServiceTest), 200);
+
   describe('declare service', () => {
-    setTimeout(() =>
-      sp.registerServiceFactory(ServiceTest), 200);
-
-    sp.declareService({
-      name: 's2',
-      type: 'test',
-      key: 1
-    }, true).then(s => console.log(`XXX: ${s}`));
-
     xit('can be declared', () =>
       sp.declareService({
         name: 's2',
@@ -119,8 +113,9 @@ describe('service provider', () => {
         s => {
           assert.equal(s.name, "s2");
           assert.equal(s.owner, sp);
-        }
-      )
+        }, r =>
+        console.log
+      ).catch(console.log)
     );
 
     xit('can be declared again', () =>
@@ -133,8 +128,9 @@ describe('service provider', () => {
           assert.equal(s.name, "s2");
           assert.equal(s.owner, sp);
           assert.equal(s.key, 2);
-        }
-      )
+        }, r => console.log
+      ).catch(console.log)
     );
+
   });
 });
