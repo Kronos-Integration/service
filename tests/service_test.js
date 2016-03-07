@@ -10,8 +10,11 @@ const chai = require('chai'),
   endpoint = require('kronos-endpoint'),
   Service = require('../lib/Service');
 
+const owner = {
+  emit(name, arg1, arg2) {} // dummy event emitter
+};
+
 describe('service', () => {
-  const owner = {};
 
   const s1 = new Service({
     key1: "value1",
@@ -99,7 +102,7 @@ describe('service', () => {
       const s2 = new MyService({
         key3: "value3",
         key4: 4
-      });
+      }, owner);
 
       it('has a type', () => assert.equal(s2.type, 'my-service'));
       it('has a toString', () => assert.equal(s2.toString(), 'my-service: stopped'));
@@ -138,7 +141,7 @@ describe('service', () => {
       const s1 = new MyService({
         key1: "value1",
         key2: 2,
-      });
+      }, owner);
       it('can be restartIfRunning (when stopped)', () => s1.restartIfRunning().then(() => assert.equal(s1.state,
         'stopped')));
 
