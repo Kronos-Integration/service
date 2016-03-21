@@ -131,6 +131,5 @@ describe('service provider', () => {
         }, r => console.log
       ).catch(console.log)
     );
-
   });
 });
