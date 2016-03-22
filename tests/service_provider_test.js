@@ -104,7 +104,7 @@ describe('service provider', () => {
     sp.registerServiceFactory(ServiceTest), 200);
 
   describe('declare service', () => {
-    xit('can be declared', () =>
+    it('can be declared', () =>
       sp.declareService({
         name: 's2',
         type: 'test',
@@ -118,7 +118,7 @@ describe('service provider', () => {
       ).catch(console.log)
     );
 
-    xit('can be declared again', () =>
+    it('can be declared again', () =>
       sp.declareService({
         name: 's2',
         type: 'test',
