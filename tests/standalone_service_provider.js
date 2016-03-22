@@ -27,18 +27,23 @@ class ServiceTest extends Service {
 
 const sp = new ServiceProvider();
 
-sp.registerServiceFactory(ServiceTest);
 
-sp.declareService({
-  name: 's1',
-  type: 'test'
-}, true).then(
-  s => {
-    console.log(`declare: ${s}`);
-  }, r =>
-  console.log
-).catch(console.log);
+for (const n of['s1', 's2', 's3', 's4', 's5']) {
+  sp.declareService({
+    name: n,
+    type: 'test'
+  }, true).then(
+    s => {
+      console.log(`declare: ${s}`);
+    }, r =>
+    console.log
+  ).catch(console.log);
+}
+
+setTimeout(() => {
+  sp.registerServiceFactory(ServiceTest);
+}, 2000);
 
 setTimeout(() => {
   console.log('done');
-}, 1000);
+}, 5000);
