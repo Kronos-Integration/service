@@ -17,11 +17,9 @@ class ServiceTest extends Service {
 
   constructor(config, owner) {
     super(config, owner);
-    console.log(`constructor`);
   }
   configure(config) {
     delete config.name;
-    this.trace(config);
     Object.assign(this, config);
     return this.restartIfRunning();
   }
@@ -29,25 +27,16 @@ class ServiceTest extends Service {
 
 const sp = new ServiceProvider();
 
-sp.registerService(new ServiceTest({}, sp));
+sp.registerServiceFactory(ServiceTest);
 
 sp.declareService({
-  name: 's2',
+  name: 's1',
   type: 'test'
 }, true).then(
   s => {
     console.log(`declare: ${s}`);
   }, r =>
   console.log
-).catch(console.log);
-
-sp.declareService({
-  name: 's2',
-  type: 'test'
-}, true).then(
-  s => {
-    console.log(`declare 2: ${s}`);
-  }, r => console.log
 ).catch(console.log);
 
 setTimeout(() => {
