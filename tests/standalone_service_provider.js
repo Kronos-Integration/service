@@ -3,8 +3,6 @@
 "use strict";
 
 const Service = require('../lib/Service'),
-  ServiceConfig = require('../lib/ServiceConfig'),
-  ServiceLogger = require('../lib/ServiceLogger'),
   ServiceProviderMixin = require('../lib/ServiceProviderMixin');
 
 class ServiceProvider extends ServiceProviderMixin(Service) {}
@@ -17,10 +15,10 @@ class ServiceTest extends Service {
     return ServiceTest.name;
   }
 
-  get autostart() {
-    return true;
+  constructor(config, owner) {
+    super(config, owner);
+    console.log(`constructor`);
   }
-
   configure(config) {
     delete config.name;
     this.trace(config);
@@ -29,17 +27,13 @@ class ServiceTest extends Service {
   }
 }
 
-const sp = new ServiceProvider([{
-  name: "a"
-}, {
-  name: "test",
-  key3: 3
-}]);
+const sp = new ServiceProvider();
+
+sp.registerService(new ServiceTest({}, sp));
 
 sp.declareService({
   name: 's2',
-  type: 'test',
-  key: 1
+  type: 'test'
 }, true).then(
   s => {
     console.log(`declare: ${s}`);
@@ -49,10 +43,13 @@ sp.declareService({
 
 sp.declareService({
   name: 's2',
-  type: 'test',
-  key: 2
+  type: 'test'
 }, true).then(
   s => {
     console.log(`declare 2: ${s}`);
   }, r => console.log
 ).catch(console.log);
+
+setTimeout(() => {
+  console.log('done');
+}, 1000);
