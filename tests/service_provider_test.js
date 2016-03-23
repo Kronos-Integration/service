@@ -28,8 +28,6 @@ class ServiceTest extends Service {
 
   configure(config) {
     delete config.name;
-    this.trace(config);
-    //console.log(`${JSON.stringify(config)}`);
     Object.assign(this, config);
     return this.restartIfRunning();
   }
@@ -100,36 +98,56 @@ describe('service provider', () => {
     );
   });
 
-  setTimeout(() =>
-    sp.registerServiceFactory(ServiceTest), 200);
 
   describe('declare service', () => {
-    it('can be declared', () =>
-      sp.declareService({
-        name: 's2',
-        type: 'test',
-        key: 1
-      }, true).then(
-        s => {
-          assert.equal(s.name, "s2");
-          assert.equal(s.owner, sp);
-        }, r =>
-        console.log
-      ).catch(console.log)
-    );
+    describe('with type', () => {
+      setTimeout(() =>
+        sp.registerServiceFactory(ServiceTest), 50);
 
-    it('can be declared again', () =>
-      sp.declareService({
-        name: 's2',
-        type: 'test',
-        key: 2
-      }, true).then(
-        s => {
-          assert.equal(s.name, "s2");
-          assert.equal(s.owner, sp);
-          assert.equal(s.key, 2);
-        }, r => console.log
-      ).catch(console.log)
-    );
+      it('can be declared', () =>
+        sp.declareService({
+          name: 's2',
+          type: 'test',
+          key: 1
+        }, true).then(
+          s => {
+            assert.equal(s.name, "s2");
+          }
+        )
+      );
+
+      it('can be declared again', () =>
+        sp.declareService({
+          name: 's2',
+          type: 'test',
+          key: 2
+        }, true).then(
+          s => {
+            assert.equal(s.name, "s2");
+            assert.equal(s.key, 2);
+          }
+        )
+      );
+    });
+
+    describe('without type', () => {
+      const sp = new ServiceProvider([{
+        name: "a"
+      }, {
+        name: "test"
+      }]);
+      setTimeout(() =>
+        sp.registerServiceFactory(ServiceTest), 50);
+
+      it('can be declared', () =>
+        sp.declareService({
+          name: 'test'
+        }, true).then(
+          s => {
+            assert.equal(s.name, "test");
+          }
+        )
+      );
+    });
   });
 });
