@@ -136,6 +136,11 @@ describe('service provider', () => {
       }, {
         name: "test"
       }]);
+
+      sp.declareService({
+        name: 'test'
+      }, true);
+
       setTimeout(() =>
         sp.registerServiceFactory(ServiceTest), 50);
 
