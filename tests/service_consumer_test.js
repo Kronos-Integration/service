@@ -65,7 +65,7 @@ describe('service consumer with wait', () => {
 
   setTimeout(() => sp.registerServiceFactory(ServiceTest), 300);
 
-  xit('defines', () => ServiceConsumerMixin.defineServiceConsumerProperties(object, {
+  it('defines', () => ServiceConsumerMixin.defineServiceConsumerProperties(object, {
     'myTest': {
       type: 'test'
     }
