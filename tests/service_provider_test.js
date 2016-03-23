@@ -35,9 +35,9 @@ class ServiceTest extends Service {
 
 describe('service provider', () => {
   const sp = new ServiceProvider([{
-    name: "a"
+    name: 'a'
   }, {
-    name: "test",
+    name: 'test',
     key3: 3
   }]);
 
@@ -98,11 +98,20 @@ describe('service provider', () => {
     );
   });
 
-
   describe('declare service', () => {
     describe('with type', () => {
       setTimeout(() =>
         sp.registerServiceFactory(ServiceTest), 50);
+
+      // force pending promises
+      sp.declareService({
+        name: 's2',
+        type: 'test'
+      }, true);
+      sp.declareService({
+        name: 's2',
+        type: 'test'
+      }, true);
 
       it('can be declared', () =>
         sp.declareService({
@@ -131,10 +140,9 @@ describe('service provider', () => {
     });
 
     describe('without type', () => {
-      const sp = new ServiceProvider([{
-        name: "a"
-      }, {
-        name: "test"
+      const sp = new ServiceProvider([{}, {
+        name: 'test',
+        value: 77
       }]);
 
       sp.declareService({
@@ -150,6 +158,7 @@ describe('service provider', () => {
         }, true).then(
           s => {
             assert.equal(s.name, "test");
+            //assert.equal(s.value, 77);
           }
         )
       );
