@@ -11,7 +11,10 @@ const chai = require('chai'),
   Service = require('../lib/Service');
 
 const owner = {
-  emit(name, arg1, arg2) {} // dummy event emitter
+  emit(name, arg1, arg2) {}, // dummy event emitter
+    endpointIdentifier(e) {
+      return `name:${e.name}`;
+    }
 };
 
 describe('service', () => {
@@ -34,15 +37,20 @@ describe('service', () => {
   describe('create with name', () => {
     const s2 = new Service({
       name: "myName"
-    });
+    }, owner);
     it('has a name', () => assert.equal(s2.name, 'myName'));
+    it('json', () => assert.deepEqual(s2.toJSON(), {
+      name: "myName",
+      type: "service",
+      endpoints: {}
+    }));
   });
 
   describe('creation with logLevel', () => {
     const s2 = new Service({
       key1: "value1",
       logLevel: "trace"
-    });
+    }, owner);
 
     it('has given logLevel', () => assert.equal(s2.logLevel, 'trace'));
 
