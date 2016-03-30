@@ -11,6 +11,10 @@
 [![downloads](http://img.shields.io/npm/dm/kronos-service.svg?style=flat-square)](https://npmjs.org/package/kronos-service)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
+kronos-service
+=====
+Base service implementation
+
 install
 =======
 
