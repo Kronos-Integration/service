@@ -51,6 +51,7 @@ describe('service provider', () => {
 
     it('logger service', () => assert.equal(sp.services.logger.name, 'logger'));
     it('can be started', () => sp.start().then(() => assert.equal(sp.state, 'running')));
+    it('service provider service', () => assert.equal(sp.services.a.name, 'a'));
   });
 
   describe('without initial config', () => {
