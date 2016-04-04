@@ -69,55 +69,115 @@ describe('service provider', () => {
     const testEndpoint = new endpoint.SendEndpoint('test');
     testEndpoint.connected = sp.endpoints.command;
 
-    it('info ', () =>
-      testEndpoint.receive({
-        data: {
-          action: "list"
-        }
-      }).then(r => {
-        assert.deepEqual(r, [{
-          "endpoints": {
-            "log": {
-              "in": true
-            }
-          },
-          "name": "logger",
-          "type": "logger"
-        }, {
-          "endpoints": {
-            "config": {
-              "in": true
-            }
-          },
-          "name": "config",
-          "type": "config"
-        }, {
-          "endpoints": {
-            "command": {
-              "in": true
+    describe('info', () => {
+      it('has response ', () =>
+        testEndpoint.receive({
+          data: {
+            action: "list"
+          }
+        }).then(r => {
+          assert.deepEqual(r, [{
+            "endpoints": {
+              "log": {
+                "in": true
+              }
             },
-            "log": {
-              "out": true,
-              "target": "logger:log"
-            }
-          },
-          "name": "a",
-          "type": "service"
-        }, {
-          "endpoints": {},
-          "name": "test",
-          "type": "test"
-        }, {
-          "endpoints": {},
-          "name": "t2",
-          "type": "test"
-        }, {
-          "endpoints": {},
-          "name": "s2",
-          "type": "test"
-        }]);
-      })
-    );
+            "name": "logger",
+            "type": "logger"
+          }, {
+            "endpoints": {
+              "config": {
+                "in": true
+              }
+            },
+            "name": "config",
+            "type": "config"
+          }, {
+            "endpoints": {
+              "command": {
+                "in": true
+              },
+              "log": {
+                "out": true,
+                "target": "logger:log"
+              }
+            },
+            "name": "a",
+            "type": "service"
+          }, {
+            "endpoints": {},
+            "name": "test",
+            "type": "test"
+          }, {
+            "endpoints": {},
+            "name": "t2",
+            "type": "test"
+          }, {
+            "endpoints": {},
+            "name": "s2",
+            "type": "test"
+          }]);
+        })
+      );
+    });
+    describe('get', () => {
+      it('has response ', () =>
+        testEndpoint.receive({
+          data: {
+            action: "get",
+            service: "logger"
+          }
+        }).then(r => {
+          assert.deepEqual(r, {
+            "endpoints": {
+              "log": {
+                "in": true
+              }
+            },
+            "name": "logger",
+            "type": "logger"
+          });
+        })
+      );
+    });
+
+    describe('start', () => {
+      it('is running ', () =>
+        testEndpoint.receive({
+          data: {
+            action: "start",
+            service: "logger"
+          }
+        }).then(r => {
+          assert.equal(r.state, 'running');
+        })
+      );
+    });
+    describe('stop', () => {
+      it('is stopped ', () =>
+        testEndpoint.receive({
+          data: {
+            action: "stop",
+            service: "logger"
+          }
+        }).then(r => {
+          assert.equal(r.state, 'stopped');
+        })
+      );
+    });
+
+    describe('restart', () => {
+      it('is running ', () =>
+        testEndpoint.receive({
+          data: {
+            action: "restart",
+            service: "logger"
+          }
+        }).then(r => {
+          assert.equal(r.state, 'running');
+        })
+      );
+    });
   });
 
   describe('additional service', () => {
