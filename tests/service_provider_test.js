@@ -125,15 +125,24 @@ describe('service provider', () => {
         testEndpoint.receive({
           data: {
             action: "get",
-            service: "logger"
+            service: "logger",
+            options: {
+              includeRuntimeInfo: true,
+              includeDefaults: true
+            }
           }
         }).then(r => {
           assert.deepEqual(r, {
             "endpoints": {
+              "config": {
+                "in": true
+              },
               "log": {
                 "in": true
               }
             },
+            "logLevel": "info",
+            "state": "running",
             "name": "logger",
             "type": "logger"
           });
