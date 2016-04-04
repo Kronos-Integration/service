@@ -7,6 +7,7 @@ const chai = require('chai'),
   assert = chai.assert,
   expect = chai.expect,
   should = chai.should(),
+  endpoint = require('kronos-endpoint'),
   Service = require('../lib/Service'),
   ServiceConfig = require('../lib/ServiceConfig'),
   ServiceLogger = require('../lib/ServiceLogger'),
@@ -64,6 +65,21 @@ describe('service provider', () => {
     sp.info(`logging`);
   });
 
+  describe('command endpoint', () => {
+    const testEndpoint = new endpoint.SendEndpoint('test');
+    testEndpoint.connected = sp.endpoints.command;
+
+    it('info ', () => {
+      testEndpoint.receive({
+        data: {
+          action: "list"
+        }
+      }).then(r => {
+        assert.deepEqual(r, ['config']);
+      });
+    });
+  });
+
   describe('additional service', () => {
     sp.registerService(new ServiceTest({}, sp));
     sp.registerService(new ServiceTest({
@@ -113,7 +129,6 @@ describe('service provider', () => {
         name: 's2',
         type: 'test'
       }, true);
-
       it('can be declared', () =>
         sp.declareService({
           name: 's2',
