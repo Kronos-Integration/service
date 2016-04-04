@@ -69,15 +69,55 @@ describe('service provider', () => {
     const testEndpoint = new endpoint.SendEndpoint('test');
     testEndpoint.connected = sp.endpoints.command;
 
-    it('info ', () => {
+    it('info ', () =>
       testEndpoint.receive({
         data: {
           action: "list"
         }
       }).then(r => {
-        assert.deepEqual(r, ['config']);
-      });
-    });
+        assert.deepEqual(r, [{
+          "endpoints": {
+            "log": {
+              "in": true
+            }
+          },
+          "name": "logger",
+          "type": "logger"
+        }, {
+          "endpoints": {
+            "config": {
+              "in": true
+            }
+          },
+          "name": "config",
+          "type": "config"
+        }, {
+          "endpoints": {
+            "command": {
+              "in": true
+            },
+            "log": {
+              "out": true,
+              "target": "logger:log"
+            }
+          },
+          "name": "a",
+          "type": "service"
+        }, {
+          "endpoints": {},
+          "name": "test",
+          "type": "test"
+        }, {
+          "endpoints": {},
+          "name": "t2",
+          "type": "test"
+        }, {
+          "endpoints": {},
+          "name": "s2",
+          "type": "test"
+        }]);
+      })
+    );
   });
 
   describe('additional service', () => {
