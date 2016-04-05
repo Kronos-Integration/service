@@ -76,23 +76,7 @@ describe('service provider', () => {
             action: "list"
           }
         }).then(r => {
-          assert.deepEqual(r, [{
-            "endpoints": {
-              "log": {
-                "in": true
-              }
-            },
-            "name": "logger",
-            "type": "logger"
-          }, {
-            "endpoints": {
-              "config": {
-                "in": true
-              }
-            },
-            "name": "config",
-            "type": "config"
-          }, {
+          assert.deepEqual(r.sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0), [{
             "endpoints": {
               "command": {
                 "in": true
@@ -105,8 +89,24 @@ describe('service provider', () => {
             "name": "a",
             "type": "service"
           }, {
+            "endpoints": {
+              "config": {
+                "in": true
+              }
+            },
+            "name": "config",
+            "type": "config"
+          }, {
+            "endpoints": {
+              "log": {
+                "in": true
+              }
+            },
+            "name": "logger",
+            "type": "logger"
+          }, {
             "endpoints": {},
-            "name": "test",
+            "name": "s2",
             "type": "test"
           }, {
             "endpoints": {},
@@ -114,7 +114,7 @@ describe('service provider', () => {
             "type": "test"
           }, {
             "endpoints": {},
-            "name": "s2",
+            "name": "test",
             "type": "test"
           }]);
         })
@@ -151,7 +151,7 @@ describe('service provider', () => {
     });
 
     describe('start', () => {
-      it('is running ', () =>
+      it('is running', () =>
         testEndpoint.receive({
           data: {
             action: "start",
@@ -163,7 +163,7 @@ describe('service provider', () => {
       );
     });
     describe('stop', () => {
-      it('is stopped ', () =>
+      it('is stopped', () =>
         testEndpoint.receive({
           data: {
             action: "stop",
@@ -176,7 +176,7 @@ describe('service provider', () => {
     });
 
     describe('restart', () => {
-      it('is running ', () =>
+      it('is running', () =>
         testEndpoint.receive({
           data: {
             action: "restart",
@@ -184,6 +184,21 @@ describe('service provider', () => {
           }
         }).then(r => {
           assert.equal(r.state, 'running');
+        })
+      );
+    });
+
+    describe('unknown command', () => {
+      it('rejects', () =>
+        testEndpoint.receive({
+          data: {
+            action: "unknown",
+            service: "logger"
+          }
+        }).then(r => {
+          assert.equal(r.state, 'xxrunning');
+        }, e => {
+          assert.ok(true);
         })
       );
     });
