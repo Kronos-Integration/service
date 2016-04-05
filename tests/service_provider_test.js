@@ -188,6 +188,37 @@ describe('service provider', () => {
       );
     });
 
+    describe('several restarts', () => {
+      it('is running', () =>
+        testEndpoint.receive({
+          data: [{
+            action: "restart",
+            service: "logger"
+          }, {
+            action: "restart",
+            service: "logger"
+          }]
+        }).then(r => {
+          assert.equal(r[1].state, 'running');
+        })
+      );
+    });
+
+    describe('restart unknown service', () => {
+      it('is running', () =>
+        testEndpoint.receive({
+          data: {
+            action: "restart",
+            service: "invalid"
+          }
+        }).then(r => {
+          assert.equal(r.state, 'xxrunning');
+        }, e => {
+          assert.ok(true);
+        })
+      );
+    });
+
     describe('unknown command', () => {
       it('rejects', () =>
         testEndpoint.receive({
