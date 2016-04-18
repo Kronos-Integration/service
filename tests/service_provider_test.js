@@ -17,7 +17,7 @@ class ServiceProvider extends ServiceProviderMixin(Service) {}
 
 class ServiceTest extends Service {
   static get name() {
-    return "test";
+    return 'test';
   }
   get type() {
     return ServiceTest.name;
@@ -76,7 +76,7 @@ describe('service provider', () => {
             action: 'list'
           }
         }).then(r => {
-          assert.deepEqual(r.sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0), [{
+          assert.deepEqual(r.sort((a, b) => a.name.localeCompare(b.name)), [{
             endpoints: {
               command: { in : true
               },
