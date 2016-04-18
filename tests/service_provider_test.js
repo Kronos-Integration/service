@@ -1,7 +1,7 @@
 /* global describe, it, xit, before, beforeEach, after, afterEach */
 /* jslint node: true, esnext: true */
 
-"use strict";
+'use strict';
 
 const chai = require('chai'),
   assert = chai.assert,
@@ -70,52 +70,49 @@ describe('service provider', () => {
     testEndpoint.connected = sp.endpoints.command;
 
     describe('info', () => {
-      it('has response ', () =>
+      it('has response', () =>
         testEndpoint.receive({
           data: {
-            action: "list"
+            action: 'list'
           }
         }).then(r => {
           assert.deepEqual(r.sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0), [{
-            "endpoints": {
-              "command": {
-                "in": true
+            endpoints: {
+              command: { in : true
               },
-              "log": {
-                "out": true,
-                "target": "logger:log"
+              log: {
+                out: true,
+                target: 'logger:log'
               }
             },
-            "name": "a",
-            "type": "service"
+            name: 'a',
+            type: 'service'
           }, {
-            "endpoints": {
-              "config": {
-                "in": true
+            endpoints: {
+              config: { in : true
               }
             },
-            "name": "config",
-            "type": "config"
+            name: 'config',
+            type: 'config'
           }, {
-            "endpoints": {
-              "log": {
-                "in": true
+            endpoints: {
+              log: { in : true
               }
             },
-            "name": "logger",
-            "type": "logger"
+            name: 'logger',
+            type: 'logger'
           }, {
-            "endpoints": {},
-            "name": "s2",
-            "type": "test"
+            endpoints: {},
+            name: 's2',
+            type: 'test'
           }, {
-            "endpoints": {},
-            "name": "t2",
-            "type": "test"
+            endpoints: {},
+            name: 't2',
+            type: 'test'
           }, {
-            "endpoints": {},
-            "name": "test",
-            "type": "test"
+            endpoints: {},
+            name: 'test',
+            type: 'test'
           }]);
         })
       );
@@ -124,8 +121,8 @@ describe('service provider', () => {
       it('has response ', () =>
         testEndpoint.receive({
           data: {
-            action: "get",
-            service: "logger",
+            action: 'get',
+            service: 'logger',
             options: {
               includeRuntimeInfo: true,
               includeDefaults: true
@@ -133,18 +130,16 @@ describe('service provider', () => {
           }
         }).then(r => {
           assert.deepEqual(r, {
-            "endpoints": {
-              "config": {
-                "in": true
+            endpoints: {
+              config: { in : true
               },
-              "log": {
-                "in": true
+              log: { in : true
               }
             },
-            "logLevel": "info",
-            "state": "running",
-            "name": "logger",
-            "type": "logger"
+            logLevel: 'info',
+            state: 'running',
+            name: 'logger',
+            type: 'logger'
           });
         })
       );
@@ -154,8 +149,8 @@ describe('service provider', () => {
       it('is running', () =>
         testEndpoint.receive({
           data: {
-            action: "start",
-            service: "logger"
+            action: 'start',
+            service: 'logger'
           }
         }).then(r => {
           assert.equal(r.state, 'running');
@@ -166,8 +161,8 @@ describe('service provider', () => {
       it('is stopped', () =>
         testEndpoint.receive({
           data: {
-            action: "stop",
-            service: "logger"
+            action: 'stop',
+            service: 'logger'
           }
         }).then(r => {
           assert.equal(r.state, 'stopped');
@@ -179,8 +174,8 @@ describe('service provider', () => {
       it('is running', () =>
         testEndpoint.receive({
           data: {
-            action: "restart",
-            service: "logger"
+            action: 'restart',
+            service: 'logger'
           }
         }).then(r => {
           assert.equal(r.state, 'running');
@@ -192,11 +187,11 @@ describe('service provider', () => {
       it('is running', () =>
         testEndpoint.receive({
           data: [{
-            action: "restart",
-            service: "logger"
+            action: 'restart',
+            service: 'logger'
           }, {
-            action: "restart",
-            service: "logger"
+            action: 'restart',
+            service: 'logger'
           }]
         }).then(r => {
           assert.equal(r[1].state, 'running');
@@ -208,8 +203,8 @@ describe('service provider', () => {
       it('is running', () =>
         testEndpoint.receive({
           data: {
-            action: "restart",
-            service: "invalid"
+            action: 'restart',
+            service: 'invalid'
           }
         }).then(r => {
           assert.equal(r.state, 'xxrunning');
@@ -223,8 +218,8 @@ describe('service provider', () => {
       it('rejects', () =>
         testEndpoint.receive({
           data: {
-            action: "unknown",
-            service: "logger"
+            action: 'unknown',
+            service: 'logger'
           }
         }).then(r => {
           assert.equal(r.state, 'xxrunning');
@@ -245,9 +240,9 @@ describe('service provider', () => {
 
     describe('configure service', () => {
       it('direct', () => sp.services.test.configure({
-        key: "new value"
+        key: 'new value'
       }).then(() =>
-        assert.equal(sp.services.test.key, "new value")
+        assert.equal(sp.services.test.key, 'new value')
       ));
 
       it('send change request over config service', () =>
@@ -258,7 +253,7 @@ describe('service provider', () => {
         }, {
           name: 'test',
           key1: 4711,
-          key2: "2"
+          key2: '2'
         }]).then(() =>
           assert.equal(sp.services.test.key1, 4711)
         )
@@ -290,9 +285,7 @@ describe('service provider', () => {
           type: 'test',
           key: 1
         }, true).then(
-          s => {
-            assert.equal(s.name, "s2");
-          }
+          s => assert.equal(s.name, 's2')
         )
       );
 
@@ -303,7 +296,7 @@ describe('service provider', () => {
           key: 2
         }, true).then(
           s => {
-            assert.equal(s.name, "s2");
+            assert.equal(s.name, 's2');
             assert.equal(s.key, 2);
           }
         )
@@ -328,7 +321,7 @@ describe('service provider', () => {
           name: 'test'
         }, true).then(
           s => {
-            assert.equal(s.name, "test");
+            assert.equal(s.name, 'test');
             //assert.equal(s.value, 77);
           }
         )
