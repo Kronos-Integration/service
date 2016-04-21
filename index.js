@@ -1,7 +1,6 @@
 /* jslint node: true, esnext: true */
 
-
-"use strict";
+'use strict';
 
 exports.Service = require('./lib/Service');
 exports.Logger = require('./lib/ServiceLogger');

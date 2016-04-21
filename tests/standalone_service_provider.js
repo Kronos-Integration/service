@@ -1,6 +1,6 @@
 /* jslint node: true, esnext: true */
 
-"use strict";
+'use strict';
 
 const Service = require('../lib/Service'),
   ServiceProviderMixin = require('../lib/ServiceProviderMixin');
@@ -9,7 +9,7 @@ class ServiceProvider extends ServiceProviderMixin(Service) {}
 
 class ServiceTest extends Service {
   static get name() {
-    return "test";
+    return 'test';
   }
   get type() {
     return ServiceTest.name;

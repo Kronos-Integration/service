@@ -1,7 +1,7 @@
 /* global describe, it, xit */
 /* jslint node: true, esnext: true */
 
-"use strict";
+'use strict';
 
 const chai = require('chai'),
   assert = chai.assert,
@@ -15,7 +15,7 @@ class ServiceProvider extends ServiceProviderMixin(Service) {}
 
 class ServiceTest extends Service {
   static get name() {
-    return "test";
+    return 'test';
   }
   get type() {
     return ServiceTest.name;

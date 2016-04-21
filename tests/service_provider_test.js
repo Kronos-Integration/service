@@ -233,7 +233,7 @@ describe('service provider', () => {
   describe('additional service', () => {
     sp.registerService(new ServiceTest({}, sp));
     sp.registerService(new ServiceTest({
-      name: "t2"
+      name: 't2'
     }, sp));
 
     it('test service', () => assert.equal(sp.services.test.name, 'test'));

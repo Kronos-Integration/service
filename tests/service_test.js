@@ -1,7 +1,7 @@
 /* global describe, it, xit */
 /* jslint node: true, esnext: true */
 
-"use strict";
+'use strict';
 
 const chai = require('chai'),
   assert = chai.assert,
@@ -20,7 +20,7 @@ const owner = {
 describe('service', () => {
 
   const s1 = new Service({
-    key1: "value1",
+    key1: 'value1',
     key2: 2
   }, owner);
 
@@ -36,35 +36,35 @@ describe('service', () => {
 
   describe('create with name', () => {
     const s2 = new Service({
-      name: "myName"
+      name: 'myName'
     }, owner);
     it('has a name', () => assert.equal(s2.name, 'myName'));
     it('json', () => assert.deepEqual(s2.toJSON(), {
-      name: "myName",
-      type: "service",
+      name: 'myName',
+      type: 'service',
       endpoints: {}
     }));
   });
 
   describe('creation with logLevel', () => {
     const s2 = new Service({
-      key1: "value1",
-      logLevel: "trace"
+      key1: 'value1',
+      logLevel: 'trace'
     }, owner);
 
     it('has given logLevel', () => assert.equal(s2.logLevel, 'trace'));
 
     describe('can log', () => {
-      s2.error("some error");
+      s2.error('some error');
       s2.error({
-        key1: "value1"
+        key1: 'value1'
       });
     });
 
     describe('invalid loglevel', () => {
       const s2 = new Service({
-        key1: "value1",
-        logLevel: "na sowas"
+        key1: 'value1',
+        logLevel: 'na sowas'
       });
 
       it('fallback to info logLevel', () => assert.equal(s2.logLevel, 'info'));
@@ -75,7 +75,7 @@ describe('service', () => {
 
     class MyService extends Service {
       static get type() {
-        return "my-service";
+        return 'my-service';
       }
       get type() {
         return MyService.type;
@@ -108,7 +108,7 @@ describe('service', () => {
 
     describe('creation', () => {
       const s2 = new MyService({
-        key3: "value3",
+        key3: 'value3',
         key4: 4
       }, owner);
 
@@ -127,12 +127,12 @@ describe('service', () => {
       });
 
       const se = new endpoint.SendEndpoint('se', {get name() {
-          return "a";
+          return 'a';
         }
       });
       se.connected = s2.endpoints.config;
 
-      it("re configure", () =>
+      it('re configure', () =>
         se.receive({
           logLevel: 'trace',
           key2: 77
@@ -147,7 +147,7 @@ describe('service', () => {
 
     describe('states', () => {
       const s1 = new MyService({
-        key1: "value1",
+        key1: 'value1',
         key2: 2,
       }, owner);
       it('can be restartIfRunning (when stopped)', () => s1.restartIfRunning().then(() => assert.equal(s1.state,
@@ -158,7 +158,7 @@ describe('service', () => {
       it('can be restarted', () => s1.restart().then(() => assert.equal(s1.state, 'running')));
 
       const s2 = new MyService({
-        key1: "value1",
+        key1: 'value1',
         key2: 2,
       });
 
