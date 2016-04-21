@@ -3,4 +3,4 @@ index
 
 kronos-service
 
-![start stop transition example](Services.png)
+![default service endpoints](Services.png)
