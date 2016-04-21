@@ -125,7 +125,8 @@ describe('service provider', () => {
             service: 'logger',
             options: {
               includeRuntimeInfo: true,
-              includeDefaults: true
+              includeDefaults: true,
+              includeConfig: true
             }
           }
         }).then(r => {
