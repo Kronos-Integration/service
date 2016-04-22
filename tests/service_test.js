@@ -81,15 +81,16 @@ describe('service', () => {
         return MyService.type;
       }
 
+      get configurationAttributes() {
+        return Object.assign({
+          'key3': {
+            needsRestart: true
+          },
+          'key4': {}
+        }, super.configurationAttributes);
+      }
       constructor(config, owner) {
         super(config, owner);
-
-        Object.defineProperty(this, 'key3', {
-          value: config.key3
-        });
-        Object.defineProperty(this, 'key4', {
-          value: config.key4
-        });
       }
 
       _start() {
@@ -150,11 +151,13 @@ describe('service', () => {
         key1: 'value1',
         key2: 2,
       }, owner);
-      it('can be restartIfRunning (when stopped)', () => s1.restartIfRunning().then(() => assert.equal(s1.state,
+      it('can be restartIfRunning (when stopped)', () => s1.restartIfRunning().then(() => assert.equal(s1
+        .state,
         'stopped')));
 
       it('can be started', () => s1.start().then(() => assert.equal(s1.state, 'running')));
-      it('can be restartIfRunning', () => s1.restartIfRunning().then(() => assert.equal(s1.state, 'running')));
+      it('can be restartIfRunning', () => s1.restartIfRunning().then(() => assert.equal(s1.state,
+        'running')));
       it('can be restarted', () => s1.restart().then(() => assert.equal(s1.state, 'running')));
 
       const s2 = new MyService({
