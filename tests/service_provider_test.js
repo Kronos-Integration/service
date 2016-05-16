@@ -78,8 +78,6 @@ describe('service provider', () => {
         }).then(r => {
           assert.deepEqual(r.sort((a, b) => a.name.localeCompare(b.name)), [{
             endpoints: {
-              command: { in : true
-              },
               log: {
                 out: true,
                 target: 'logger:log'
@@ -89,6 +87,8 @@ describe('service provider', () => {
             type: 'service'
           }, {
             endpoints: {
+              /*  command: { in : true
+              },*/
               config: { in : true
               }
             },
@@ -132,6 +132,8 @@ describe('service provider', () => {
         }).then(r => {
           assert.deepEqual(r, {
             endpoints: {
+              command: { in : true
+              },
               config: { in : true
               },
               log: { in : true
