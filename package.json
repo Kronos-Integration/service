@@ -19,7 +19,7 @@
   "homepage": "https://github.com/Kronos-Integration/kronos-service#readme",
   "dependencies": {
     "kronos-endpoint": "^2.9.1",
-    "loglevel-mixin": "^1.4.0",
+    "loglevel-mixin": "^1.4.1",
     "registry-mixin": "^2.0.0",
     "statetransition-mixin": "2.2.1"
   },
