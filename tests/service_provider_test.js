@@ -75,12 +75,7 @@ describe('service provider', () => {
           action: 'list'
         }).then(r => {
           assert.deepEqual(r.sort((a, b) => a.name.localeCompare(b.name)), [{
-            endpoints: {
-              log: {
-                out: true,
-                target: 'logger:log'
-              }
-            },
+            endpoints: {},
             name: 'a',
             type: 'service'
           }, {
@@ -99,18 +94,6 @@ describe('service provider', () => {
             },
             name: 'logger',
             type: 'logger'
-          }, {
-            endpoints: {},
-            name: 's2',
-            type: 'test'
-          }, {
-            endpoints: {},
-            name: 't2',
-            type: 'test'
-          }, {
-            endpoints: {},
-            name: 'test',
-            type: 'test'
           }]);
         })
       );
@@ -218,10 +201,12 @@ describe('service provider', () => {
   });
 
   describe('additional service', () => {
-    sp.registerService(new ServiceTest({}, sp));
-    sp.registerService(new ServiceTest({
-      name: 't2'
-    }, sp));
+    before(() => {
+      sp.registerService(new ServiceTest({}, sp));
+      sp.registerService(new ServiceTest({
+        name: 't2'
+      }, sp));
+    });
 
     it('test service', () => assert.equal(sp.services.test.name, 'test'));
 
@@ -254,25 +239,33 @@ describe('service provider', () => {
 
   describe('declare service', () => {
     describe('with type', () => {
-      setTimeout(() =>
-        sp.registerServiceFactory(ServiceTest), 50);
+      before(() => {
+        setTimeout(() =>
+          sp.registerServiceFactory(ServiceTest), 30);
 
-      // force pending promises
-      sp.declareService({
-        name: 's2',
-        type: 'test'
-      }, true);
-      sp.declareService({
-        name: 's2',
-        type: 'test'
-      }, true);
+        // force pending promises
+        /*
+        sp.declareService({
+          name: 's2',
+          type: 'test'
+        }, true);
+        sp.declareService({
+          name: 's2',
+          type: 'test'
+        }, true);
+        */
+      });
+
       it('can be declared', () =>
         sp.declareService({
           name: 's2',
           type: 'test',
           key: 1
         }, true).then(
-          s => assert.equal(s.name, 's2')
+          s => { 
+            assert.equal(s.name, 's2');
+            assert.equal(s.type, 'test');
+          }
         )
       );
 
