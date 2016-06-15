@@ -1,4 +1,4 @@
-/* global describe, it, xit, before, beforeEach, after, afterEach */
+/* global xdescribe, describe, it, xit, before, beforeEach, after, afterEach */
 /* jslint node: true, esnext: true */
 
 'use strict';
@@ -283,7 +283,7 @@ describe('service provider', () => {
       );
     });
 
-    describe('without type', () => {
+    xdescribe('without type', () => {
       const sp = new ServiceProvider([{}, {
         name: 'test',
         value: 77
