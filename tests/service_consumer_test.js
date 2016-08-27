@@ -17,9 +17,6 @@ class ServiceTest extends Service {
   static get name() {
     return 'test';
   }
-  get type() {
-    return ServiceTest.name;
-  }
 }
 
 describe('service consumer', () => {

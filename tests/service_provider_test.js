@@ -13,14 +13,15 @@ const chai = require('chai'),
   ServiceLogger = require('../lib/ServiceLogger'),
   ServiceProviderMixin = require('../lib/ServiceProviderMixin');
 
-class ServiceProvider extends ServiceProviderMixin(Service) {}
+class ServiceProvider extends ServiceProviderMixin(Service) {
+  static get name() {
+    return 'service-provider';
+  }
+}
 
 class ServiceTest extends Service {
   static get name() {
     return 'test';
-  }
-  get type() {
-    return ServiceTest.name;
   }
 
   get autostart() {
@@ -77,7 +78,7 @@ describe('service provider', () => {
           assert.deepEqual(r.sort((a, b) => a.name.localeCompare(b.name)), [{
             endpoints: {},
             name: 'a',
-            type: 'service'
+            type: 'service-provider'
           }, {
             endpoints: {
               /*  command: { in : true

@@ -11,9 +11,6 @@ class ServiceTest extends Service {
   static get name() {
     return 'test';
   }
-  get type() {
-    return ServiceTest.name;
-  }
 
   constructor(config, owner) {
     super(config, owner);
@@ -33,17 +30,9 @@ for (const n of['s1', 's2', 's3', 's4', 's5']) {
     name: n,
     type: 'test'
   }, true).then(
-    s => {
-      console.log(`declare: ${s}`);
-    }, r =>
-    console.log
+    s => console.log(`declare: ${s}`), r => console.log
   ).catch(console.log);
 }
 
-setTimeout(() => {
-  sp.registerServiceFactory(ServiceTest);
-}, 2000);
-
-setTimeout(() => {
-  console.log('done');
-}, 5000);
+setTimeout(() => sp.registerServiceFactory(ServiceTest), 2000);
+setTimeout(() => console.log('done'), 5000);

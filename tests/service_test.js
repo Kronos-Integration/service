@@ -1,4 +1,4 @@
-/* global describe, it, xit */
+/* global describe, it, xit, before, beforeEach  */
 /* jslint node: true, esnext: true */
 
 'use strict';
@@ -8,6 +8,7 @@ const chai = require('chai'),
   expect = chai.expect,
   should = chai.should(),
   endpoint = require('kronos-endpoint'),
+  mat = require('model-attributes'),
   Service = require('../lib/Service');
 
 const owner = {
@@ -17,8 +18,35 @@ const owner = {
     }
 };
 
-describe('service', () => {
+class MyService extends Service {
+  static get name() {
+    return 'my-service';
+  }
 
+  static get configurationAttributes() {
+    return Object.assign(mat.createAttributes({
+      key3: {
+        needsRestart: true
+      },
+      key4: {}
+    }), Service.configurationAttributes);
+  }
+
+  _start() {
+    return new Promise((f, r) => setTimeout(() => f(), 10));
+  }
+
+  configure(config) {
+    return super.configure(config).then(
+      () => {
+        Object.assign(this, config);
+        return Promise.resolve();
+      }
+    );
+  }
+}
+
+describe('service', () => {
   const s1 = new Service({
     key1: 'value1',
     key2: 2
@@ -72,41 +100,6 @@ describe('service', () => {
   });
 
   describe('derived service', () => {
-
-    class MyService extends Service {
-      static get type() {
-        return 'my-service';
-      }
-      get type() {
-        return MyService.type;
-      }
-
-      get configurationAttributes() {
-        return Object.assign({
-          'key3': {
-            needsRestart: true
-          },
-          'key4': {}
-        }, super.configurationAttributes);
-      }
-      constructor(config, owner) {
-        super(config, owner);
-      }
-
-      _start() {
-        return new Promise((f, r) => setTimeout(() => f(), 10));
-      }
-
-      configure(config) {
-        return super.configure(config).then(
-          () => {
-            Object.assign(this, config);
-            return Promise.resolve();
-          }
-        );
-      }
-    }
-
     describe('creation', () => {
       const s2 = new MyService({
         key3: 'value3',
@@ -115,7 +108,9 @@ describe('service', () => {
 
       it('has a type', () => assert.equal(s2.type, 'my-service'));
       it('has a toString', () => assert.equal(s2.toString(), 'my-service: stopped'));
-
+      it('has additional configuration attribute key3', () => assert.equal(s2.configurationAttributes.key3
+        .name,
+        'key3'));
       it('has values', () => {
         assert.equal(s2.key3, 'value3');
         assert.equal(s2.key4, 4);
