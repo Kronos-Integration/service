@@ -119,6 +119,9 @@ describe('service provider', () => {
               log: { in : true
               }
             },
+            timeout: {
+              start: 5
+            },
             logLevel: 'info',
             state: 'running',
             name: 'logger',
