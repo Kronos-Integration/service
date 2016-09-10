@@ -60,6 +60,7 @@ describe('service', () => {
     it('is stopped', () => assert.equal(s1.state, 'stopped'));
     it('autstart is off', () => assert.isFalse(s1.autostart));
     it('has default logLevel info', () => assert.equal(s1.logLevel, 'info'));
+    it('has default start timeout', () => assert.equal(s1.timeout.start, 5));
   });
 
   describe('create with name', () => {
@@ -139,6 +140,15 @@ describe('service', () => {
           }
         )
       );
+
+      describe('timeout', () => {
+        it('can change start timeout', () =>
+          s2.configure({
+            timeout: {
+              start: 123.45
+            }
+          }).then(() => assert.equal(s2.timeout.start, 123.45)));
+      });
     });
 
     describe('states', () => {
