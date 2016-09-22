@@ -21,7 +21,7 @@
     "fast-safe-stringify": "^1.1.0",
     "kronos-endpoint": "^2.13.4",
     "loglevel-mixin": "^1.5.0",
-    "model-attributes": "^2.0.0",
+    "model-attributes": "^2.1.0",
     "registry-mixin": "^2.0.0",
     "statetransition-mixin": "^3.0.0"
   },
