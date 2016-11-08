@@ -20,10 +20,10 @@
   "dependencies": {
     "fast-safe-stringify": "^1.1.1",
     "kronos-endpoint": "^2.13.4",
-    "loglevel-mixin": "^1.6.0",
-    "model-attributes": "^2.2.3",
+    "loglevel-mixin": "^1.6.1",
+    "model-attributes": "^2.2.6",
     "registry-mixin": "^2.1.0",
-    "statetransition-mixin": "^3.1.0"
+    "statetransition-mixin": "^3.1.1"
   },
   "devDependencies": {
     "chai": "3.5.0",
