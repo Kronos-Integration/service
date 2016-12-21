@@ -9,7 +9,7 @@ const chai = require('chai'),
   should = chai.should(),
   endpoint = require('kronos-endpoint'),
   mat = require('model-attributes'),
-  Service = require('../lib/Service');
+  Service = require('../dist/Service').Service;
 
 const owner = {
   emit(name, arg1, arg2) {}, // dummy event emitter

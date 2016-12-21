@@ -7,7 +7,7 @@ const chai = require('chai'),
   assert = chai.assert,
   expect = chai.expect,
   should = chai.should(),
-  Service = require('../lib/Service'),
+  Service = require('../dist/Service').Service,
   ServiceProviderMixin = require('../lib/ServiceProviderMixin'),
   ServiceConsumerMixin = require('../lib/ServiceConsumerMixin');
 

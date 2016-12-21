@@ -2,7 +2,7 @@
 
 'use strict';
 
-const Service = require('../lib/Service'),
+const Service = require('../dist/Service'),
   ServiceProviderMixin = require('../lib/ServiceProviderMixin');
 
 class ServiceProvider extends ServiceProviderMixin(Service) {}
