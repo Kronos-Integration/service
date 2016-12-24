@@ -23,7 +23,7 @@
     "loglevel-mixin": "^1.6.9",
     "model-attributes": "^2.2.16",
     "registry-mixin": "^2.1.6",
-    "statetransition-mixin": "^3.1.10"
+    "statetransition-mixin": "^3.1.11"
   },
   "devDependencies": {
     "chai": "3.5.0",
