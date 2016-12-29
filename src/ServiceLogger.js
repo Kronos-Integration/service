@@ -2,14 +2,19 @@
 
 'use strict';
 
-const safeStringify = require('fast-safe-stringify'),
-	endpoint = require('kronos-endpoint'),
-	Service = require('./Service');
+const safeStringify = require('fast-safe-stringify');
+
+import {
+	ReceiveEndpoint
+}
+from 'kronos-endpoint';
+
+import Service from './Service';
 
 /**
  * Log receiving service
  */
-class ServiceLogger extends Service {
+export default class ServiceLogger extends Service {
 
 	static get name() {
 		return 'logger';
@@ -18,7 +23,7 @@ class ServiceLogger extends Service {
 	constructor(config, owner) {
 		super(config, owner);
 
-		this.addEndpoint(new endpoint.ReceiveEndpoint('log', this)).receive = entry => {
+		this.addEndpoint(new ReceiveEndpoint('log', this)).receive = entry => {
 			if (entry.severity === 'error') {
 				console.error(safeStringify(entry));
 			} else {
@@ -32,5 +37,3 @@ class ServiceLogger extends Service {
 		return true;
 	}
 }
-
-module.exports = ServiceLogger;

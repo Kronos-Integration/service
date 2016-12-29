@@ -2,14 +2,31 @@
 'use strict';
 
 const events = require('events'),
-	safeStringify = require('fast-safe-stringify'),
-	llm = require('loglevel-mixin'),
-	stm = require('statetransition-mixin'),
-	mat = require('model-attributes'),
-	EndpointsMixin = require('./EndpointsMixin'),
-	endpoint = require('kronos-endpoint');
+	safeStringify = require('fast-safe-stringify');
 
-const actions = stm.prepareActions({
+import EndpointsMixin from './EndpointsMixin';
+
+import {
+	ReceiveEndpoint, SendEndpointDefault, ReceiveEndpointDefault
+}
+from 'kronos-endpoint';
+
+import {
+	defaultLogLevels, defineLoggerMethods, defineLogLevelProperties, LogLevelMixin, makeLogEvent
+}
+from 'loglevel-mixin';
+
+import {
+	prepareActions, defineActionMethods, StateTransitionMixin, defineStateTransitionProperties
+}
+from 'statetransition-mixin';
+
+import {
+	createAttributes, getAttribute, setAttributes
+}
+from 'model-attributes';
+
+const actions = prepareActions({
 	start: {
 		stopped: {
 			target: 'running',
@@ -60,14 +77,14 @@ const actions = stm.prepareActions({
  * - setter(newValue,attrribute) optional function to be used if simple value assignment is not enough
  * The Service class only defines the logLevel attribute
  */
-const _ca = mat.createAttributes({
+const _ca = createAttributes({
 	logLevel: {
-		description: `logging level one of: ${Object.keys(llm.defaultLogLevels)}`,
-		default: llm.defaultLogLevels.info,
+		description: `logging level one of: ${Object.keys(defaultLogLevels)}`,
+		default: defaultLogLevels.info,
 		type: 'string',
 		setter(newValue) {
 			if (newValue !== undefined) {
-				const l = llm.defaultLogLevels[newValue];
+				const l = defaultLogLevels[newValue];
 				if (l !== undefined) {
 					this.logLevel = l;
 					return true;
@@ -93,10 +110,10 @@ const _ca = mat.createAttributes({
 
 class _Service extends events {}
 
-llm.defineLoggerMethods(_Service.prototype);
-stm.defineActionMethods(_Service.prototype, actions);
+defineLoggerMethods(_Service.prototype);
+defineActionMethods(_Service.prototype, actions);
 
-const dummyLogReceiver = new endpoint.ReceiveEndpoint('logReceiver', {
+const dummyLogReceiver = new ReceiveEndpoint('logReceiver', {
 	endpointIdentifier(ep) {
 		return undefined; // prevent target;
 	}
@@ -118,7 +135,7 @@ dummyLogReceiver.receive = entry => {
  * - log out: log events
  * - config in: configuration request
  */
-class Service extends EndpointsMixin(stm.StateTransitionMixin(llm.LogLevelMixin(_Service), actions, 'stopped')) {
+export default class Service extends EndpointsMixin(StateTransitionMixin(LogLevelMixin(_Service), actions, 'stopped')) {
 
 	static get name() {
 		return 'service';
@@ -152,15 +169,15 @@ class Service extends EndpointsMixin(stm.StateTransitionMixin(llm.LogLevelMixin(
 			value: {}
 		});
 
-		llm.defineLogLevelProperties(this, llm.defaultLogLevels,
-			config.logLevel !== undefined ? llm.defaultLogLevels[config.logLevel] || llm.defaultLogLevels.info :
-			llm.defaultLogLevels.info);
+		defineLogLevelProperties(this, defaultLogLevels,
+			config.logLevel !== undefined ? defaultLogLevels[config.logLevel] || defaultLogLevels.info :
+			defaultLogLevels.info);
 
-		stm.defineStateTransitionProperties(this, actions, 'stopped');
+		defineStateTransitionProperties(this, actions, 'stopped');
 
-		this.addEndpoint(new endpoint.SendEndpointDefault('log', this)).connected = dummyLogReceiver;
-		this.addEndpoint(new endpoint.ReceiveEndpointDefault('config', this)).receive = request => this.configure(request);
-		this.addEndpoint(new endpoint.ReceiveEndpointDefault('command', this)).receive = request => this.execute(request);
+		this.addEndpoint(new SendEndpointDefault('log', this)).connected = dummyLogReceiver;
+		this.addEndpoint(new ReceiveEndpointDefault('config', this)).receive = request => this.configure(request);
+		this.addEndpoint(new ReceiveEndpointDefault('command', this)).receive = request => this.execute(request);
 
 		this._configure(config);
 	}
@@ -184,7 +201,7 @@ class Service extends EndpointsMixin(stm.StateTransitionMixin(llm.LogLevelMixin(
 		const ca = this.configurationAttributes;
 
 		for (const an in ca) {
-			mat.getAttribute(this, ca, an);
+			getAttribute(this, ca, an);
 		}
 
 		Promise.resolve(result);
@@ -335,7 +352,7 @@ class Service extends EndpointsMixin(stm.StateTransitionMixin(llm.LogLevelMixin(
 	 */
 	_configure(config) {
 		const modified = new Set();
-		mat.setAttributes(this, this.configurationAttributes, config, (ca, path, value) => {
+		setAttributes(this, this.configurationAttributes, config, (ca, path, value) => {
 			this.trace({
 				message: 'config',
 				attribute: path,
@@ -370,7 +387,7 @@ class Service extends EndpointsMixin(stm.StateTransitionMixin(llm.LogLevelMixin(
 	 * Adds service name to the log event
 	 */
 	log(level, arg) {
-		this.endpoints.log.receive(llm.makeLogEvent(level, arg, {
+		this.endpoints.log.receive(makeLogEvent(level, arg, {
 			service: this.name
 		}));
 	}
@@ -382,5 +399,3 @@ class Service extends EndpointsMixin(stm.StateTransitionMixin(llm.LogLevelMixin(
 		return ':';
 	}
 }
-
-module.exports = Service;

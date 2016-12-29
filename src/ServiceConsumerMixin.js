@@ -5,7 +5,7 @@
  * assign services based on a configuration
  */
 
-module.exports.defineServiceConsumerProperties = function (object, config, provider, waitUntilFactoryPresent) {
+function defineServiceConsumerProperties(object, config, provider, waitUntilFactoryPresent) {
 	const promises = [];
 
 	Object.keys(config).forEach(name => {
@@ -31,4 +31,8 @@ module.exports.defineServiceConsumerProperties = function (object, config, provi
 	});
 
 	return Promise.all(promises);
+}
+
+export {
+	defineServiceConsumerProperties
 };

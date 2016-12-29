@@ -1,16 +1,24 @@
 /* jslint node: true, esnext: true */
 'use strict';
 
-const endpoint = require('kronos-endpoint'),
-	rgm = require('registry-mixin'),
-	Service = require('./Service');
+import {
+	defineRegistryProperties
+}
+from 'registry-mixin';
+
+import {
+	ReceiveEndpoint
+}
+from 'kronos-endpoint';
+
+import Service from './Service';
 
 /**
  * Config providing service
  * Dispatches config requests to services
  * or preserves them for future use
  */
-class ServiceConfig extends Service {
+export default class ServiceConfig extends Service {
 	static get name() {
 		return 'config';
 	}
@@ -18,12 +26,12 @@ class ServiceConfig extends Service {
 	constructor(config, owner) {
 		super(config, owner);
 
-		rgm.defineRegistryProperties(this, 'preservedConfig', {});
+		defineRegistryProperties(this, 'preservedConfig', {});
 
 		/**
 		 * requests can be an array of config entries
 		 */
-		this.addEndpoint(new endpoint.ReceiveEndpoint('config', this)).receive = request => {
+		this.addEndpoint(new ReceiveEndpoint('config', this)).receive = request => {
 			if (!Array.isArray(request)) {
 				request = [request];
 			}
@@ -47,5 +55,3 @@ class ServiceConfig extends Service {
 		return true;
 	}
 }
-
-module.exports = ServiceConfig;
