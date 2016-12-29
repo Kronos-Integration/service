@@ -1,7 +1,7 @@
 /* jslint node: true, esnext: true */
 'use strict';
 
-function EndpointsMixin(superclass) {
+export default function EndpointsMixin(superclass) {
 	return class extends superclass {
 		constructor() {
 				super();
@@ -28,7 +28,3 @@ function EndpointsMixin(superclass) {
 		}
 	};
 }
-
-export {
-	EndpointsMixin
-};

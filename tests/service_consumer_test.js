@@ -7,9 +7,9 @@ const chai = require('chai'),
   assert = chai.assert,
   expect = chai.expect,
   should = chai.should(),
-  Service = require('../dist/Service').Service,
-  ServiceProviderMixin = require('../lib/ServiceProviderMixin'),
-  ServiceConsumerMixin = require('../lib/ServiceConsumerMixin');
+  {
+    Service, ServiceProviderMixin, defineServiceConsumerProperties
+  } = require('../dist/module');
 
 class ServiceProvider extends ServiceProviderMixin(Service) {}
 
@@ -25,7 +25,7 @@ describe('service consumer', () => {
 
   it('define with name and type', () =>
     sp.registerServiceFactory(ServiceTest).then(() =>
-      ServiceConsumerMixin.defineServiceConsumerProperties(object, {
+      defineServiceConsumerProperties(object, {
         'myTest': {
           type: 'test',
           name: 'n1'
@@ -37,7 +37,7 @@ describe('service consumer', () => {
 
   it('define with type', () =>
     sp.registerServiceFactory(ServiceTest).then(() =>
-      ServiceConsumerMixin.defineServiceConsumerProperties(object, {
+      defineServiceConsumerProperties(object, {
         'myTest2': {
           type: 'test'
         }
@@ -48,7 +48,7 @@ describe('service consumer', () => {
 
   it('define with type simple', () =>
     sp.registerServiceFactory(ServiceTest).then(() =>
-      ServiceConsumerMixin.defineServiceConsumerProperties(object, {
+      defineServiceConsumerProperties(object, {
         'myTest3': 'test'
       }, sp).then(() =>
         assert.equal(object.myTest3.name, 'myTest3'))
@@ -62,7 +62,7 @@ describe('service consumer with wait', () => {
 
   setTimeout(() => sp.registerServiceFactory(ServiceTest), 300);
 
-  it('defines', () => ServiceConsumerMixin.defineServiceConsumerProperties(object, {
+  it('defines', () => defineServiceConsumerProperties(object, {
     'myTest': {
       type: 'test'
     }

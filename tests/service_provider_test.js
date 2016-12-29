@@ -8,10 +8,9 @@ const chai = require('chai'),
   expect = chai.expect,
   should = chai.should(),
   endpoint = require('kronos-endpoint'),
-  Service = require('../dist/Service').Service,
-  ServiceConfig = require('../lib/ServiceConfig'),
-  ServiceLogger = require('../lib/ServiceLogger'),
-  ServiceProviderMixin = require('../lib/ServiceProviderMixin');
+  {
+    Service, ServiceProviderMixin, ServiceLogger, ServiceConfig
+  } = require('../dist/module');
 
 class ServiceProvider extends ServiceProviderMixin(Service) {
   static get name() {

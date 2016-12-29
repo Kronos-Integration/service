@@ -4,10 +4,7 @@
 const events = require('events'),
 	safeStringify = require('fast-safe-stringify');
 
-import {
-	EndpointsMixin
-}
-from './EndpointsMixin';
+import EndpointsMixin from './EndpointsMixin';
 
 import {
 	ReceiveEndpoint, SendEndpointDefault, ReceiveEndpointDefault
@@ -138,7 +135,7 @@ dummyLogReceiver.receive = entry => {
  * - log out: log events
  * - config in: configuration request
  */
-class Service extends EndpointsMixin(StateTransitionMixin(LogLevelMixin(_Service), actions, 'stopped')) {
+export default class Service extends EndpointsMixin(StateTransitionMixin(LogLevelMixin(_Service), actions, 'stopped')) {
 
 	static get name() {
 		return 'service';
@@ -402,7 +399,3 @@ class Service extends EndpointsMixin(StateTransitionMixin(LogLevelMixin(_Service
 		return ':';
 	}
 }
-
-export {
-	Service
-};

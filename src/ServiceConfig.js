@@ -11,17 +11,14 @@ import {
 }
 from 'kronos-endpoint';
 
-import {
-	Service
-}
-from './Service';
+import Service from './Service';
 
 /**
  * Config providing service
  * Dispatches config requests to services
  * or preserves them for future use
  */
-class ServiceConfig extends Service {
+export default class ServiceConfig extends Service {
 	static get name() {
 		return 'config';
 	}
@@ -58,7 +55,3 @@ class ServiceConfig extends Service {
 		return true;
 	}
 }
-
-export {
-	ServiceConfig
-};

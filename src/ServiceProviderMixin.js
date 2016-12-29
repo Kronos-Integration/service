@@ -6,25 +6,15 @@ import {
 }
 from 'registry-mixin';
 
-import {}
-from 'kronos-endpoint';
-
-import {
-	ServiceLogger
-}
-from './ServiceLogger';
-
-import {
-	ServiceConfig
-}
-from './ServiceConfig';
+import ServiceLogger from './ServiceLogger';
+import ServiceConfig from './ServiceConfig';
 
 /**
  * Provide services and hold service configuration.
  * By default a service provider has two build in services
  * 'logger' and 'config'.
  */
-function ServiceProviderMixin(superclass) {
+export default function ServiceProviderMixin(superclass) {
 	return class extends superclass {
 		/**
 		 * if config is an array entry 0 then entry 0 will be passed to super and all other entries
@@ -225,7 +215,3 @@ function ServiceProviderMixin(superclass) {
 		}
 	};
 }
-
-export {
-	ServiceProviderMixin
-};

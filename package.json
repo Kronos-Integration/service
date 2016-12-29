@@ -2,11 +2,11 @@
   "name": "kronos-service",
   "version": "0.0.0-semantic-release",
   "description": "Base service implementation",
-  "main": "dist/Service.js",
-  "module": "src/Service.js",
+  "main": "dist/module.js",
+  "module": "src/module.js",
   "scripts": {
     "cover": "npm run build && node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- -u exports tests/*_test.js",
-    "build": "node_modules/rollup/bin/rollup --output=dist/Service.js -c -- src/Service.js",
+    "build": "node_modules/rollup/bin/rollup --output=dist/module.js -c -- src/module.js",
     "docs": "jsdoc2md -l off -t doc/README.hbs -f src/*.js > README.md",
     "test": "npm run build && node_modules/.bin/mocha tests/*_test.js && markdown-doctest",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
@@ -34,19 +34,16 @@
     "chai": "3.5.0",
     "jsdoc-to-markdown": "^2.0.1",
     "markdown-doctest": "^0.9.1",
-    "rollup": "^0.37.2",
+    "rollup": "^0.39.0",
     "semantic-release": "^6.3.5"
   },
-  "contributors": [
-    {
-      "name": "Torsten Link",
-      "email": "torstenlink@gmx.de"
-    },
-    {
-      "name": "Markus Felten",
-      "email": "markus.felten@gmx.de"
-    }
-  ],
+  "contributors": [{
+    "name": "Torsten Link",
+    "email": "torstenlink@gmx.de"
+  }, {
+    "name": "Markus Felten",
+    "email": "markus.felten@gmx.de"
+  }],
   "license": "BSD-2-Clause",
   "engines": {
     "node": ">=6.9.1"

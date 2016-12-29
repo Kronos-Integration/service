@@ -9,15 +9,12 @@ import {
 }
 from 'kronos-endpoint';
 
-import {
-	Service
-}
-from './Service';
+import Service from './Service';
 
 /**
  * Log receiving service
  */
-class ServiceLogger extends Service {
+export default class ServiceLogger extends Service {
 
 	static get name() {
 		return 'logger';
@@ -40,7 +37,3 @@ class ServiceLogger extends Service {
 		return true;
 	}
 }
-
-export {
-	ServiceLogger
-};
