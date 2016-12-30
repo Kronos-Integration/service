@@ -3,5 +3,6 @@
 
 export default {
   format: 'cjs',
-  plugins: []
+  plugins: [],
+  external: ['kronos-endpoint', 'loglevel-mixin', 'statetransition-mixin', 'model-attributes', 'registry-mixin']
 };
