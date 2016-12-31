@@ -28,25 +28,28 @@
     "statetransition-mixin": "^3.1.12"
   },
   "devDependencies": {
-    "cz-conventional-changelog": "1.2.0",
-    "istanbul": "0.4.5",
-    "mocha": "3.2.0",
-    "chai": "3.5.0",
+    "cz-conventional-changelog": "^1.2.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0",
+    "chai": "^3.5.0",
     "jsdoc-to-markdown": "^2.0.1",
     "markdown-doctest": "^0.9.1",
     "rollup": "^0.39.2",
     "semantic-release": "^6.3.5"
   },
-  "contributors": [{
-    "name": "Torsten Link",
-    "email": "torstenlink@gmx.de"
-  }, {
-    "name": "Markus Felten",
-    "email": "markus.felten@gmx.de"
-  }],
+  "contributors": [
+    {
+      "name": "Torsten Link",
+      "email": "torstenlink@gmx.de"
+    },
+    {
+      "name": "Markus Felten",
+      "email": "markus.felten@gmx.de"
+    }
+  ],
   "license": "BSD-2-Clause",
   "engines": {
-    "node": ">=6.9.1"
+    "node": ">=6.9.2"
   },
   "keywords": [],
   "config": {
