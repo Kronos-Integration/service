@@ -280,6 +280,7 @@ export default class Service extends EndpointsMixin(StateTransitionMixin(LogLeve
 		return this.toJSONWithOptions({
 			includeRuntimeInfo: false,
 			includeDefaults: false,
+			includeNale: false,
 			includeConfig: false
 		});
 	}
@@ -290,18 +291,23 @@ export default class Service extends EndpointsMixin(StateTransitionMixin(LogLeve
 	 *  with the following flags:
 	 *    includeRuntimeInfo - include runtime informtion like state
 	 *    includeDefaults - also include default endpoints
+	 *    includeName - name of the service
 	 *    includeConfig - also include config attributes
 	 * @return {Object} json representation
 	 */
 	toJSONWithOptions(options = {}) {
 		const json = {
-			name: this.name,
 			type: this.type,
 			endpoints: {}
 		};
 
+		if (options.includeName) {
+			json.name = this.name;
+		}
+
 		if (options.includeRuntimeInfo) {
 			json.state = this.state;
+			json.logLevel = this.logLevel;
 		}
 
 		if (options.includeConfig) {
