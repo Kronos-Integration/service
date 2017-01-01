@@ -10,17 +10,29 @@ export default function EndpointsMixin(superclass) {
 					value: {}
 				});
 			}
-			/**
-			 * @param {Endpoint} ep
-			 */
+
+		/**
+		 * Add a endpoint
+		 * @param {Endpoint} ep
+		 * @return {Endpoint} the added endpoint
+		 */
 		addEndpoint(ep) {
 			this.endpoints[ep.name] = ep;
 			return ep;
 		}
 
+	/**
+	 * removes a endpoint
+	 * @param {String} name name of the endpoint
+	 * @return {undefined}
+	 */
+	removeEndpoint(name) {
+		delete this.endpoints[name];
+	}
+
 		/**
 		 * Deliver an identifier suitable as target name.
-		 * @param {Endpoint} ep edntpoint to be identified
+		 * @param {Endpoint} ep endpoint to be identified
 		 * @return {String} endpoint identifier
 		 */
 		endpointIdentifier(ep) {
