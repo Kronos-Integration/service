@@ -22,10 +22,10 @@
   "dependencies": {
     "fast-safe-stringify": "^1.1.3",
     "kronos-endpoint": "^2.14.6",
-    "loglevel-mixin": "^1.6.10",
-    "model-attributes": "^3.0.1",
-    "registry-mixin": "^2.1.9",
-    "statetransition-mixin": "^3.1.12"
+    "loglevel-mixin": "^1.6.13",
+    "model-attributes": "^3.0.2",
+    "registry-mixin": "^2.1.10",
+    "statetransition-mixin": "^3.1.13"
   },
   "devDependencies": {
     "cz-conventional-changelog": "^1.2.0",
