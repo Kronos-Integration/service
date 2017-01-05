@@ -3,9 +3,11 @@
 [![Build Status](https://secure.travis-ci.org/Kronos-Integration/kronos-service.png)](http://travis-ci.org/Kronos-Integration/kronos-service)
 [![bithound](https://www.bithound.io/github/Kronos-Integration/kronos-service/badges/score.svg)](https://www.bithound.io/github/Kronos-Integration/kronos-service)
 [![codecov.io](http://codecov.io/github/Kronos-Integration/kronos-service/coverage.svg?branch=master)](http://codecov.io/github/Kronos-Integration/kronos-service?branch=master)
+[![Coverage Status](https://coveralls.io/repos/Kronos-Integration/kronos-service/badge.svg)](https://coveralls.io/r/Kronos-Integration/kronos-service)
 [![Code Climate](https://codeclimate.com/github/Kronos-Integration/kronos-service/badges/gpa.svg)](https://codeclimate.com/github/Kronos-Integration/kronos-service)
 [![Known Vulnerabilities](https://snyk.io/test/github/Kronos-Integration/kronos-service/badge.svg)](https://snyk.io/test/github/Kronos-Integration/kronos-service)
 [![GitHub Issues](https://img.shields.io/github/issues/Kronos-Integration/kronos-service.svg?style=flat-square)](https://github.com/Kronos-Integration/kronos-service/issues)
+[![Stories in Ready](https://badge.waffle.io/Kronos-Integration/kronos-service.svg?label=ready&title=Ready)](http://waffle.io/Kronos-Integration/kronos-service)
 [![Dependency Status](https://david-dm.org/Kronos-Integration/kronos-service.svg)](https://david-dm.org/Kronos-Integration/kronos-service)
 [![devDependency Status](https://david-dm.org/Kronos-Integration/kronos-service/dev-status.svg)](https://david-dm.org/Kronos-Integration/kronos-service#info=devDependencies)
 [![docs](http://inch-ci.org/github/Kronos-Integration/kronos-service.svg?branch=master)](http://inch-ci.org/github/Kronos-Integration/kronos-service)
@@ -20,25 +22,40 @@ Base service implementation
 
 * <a name="addEndpoint"></a>
 
-## addEndpoint(ep)
+## addEndpoint(ep) ⇒ <code>Endpoint</code>
+Add a endpoint
+
 **Kind**: global function  
+**Returns**: <code>Endpoint</code> - the added endpoint  
 
 | Param | Type |
 | --- | --- |
 | ep | <code>Endpoint</code> | 
 
 
-* <a name="endpointIdentifier"></a>
+* <a name="removeEndpoint"></a>
 
-## endpointIdentifier(ep) ⇒ <code>String</code>
-Deliver an identifier suitable as target name.
+## removeEndpoint(name) ⇒ <code>undefined</code>
+removes a endpoint
 
 **Kind**: global function  
-**Returns**: <code>String</code> - endpoint identifier  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| ep | <code>Endpoint</code> | edntpoint to be identified |
+| name | <code>string</code> | name of the endpoint |
+
+
+* <a name="endpointIdentifier"></a>
+
+## endpointIdentifier(ep) ⇒ <code>string</code>
+Deliver an identifier suitable as target name.
+
+**Kind**: global function  
+**Returns**: <code>string</code> - endpoint identifier  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| ep | <code>Endpoint</code> | endpoint to be identified |
 
 
 * <a name="stateChanged"></a>
@@ -51,8 +68,8 @@ Emits a serviceStateChanged event to the owner
 
 | Param | Type |
 | --- | --- |
-| oldState | <code>String</code> | 
-| newState | <code>String</code> | 
+| oldState | <code>string</code> | 
+| newState | <code>string</code> | 
 
 
 * <a name="rejectWrongState"></a>
@@ -63,14 +80,14 @@ Called when state transition is not allowed
 **Kind**: global function  
 **Returns**: <code>Promise</code> - rejecting with an Error  
 
-| Param | Type |
-| --- | --- |
-| action | <code>String</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| action | <code>string</code> | originating action name |
 
 
 * <a name="_restart"></a>
 
-## _restart()
+## _restart() ⇒ <code>Promise</code>
 default implementation does a _stop() and a _start()
 
 **Kind**: global function  
@@ -86,23 +103,23 @@ Otherwise does nothing
 
 * <a name="toString"></a>
 
-## toString() ⇒ <code>String</code>
+## toString() ⇒ <code>string</code>
 Returns the string representation of this step
 
 **Kind**: global function  
-**Returns**: <code>String</code> - human readable name  
+**Returns**: <code>string</code> - human readable name  
 
 * <a name="toJSONWithOptions"></a>
 
-## toJSONWithOptions(options) ⇒ <code>Object</code>
+## toJSONWithOptions([options]) ⇒ <code>object</code>
 Deliver json representation
 
 **Kind**: global function  
-**Returns**: <code>Object</code> - json representation  
+**Returns**: <code>object</code> - json representation  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| options | <code>Object</code> | with the following flags:    includeRuntimeInfo - include runtime informtion like state    includeDefaults - also include default endpoints    includeConfig - also include config attributes |
+| [options] | <code>object</code> | with the following flags:    includeRuntimeInfo - include runtime informtion like state    includeDefaults - also include default endpoints    includeName - name of the service    includeConfig - also include config attributes |
 
 
 * <a name="_configure"></a>
@@ -120,7 +137,7 @@ or simply assign the attribute value
 
 | Param | Type |
 | --- | --- |
-| config | <code>Object</code> | 
+| config | <code>object</code> | 
 
 
 * <a name="configure"></a>
@@ -136,15 +153,21 @@ will be called
 
 | Param | Type | Description |
 | --- | --- | --- |
-| new | <code>Object</code> | config |
+| new | <code>pbject</code> | config |
 
 
 * <a name="log"></a>
 
-## log()
+## log(level, arg)
 Adds service name to the log event
 
 **Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| level | <code>string</code> | the log level |
+| arg | <code>object</code> | log content |
+
 
 * <a name="defineServiceConsumerProperties"></a>
 
@@ -166,7 +189,7 @@ Otherwise a new service will be created eventually replacing an already existing
 
 | Param | Type | Description |
 | --- | --- | --- |
-| config | <code>Object</code> | with     name - the service name     type - the service factory name - defaults to config.name |
+| config | <code>object</code> | with     name - the service name     type - the service factory name - defaults to config.name |
 | waitUntilFactoryPresent | <code>boolean</code> | waits until someone registers a matching service factory |
 
 
@@ -177,6 +200,22 @@ Stop all services
 
 **Kind**: global function  
 **Returns**: <code>Promise</code> - that fullfills when all services are stopped  
+
+* <a name="module.exports"></a>
+
+## module.exports()
+Endpoint accessor mixin
+
+**Kind**: static method of <code>module</code>  
+<a name="new_module.exports_new"></a>
+
+### new module.exports(config, [owner])
+
+| Param | Type |
+| --- | --- |
+| config | <code>object</code> | 
+| [owner] | <code>object</code> | 
+
 
 * <a name="<anonymous>...receive"></a>
 
@@ -193,6 +232,15 @@ By default a service provider has two build in services
 'logger' and 'config'.
 
 **Kind**: static method of <code>module</code>  
+<a name="new_module.exports_new"></a>
+
+### new module.exports(config, [owner])
+
+| Param | Type |
+| --- | --- |
+| config | <code>object</code> | 
+| [owner] | <code>object</code> | 
+
 
 * * *
 

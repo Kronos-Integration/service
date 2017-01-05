@@ -74,8 +74,9 @@ export default function ServiceProviderMixin(superclass) {
 			}
 
 			if (command.action === 'list') {
-				return Promise.resolve(Object.keys(this.services).map(name => this.services[name]).map(s => s.toJSONWithOptions(
-					command.options)));
+				return Promise.resolve(Object.keys(this.services).map(name => this.services[name]).map(s =>
+					command.options ? s.toJSONWithOptions(
+						command.options) : s.toJSON()));
 			}
 
 			const service = this.services[command.service];
@@ -119,7 +120,7 @@ export default function ServiceProviderMixin(superclass) {
 		 * If a service for the name is already present and it has a matching type
 		 * then its configure() is called and then returned.
 		 * Otherwise a new service will be created eventually replacing an already existing service with the same name.
-		 * @param {Object} config with
+		 * @param {object} config with
 		 *     name - the service name
 		 *     type - the service factory name - defaults to config.name
 		 * @param {boolean} waitUntilFactoryPresent waits until someone registers a matching service factory

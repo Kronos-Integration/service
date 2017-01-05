@@ -145,6 +145,10 @@ export default class Service extends EndpointsMixin(StateTransitionMixin(LogLeve
 		return _ca;
 	}
 
+	/**
+	 * @param {object} config
+	 * @param {object} [owner]
+	 */
 	constructor(config, owner) {
 		super();
 
@@ -210,8 +214,8 @@ export default class Service extends EndpointsMixin(StateTransitionMixin(LogLeve
 	/**
 	 * Called when the service state changes.
 	 * Emits a serviceStateChanged event to the owner
-	 * @param {String} oldState
-	 * @param {String} newState
+	 * @param {string} oldState
+	 * @param {string} newState
 	 */
 	stateChanged(oldState, newState) {
 		this.owner.emit('serviceStateChanged', this, oldState, newState);
@@ -234,7 +238,7 @@ export default class Service extends EndpointsMixin(StateTransitionMixin(LogLeve
 
 	/**
 	 * Called when state transition is not allowed
-	 * @param {String} action
+	 * @param {string} action originating action name
 	 * @return {Promise} rejecting with an Error
 	 */
 	rejectWrongState(action) {
@@ -251,6 +255,7 @@ export default class Service extends EndpointsMixin(StateTransitionMixin(LogLeve
 
 	/**
 	 * default implementation does a _stop() and a _start()
+	 * @return {Promise}
 	 */
 	_restart() {
 		return this._stop().then(f => this._start());
@@ -270,7 +275,7 @@ export default class Service extends EndpointsMixin(StateTransitionMixin(LogLeve
 
 	/**
 	 * Returns the string representation of this step
-	 * @return {String} human readable name
+	 * @return {string} human readable name
 	 */
 	toString() {
 		return `${this.name}: ${this.state}`;
@@ -280,20 +285,20 @@ export default class Service extends EndpointsMixin(StateTransitionMixin(LogLeve
 		return this.toJSONWithOptions({
 			includeRuntimeInfo: false,
 			includeDefaults: false,
-			includeNale: false,
+			includeName: true,
 			includeConfig: false
 		});
 	}
 
 	/**
 	 * Deliver json representation
-	 * @param {Object} options
+	 * @param {object} [options]
 	 *  with the following flags:
 	 *    includeRuntimeInfo - include runtime informtion like state
 	 *    includeDefaults - also include default endpoints
 	 *    includeName - name of the service
 	 *    includeConfig - also include config attributes
-	 * @return {Object} json representation
+	 * @return {object} json representation
 	 */
 	toJSONWithOptions(options = {}) {
 		const json = {
@@ -340,7 +345,7 @@ export default class Service extends EndpointsMixin(StateTransitionMixin(LogLeve
 
 	/**
 	 * Should we start when beeing registered
-	 * defaults to false
+	 * @return {boolean} false
 	 */
 	get autostart() {
 		return false;
@@ -353,7 +358,7 @@ export default class Service extends EndpointsMixin(StateTransitionMixin(LogLeve
 	 * Which means we loop over all configuration attributes
 	 * and then for each attribute decide if we use the default, call a setter function
 	 * or simply assign the attribute value
-	 * @param {Object} config
+	 * @param {object} config
 	 * @return {Set} of modified attributes
 	 */
 	_configure(config) {
@@ -374,7 +379,7 @@ export default class Service extends EndpointsMixin(StateTransitionMixin(LogLeve
 	 * Internally calls _configure(config) as the constructor does
 	 * If attribute with needsRestart are touched the restartIfRunning method
 	 * will be called
-	 * @param {Object} new config
+	 * @param {pbject} new config
 	 * @return {Promise} fillfills when config is applied
 	 */
 	configure(config) {
@@ -391,6 +396,8 @@ export default class Service extends EndpointsMixin(StateTransitionMixin(LogLeve
 
 	/**
 	 * Adds service name to the log event
+	 * @param {string} level the log level
+	 * @param {object} arg log content
 	 */
 	log(level, arg) {
 		this.endpoints.log.receive(makeLogEvent(level, arg, {
@@ -399,7 +406,7 @@ export default class Service extends EndpointsMixin(StateTransitionMixin(LogLeve
 	}
 
 	/**
-	 * @return {String} separator between service name and endpoint name
+	 * @return {string} separator between service name and endpoint name
 	 **/
 	get endpointParentSeparator() {
 		return ':';

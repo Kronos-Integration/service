@@ -73,15 +73,13 @@ describe('service provider', () => {
       it('has response', () =>
         testEndpoint.receive({
           action: 'list'
-        }).then(r => {
+        }).then(r =>
           assert.deepEqual(r.sort((a, b) => a.name.localeCompare(b.name)), [{
             endpoints: {},
             name: 'a',
             type: 'service-provider'
           }, {
             endpoints: {
-              /*  command: { in : true
-              },*/
               config: { in : true
               }
             },
@@ -94,8 +92,8 @@ describe('service provider', () => {
             },
             name: 'logger',
             type: 'logger'
-          }]);
-        })
+          }])
+        )
       );
     });
     describe('get', () => {
@@ -106,7 +104,8 @@ describe('service provider', () => {
           options: {
             includeRuntimeInfo: true,
             includeDefaults: true,
-            includeConfig: true
+            includeConfig: true,
+            includeName: true
           }
         }).then(r => {
           assert.deepEqual(r, {
