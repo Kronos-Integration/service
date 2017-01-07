@@ -6,7 +6,7 @@
   "module": "src/module.js",
   "scripts": {
     "cover": "npm run prepublish && istanbul cover node_modules/.bin/_mocha -- -u exports tests/*_test.js",
-    "docs": "jsdoc2md -l off -t doc/README.hbs -f src/*.js > README.md",
+    "docs": "jsdoc2md -l off -t doc/README.hbs -f src/*.js >README.md",
     "test": "mocha tests/*_test.js",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "prepublish": "rollup --output=dist/module.js -c -- src/module.js",
@@ -51,7 +51,7 @@
   ],
   "license": "BSD-2-Clause",
   "engines": {
-    "node": ">=6.9.2"
+    "node": ">=6.9.3"
   },
   "keywords": [],
   "config": {
