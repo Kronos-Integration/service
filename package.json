@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/Kronos-Integration/kronos-service#readme",
   "dependencies": {
-    "fast-safe-stringify": "^1.1.4",
+    "fast-safe-stringify": "^1.1.5",
     "kronos-endpoint": "^2.14.8",
     "loglevel-mixin": "^1.6.17",
     "model-attributes": "^3.0.5",
