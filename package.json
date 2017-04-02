@@ -28,7 +28,7 @@
     "loglevel-mixin": "^1.6.21",
     "model-attributes": "^3.0.8",
     "registry-mixin": "^2.1.14",
-    "statetransition-mixin": "^3.1.17"
+    "statetransition-mixin": "^3.1.18"
   },
   "devDependencies": {
     "cz-conventional-changelog": "^2.0.0",
