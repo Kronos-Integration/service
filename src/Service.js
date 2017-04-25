@@ -107,12 +107,6 @@ const _ca = createAttributes({
 	}
 });
 
-
-class _Service extends events {}
-
-defineLoggerMethods(_Service.prototype);
-defineActionMethods(_Service.prototype, actions);
-
 const dummyLogReceiver = new ReceiveEndpoint('logReceiver', {
 	endpointIdentifier(ep) {
 		return undefined; // prevent target;
@@ -135,7 +129,7 @@ dummyLogReceiver.receive = entry => {
  * - log out: log events
  * - config in: configuration request
  */
-export default class Service extends EndpointsMixin(StateTransitionMixin(LogLevelMixin(_Service), actions, 'stopped')) {
+export default class Service extends EndpointsMixin(StateTransitionMixin(LogLevelMixin(events), actions, 'stopped')) {
 
 	static get name() {
 		return 'service';
@@ -409,3 +403,6 @@ export default class Service extends EndpointsMixin(StateTransitionMixin(LogLeve
 		return ':';
 	}
 }
+
+defineLoggerMethods(Service.prototype);
+defineActionMethods(Service.prototype, actions);
