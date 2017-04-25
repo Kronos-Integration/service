@@ -161,10 +161,9 @@ export default class Service extends EndpointsMixin(StateTransitionMixin(LogLeve
 		if (config === undefined) {
 			config = {};
 		} else {
-			if (config.name) {
-				const name = config.name;
+			if (config.name !== undefined) {
 				Object.defineProperty(this, 'name', {
-					value: name
+					value: config.name
 				});
 			}
 		}
@@ -317,9 +316,7 @@ export default class Service extends EndpointsMixin(StateTransitionMixin(LogLeve
 
 		if (options.includeConfig) {
 			const ca = this.configurationAttributes;
-			Object.keys(ca).forEach(name => {
-				json[name] = this[name];
-			});
+			Object.keys(ca).forEach(name => json[name] = this[name]);
 		}
 
 		for (const endpointName in this.endpoints) {
