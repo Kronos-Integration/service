@@ -36,7 +36,7 @@
     "chai": "^4.0.2",
     "jsdoc-to-markdown": "^3.0.0",
     "markdown-doctest": "^0.9.1",
-    "rollup": "^0.42.0",
+    "rollup": "^0.43.0",
     "semantic-release": "^6.3.6",
     "nyc": "^11.0.3"
   },
@@ -52,14 +52,11 @@
   ],
   "license": "BSD-2-Clause",
   "engines": {
-    "node": ">=7.10.0"
+    "node": ">=8.1.2"
   },
-  "keywords": [],
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  },
+  "keywords": [
+    null
+  ],
   "nyc": {
     "include": [
       "dist/**/*.js"
