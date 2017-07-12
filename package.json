@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "mocha": "^3.4.2",
-    "chai": "^4.0.2",
+    "chai": "^4.1.0",
     "jsdoc-to-markdown": "^3.0.0",
     "markdown-doctest": "^0.9.1",
     "rollup": "^0.45.1",
