@@ -51,7 +51,7 @@
   ],
   "license": "BSD-2-Clause",
   "engines": {
-    "node": ">=8.1.4"
+    "node": ">=8.2.0"
   },
   "keywords": [],
   "nyc": {
