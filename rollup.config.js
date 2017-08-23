@@ -1,8 +1,12 @@
-/* jslint node: true, esnext: true */
-'use strict';
+import pkg from './package.json';
 
 export default {
-  format: 'cjs',
   plugins: [],
-  external: ['kronos-endpoint', 'loglevel-mixin', 'statetransition-mixin', 'model-attributes', 'registry-mixin']
+  external: ['kronos-endpoint', 'loglevel-mixin', 'statetransition-mixin', 'model-attributes', 'registry-mixin'],
+  input: pkg.module,
+
+  output: {
+    format: 'cjs',
+    file: pkg.main
+  }
 };
