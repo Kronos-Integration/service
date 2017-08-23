@@ -9,10 +9,10 @@
     "docs": "jsdoc2md -l off -t doc/README.hbs -f src/*.js >README.md",
     "test": "mocha tests/*_test.js",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "prepublish": "rollup --output=dist/module.js -c -- src/module.js",
-    "pretest": "npm run prepublish",
+    "pretest": "rollup -c",
     "posttest": "markdown-doctest",
-    "precover": "npm run prepublish"
+    "precover": "rollup -c",
+    "prepare": "rollup -c"
   },
   "repository": {
     "type": "git",
@@ -35,7 +35,7 @@
     "chai": "^4.1.1",
     "jsdoc-to-markdown": "^3.0.0",
     "markdown-doctest": "^0.9.1",
-    "rollup": "^0.47.6",
+    "rollup": "^0.48.2",
     "semantic-release": "^7.0.2",
     "nyc": "^11.1.0"
   },
