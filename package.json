@@ -1,19 +1,5 @@
 {
   "name": "kronos-service",
-  "version": "0.0.0-semantic-release",
-  "description": "Base service implementation",
-  "main": "dist/module.js",
-  "module": "src/module.js",
-  "scripts": {
-    "cover": "nyc npm test",
-    "docs": "jsdoc2md -l off -t doc/README.hbs -f src/*.js >README.md",
-    "test": "mocha tests/*_test.js",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "pretest": "rollup -c",
-    "posttest": "markdown-doctest",
-    "precover": "rollup -c",
-    "prepare": "rollup -c"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Kronos-Integration/kronos-service.git"
@@ -22,38 +8,42 @@
     "url": "https://github.com/Kronos-Integration/kronos-service/issues"
   },
   "homepage": "https://github.com/Kronos-Integration/kronos-service#readme",
-  "dependencies": {
-    "fast-safe-stringify": "^1.2.0",
-    "kronos-endpoint": "^2.14.11",
-    "loglevel-mixin": "^1.6.22",
-    "model-attributes": "^3.0.10",
-    "registry-mixin": "^2.1.14",
-    "statetransition-mixin": "^3.1.21"
+  "scripts": {
+    "precover": "rollup -c",
+    "cover": "nyc npm test",
+    "pretest": "rollup -c",
+    "test": "mocha tests/*_test.js",
+    "posttest": "markdown-doctest",
+    "prepare": "rollup -c",
+    "docs": "jsdoc2md -l off -t doc/README.hbs -f src/*.js >README.md",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "devDependencies": {
-    "mocha": "^3.5.0",
-    "chai": "^4.1.2",
     "jsdoc-to-markdown": "^3.0.0",
     "markdown-doctest": "^0.9.1",
+    "chai": "^4.1.2",
+    "mocha": "^3.5.0",
+    "nyc": "^11.2.1",
     "rollup": "^0.49.2",
-    "semantic-release": "^7.0.2",
-    "nyc": "^11.2.1"
+    "semantic-release": "^7.0.2"
   },
+  "engines": {
+    "node": ">=8.4.0"
+  },
+  "version": "0.0.0-semantic-release",
+  "description": "{{description}}",
+  "main": "dist/index.js",
+  "keywords": [
+    "npm-package-template"
+  ],
+  "dependencies": {},
   "contributors": [
-    {
-      "name": "Torsten Link",
-      "email": "torstenlink@gmx.de"
-    },
     {
       "name": "Markus Felten",
       "email": "markus.felten@gmx.de"
     }
   ],
   "license": "BSD-2-Clause",
-  "engines": {
-    "node": ">=8.4.0"
-  },
-  "keywords": [],
   "nyc": {
     "include": [
       "dist/**/*.js"
