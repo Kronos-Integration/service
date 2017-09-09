@@ -1,16 +1,9 @@
-/* jslint node: true, esnext: true */
-
-'use strict';
-
-import Service from './Service';
-import ServiceLogger from './ServiceLogger';
-import ServiceConfig from './ServiceConfig';
-import {
-  defineServiceConsumerProperties
-}
-from './ServiceConsumerMixin';
-import ServiceProviderMixin from './ServiceProviderMixin';
-import EndpointsMixin from './EndpointsMixin';
+import Service from './service';
+import ServiceLogger from './service-logger';
+import ServiceConfig from './service-config';
+import { defineServiceConsumerProperties } from './service-consumer-mixin';
+import ServiceProviderMixin from './service-provider-mixin';
+import EndpointsMixin from './endpoints-mixin';
 
 export {
   EndpointsMixin,
