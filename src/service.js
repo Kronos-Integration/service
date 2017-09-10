@@ -79,7 +79,7 @@ const actions = prepareActions({
  * - default optional default value of the attribute
  * - needsRestart optional modification requires a service restart
  * - setter(newValue,attrribute) optional function to be used if simple value assignment is not enough
- * The Service class only defines the logLevel attribute
+ * The Service class only defines the logLevel, ans start timeout attribute
  */
 const _ca = createAttributes({
   logLevel: {
