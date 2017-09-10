@@ -13,9 +13,9 @@ const chai = require('chai'),
 
 const owner = {
   emit(name, arg1, arg2) {}, // dummy event emitter
-    endpointIdentifier(e) {
-      return `name:${e.name}`;
-    }
+  endpointIdentifier(e) {
+    return `name:${e.name}`;
+  }
 };
 
 class MyService extends Service {
@@ -23,13 +23,20 @@ class MyService extends Service {
     return 'my-service';
   }
 
+  static get description() {
+    return 'my description';
+  }
+
   static get configurationAttributes() {
-    return Object.assign(mat.createAttributes({
-      key3: {
-        needsRestart: true
-      },
-      key4: {}
-    }), Service.configurationAttributes);
+    return Object.assign(
+      mat.createAttributes({
+        key3: {
+          needsRestart: true
+        },
+        key4: {}
+      }),
+      Service.configurationAttributes
+    );
   }
 
   _start() {
@@ -37,20 +44,21 @@ class MyService extends Service {
   }
 
   configure(config) {
-    return super.configure(config).then(
-      () => {
-        Object.assign(this, config);
-        return Promise.resolve();
-      }
-    );
+    return super.configure(config).then(() => {
+      Object.assign(this, config);
+      return Promise.resolve();
+    });
   }
 }
 
 describe('service', () => {
-  const s1 = new Service({
-    key1: 'value1',
-    key2: 2
-  }, owner);
+  const s1 = new Service(
+    {
+      key1: 'value1',
+      key2: 2
+    },
+    owner
+  );
 
   describe('plain creation', () => {
     it('has a type', () => assert.equal(s1.type, 'service'));
@@ -64,22 +72,29 @@ describe('service', () => {
   });
 
   describe('create with name', () => {
-    const s2 = new Service({
-      name: 'myName'
-    }, owner);
+    const s2 = new Service(
+      {
+        name: 'myName'
+      },
+      owner
+    );
     it('has a name', () => assert.equal(s2.name, 'myName'));
-    it('json', () => assert.deepEqual(s2.toJSON(), {
-      name: 'myName',
-      type: 'service',
-      endpoints: {}
-    }));
+    it('json', () =>
+      assert.deepEqual(s2.toJSON(), {
+        name: 'myName',
+        type: 'service',
+        endpoints: {}
+      }));
   });
 
   describe('creation with logLevel', () => {
-    const s2 = new Service({
-      key1: 'value1',
-      logLevel: 'trace'
-    }, owner);
+    const s2 = new Service(
+      {
+        key1: 'value1',
+        logLevel: 'trace'
+      },
+      owner
+    );
 
     it('has given logLevel', () => assert.equal(s2.logLevel, 'trace'));
 
@@ -102,16 +117,21 @@ describe('service', () => {
 
   describe('derived service', () => {
     describe('creation', () => {
-      const s2 = new MyService({
-        key3: 'value3',
-        key4: 4
-      }, owner);
+      const s2 = new MyService(
+        {
+          key3: 'value3',
+          key4: 4
+        },
+        owner
+      );
 
       it('has a type', () => assert.equal(s2.type, 'my-service'));
-      it('has a toString', () => assert.equal(s2.toString(), 'my-service: stopped'));
-      it('has additional configuration attribute key3', () => assert.equal(s2.configurationAttributes.key3
-        .name,
-        'key3'));
+      it('has a description', () =>
+        assert.equal(s2.description, 'my description'));
+      it('has a toString', () =>
+        assert.equal(s2.toString(), 'my-service: stopped'));
+      it('has additional configuration attribute key3', () =>
+        assert.equal(s2.configurationAttributes.key3.name, 'key3'));
       it('has values', () => {
         assert.equal(s2.key3, 'value3');
         assert.equal(s2.key4, 4);
@@ -123,56 +143,63 @@ describe('service', () => {
         key7: 1
       });
 
-      const se = new endpoint.SendEndpoint('se', {get name() {
+      const se = new endpoint.SendEndpoint('se', {
+        get name() {
           return 'a';
         }
       });
       se.connected = s2.endpoints.config;
 
       it('re configure', () =>
-        se.receive({
-          logLevel: 'trace',
-          key2: 77
-        }).then(
-          f => {
+        se
+          .receive({
+            logLevel: 'trace',
+            key2: 77
+          })
+          .then(f => {
             assert.equal(s2.logLevel, 'trace');
             assert.equal(s2.key2, 77);
-          }
-        )
-      );
+          }));
 
       describe('timeout', () => {
         it('can change start timeout', () =>
-          s2.configure({
-            timeout: {
-              start: 123.45
-            }
-          }).then(() => assert.equal(s2.timeout.start, 123.45)));
+          s2
+            .configure({
+              timeout: {
+                start: 123.45
+              }
+            })
+            .then(() => assert.equal(s2.timeout.start, 123.45)));
       });
     });
 
     describe('states', () => {
-      const s1 = new MyService({
-        key1: 'value1',
-        key2: 2,
-      }, owner);
-      it('can be restartIfRunning (when stopped)', () => s1.restartIfRunning().then(() => assert.equal(s1
-        .state,
-        'stopped')));
+      const s1 = new MyService(
+        {
+          key1: 'value1',
+          key2: 2
+        },
+        owner
+      );
+      it('can be restartIfRunning (when stopped)', () =>
+        s1.restartIfRunning().then(() => assert.equal(s1.state, 'stopped')));
 
-      it('can be started', () => s1.start().then(() => assert.equal(s1.state, 'running')));
-      it('can be restartIfRunning', () => s1.restartIfRunning().then(() => assert.equal(s1.state,
-        'running')));
-      it('can be restarted', () => s1.restart().then(() => assert.equal(s1.state, 'running')));
+      it('can be started', () =>
+        s1.start().then(() => assert.equal(s1.state, 'running')));
+      it('can be restartIfRunning', () =>
+        s1.restartIfRunning().then(() => assert.equal(s1.state, 'running')));
+      it('can be restarted', () =>
+        s1.restart().then(() => assert.equal(s1.state, 'running')));
 
       const s2 = new MyService({
         key1: 'value1',
-        key2: 2,
+        key2: 2
       });
 
       it('derived state untouched', () => assert.equal(s2.state, 'stopped'));
 
-      it('can be stopped', () => s1.stop().then(() => assert.equal(s1.state, 'stopped')));
+      it('can be stopped', () =>
+        s1.stop().then(() => assert.equal(s1.state, 'stopped')));
     });
   });
 });
