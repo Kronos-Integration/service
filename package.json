@@ -31,7 +31,7 @@
     "statetransition-mixin": "^3.1.21"
   },
   "devDependencies": {
-    "mocha": "^3.5.1",
+    "mocha": "^3.5.2",
     "chai": "^4.1.2",
     "jsdoc-to-markdown": "^3.0.0",
     "markdown-doctest": "^0.9.1",
@@ -67,5 +67,8 @@
     "repository": {
       "url": "https://github.com/Kronos-Tools/npm-package-template.git"
     }
+  },
+  "xo": {
+    "space": true
   }
 }
