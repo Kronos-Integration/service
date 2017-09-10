@@ -136,6 +136,10 @@ dummyLogReceiver.receive = entry => {
 export default class Service extends EndpointsMixin(
   StateTransitionMixin(LogLevelMixin(events), actions, 'stopped')
 ) {
+  static get description() {
+    return 'This service is the base class for service implementations';
+  }
+
   static get name() {
     return 'service';
   }
@@ -200,6 +204,10 @@ export default class Service extends EndpointsMixin(
 
   get type() {
     return this.constructor.name;
+  }
+
+  get description() {
+    return this.constructor.description;
   }
 
   async execute(command) {
