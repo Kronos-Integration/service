@@ -1,6 +1,6 @@
 {
   "name": "kronos-service",
-  "version": "4.5.6",
+  "version": "0.0.0-semantic-release",
   "description": "Base service implementation",
   "main": "dist/module.js",
   "module": "src/module.js",
