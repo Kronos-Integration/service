@@ -11,7 +11,6 @@ import {
 
 import {
   defaultLogLevels,
-  defineLoggerMethods,
   defineLogLevelProperties,
   LogLevelMixin,
   makeLogEvent
@@ -434,5 +433,4 @@ export default class Service extends EndpointsMixin(
   }
 }
 
-defineLoggerMethods(Service.prototype);
 defineActionMethods(Service.prototype, actions);
