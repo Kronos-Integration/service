@@ -1,6 +1,6 @@
 {
   "name": "kronos-service",
-  "version": "0.0.0-semantic-release",
+  "version": "4.5.6",
   "description": "Base service implementation",
   "main": "dist/module.js",
   "module": "src/module.js",
@@ -8,7 +8,8 @@
     "cover": "nyc npm test",
     "docs": "jsdoc2md -l off -t doc/README.hbs -f src/*.js >README.md",
     "test": "mocha tests/*-test.js",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "semantic-release":
+      "semantic-release pre && npm publish && semantic-release post",
     "pretest": "rollup -c",
     "posttest": "markdown-doctest",
     "precover": "rollup -c",
@@ -55,12 +56,8 @@
   },
   "keywords": [],
   "nyc": {
-    "include": [
-      "dist/**/*.js"
-    ],
-    "reporter": [
-      "lcov"
-    ],
+    "include": ["dist/**/*.js"],
+    "reporter": ["lcov"],
     "report-dir": "./coverage"
   },
   "template": {
