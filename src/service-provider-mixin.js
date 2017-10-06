@@ -222,14 +222,11 @@ export default function ServiceProviderMixin(superclass) {
 		 * Stop all services
 		 * @return {Promise} that fullfills when all services are stopped
 		 */
-    _stop() {
-      return super
-        ._stop()
-        .then(
-          Promise.all(
-            Object.keys(this.services).map(name => this.services[name].stop())
-          )
-        );
+    async _stop() {
+      await super._stop();
+      return Promise.all(
+        Object.keys(this.services).map(name => this.services[name].stop())
+      );
     }
   };
 }
