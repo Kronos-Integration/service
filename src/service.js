@@ -16,62 +16,13 @@ import {
   makeLogEvent
 } from 'loglevel-mixin';
 
-import {
-  prepareActions,
-  defineActionMethods,
-  StateTransitionMixin,
-  defineStateTransitionProperties
-} from 'statetransition-mixin';
+import { prepareActions, StateTransitionMixin } from 'statetransition-mixin';
 
 import {
   createAttributes,
   getAttribute,
   setAttributes
 } from 'model-attributes';
-
-const actions = prepareActions({
-  start: {
-    stopped: {
-      target: 'running',
-      during: 'starting',
-      rejected: 'failed',
-      timeout: 5000
-    }
-  },
-  restart: {
-    stopped: {
-      target: 'running',
-      during: 'starting',
-      rejected: 'failed',
-      timeout: 5000
-    },
-    running: {
-      target: 'running',
-      during: 'restarting',
-      timeout: 5000
-    }
-  },
-  stop: {
-    running: {
-      target: 'stopped',
-      during: 'stopping',
-      rejected: 'failed',
-      timeout: 5000
-    },
-    starting: {
-      target: 'stopped',
-      during: 'stopping',
-      rejected: 'failed',
-      timeout: 5000
-    },
-    failed: {
-      target: 'stopped',
-      during: 'stopping',
-      rejected: 'failed',
-      timeout: 1000
-    }
-  }
-});
 
 /**
  * Meta information for the config attributes.
@@ -133,7 +84,53 @@ dummyLogReceiver.receive = entry => {
  * - config in: configuration request
  */
 export default class Service extends EndpointsMixin(
-  StateTransitionMixin(LogLevelMixin(events), actions, 'stopped')
+  StateTransitionMixin(
+    LogLevelMixin(events),
+    prepareActions({
+      start: {
+        stopped: {
+          target: 'running',
+          during: 'starting',
+          rejected: 'failed',
+          timeout: 5000
+        }
+      },
+      restart: {
+        stopped: {
+          target: 'running',
+          during: 'starting',
+          rejected: 'failed',
+          timeout: 5000
+        },
+        running: {
+          target: 'running',
+          during: 'restarting',
+          timeout: 5000
+        }
+      },
+      stop: {
+        running: {
+          target: 'stopped',
+          during: 'stopping',
+          rejected: 'failed',
+          timeout: 5000
+        },
+        starting: {
+          target: 'stopped',
+          during: 'stopping',
+          rejected: 'failed',
+          timeout: 5000
+        },
+        failed: {
+          target: 'stopped',
+          during: 'stopping',
+          rejected: 'failed',
+          timeout: 1000
+        }
+      }
+    }),
+    'stopped'
+  )
 ) {
   static get description() {
     return 'This service is the base class for service implementations';
@@ -181,8 +178,6 @@ export default class Service extends EndpointsMixin(
         ? defaultLogLevels[config.logLevel] || defaultLogLevels.info
         : defaultLogLevels.info
     );
-
-    defineStateTransitionProperties(this, actions, 'stopped');
 
     this.addEndpoint(
       new SendEndpointDefault('log', this)
@@ -432,5 +427,3 @@ export default class Service extends EndpointsMixin(
     return ':';
   }
 }
-
-defineActionMethods(Service.prototype, actions);
