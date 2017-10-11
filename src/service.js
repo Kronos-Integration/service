@@ -32,6 +32,10 @@ import {
  * The Service class only defines the logLevel, ans start timeout attribute
  */
 const _ca = createAttributes({
+  description: {
+    type: 'string',
+    description: 'human readable description of the step'
+  },
   logLevel: {
     description: `logging level one of: ${Object.keys(defaultLogLevels)}`,
     default: defaultLogLevels.info,
