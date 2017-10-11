@@ -1,5 +1,8 @@
+import { SendEndpoint, ReceiveEndpoint } from 'kronos-endpoint';
+
 /**
  * Endpoint accessor mixin
+ * Manages endpoints in a container
  */
 export default function EndpointsMixin(superclass) {
   return class extends superclass {
@@ -19,6 +22,39 @@ export default function EndpointsMixin(superclass) {
     addEndpoint(ep) {
       this.endpoints[ep.name] = ep;
       return ep;
+    }
+
+    /**
+     * Deliver the endpoint options for a given endpoint definition.
+     * @return {Object} suiable to pass as options to the endpoint factory
+     */
+    endpointOptions(name, def) {
+      let options = {};
+
+      if (def.opposite) {
+        options.createOpposite = true;
+      }
+
+      return options;
+    }
+
+    /**
+     * Creates the endpoint objects defined as a combination from
+     * implementation and definition
+     * @param {Object} def The step configuration
+     * @param {Object} interceptorFactory
+     * @api protected
+     */
+    createEndpointsFromConfig(def, interceptorFactory) {
+      if (def !== undefined && def.endpoints !== undefined) {
+        Object.keys(def.endpoints).forEach(name =>
+          this.createEndpointFromConfig(
+            name,
+            def.endpoints[name],
+            interceptorFactory
+          )
+        );
+      }
     }
 
     /**
