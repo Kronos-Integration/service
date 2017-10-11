@@ -24,6 +24,8 @@ import {
   setAttributes
 } from 'model-attributes';
 
+const DESCRIPTION = Symbol('description');
+
 /**
  * Meta information for the config attributes.
  * - default optional default value of the attribute
@@ -205,7 +207,11 @@ export default class Service extends EndpointsMixin(
   }
 
   get description() {
-    return this.constructor.description;
+    return this[DESCRIPTION] || this.constructor.description;
+  }
+
+  set description(desc) {
+    this[DESCRIPTION] = desc;
   }
 
   async execute(command) {
