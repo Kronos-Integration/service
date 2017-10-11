@@ -61,33 +61,31 @@ export default function ServiceProviderMixin(superclass) {
       this.registerService(this);
     }
 
-    execute(command) {
+    async execute(command) {
       if (Array.isArray(command)) {
         return Promise.all(command.map(c => this.execute(c)));
       }
 
       if (command.action === 'list') {
-        return Promise.resolve(
-          Object.keys(this.services)
-            .map(name => this.services[name])
-            .map(
-              s =>
-                command.options
-                  ? s.toJSONWithOptions(command.options)
-                  : s.toJSON()
-            )
-        );
+        return Object.keys(this.services)
+          .map(name => this.services[name])
+          .map(
+            s =>
+              command.options
+                ? s.toJSONWithOptions(command.options)
+                : s.toJSON()
+          );
       }
 
       const service = this.services[command.service];
 
-      if (!service) {
-        return Promise.reject(new Error(`Unknown service: ${command.service}`));
+      if (service === undefined) {
+        throw new Error(`Unknown service: ${command.service}`);
       }
 
       switch (command.action) {
         case 'get':
-          return Promise.resolve(service.toJSONWithOptions(command.options));
+          return service.toJSONWithOptions(command.options);
 
         case 'start':
           return service.start();
@@ -99,9 +97,7 @@ export default function ServiceProviderMixin(superclass) {
           return service.restart();
 
         default:
-          return Promise.reject(
-            new Error(`Unknown command: ${command.action}`)
-          );
+          throw new Error(`Unknown command: ${command.action}`);
       }
     }
 
