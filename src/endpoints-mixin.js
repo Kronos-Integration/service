@@ -22,6 +22,30 @@ export default function EndpointsMixin(superclass) {
     }
 
     /**
+     * creates a new endpoint form a defintion
+     * @param {string} name of the new endpoint
+     * @param {Object} def endpoint attributes
+     * @param {Object} interceptorFactory
+     */
+    createEndpointFromConfig(name, def, interceptorFactory) {
+      let ep;
+
+      if (def.in) {
+        ep = new ReceiveEndpoint(name, this, this.endpointOptions(name, def));
+      } else if (def.out) {
+        ep = new SendEndpoint(name, this, this.endpointOptions(name, def));
+      }
+
+      this.addEndpoint(ep);
+
+      if (def.interceptors !== undefined) {
+        ep.interceptors = def.interceptors.map(icDef =>
+          interceptorFactory.createInterceptorInstanceFromConfig(icDef, ep)
+        );
+      }
+    }
+
+    /**
 		 * removes a endpoint
 		 * @param {string} name name of the endpoint
 		 * @return {undefined}
