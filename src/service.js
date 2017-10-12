@@ -196,6 +196,8 @@ export default class Service extends EndpointsMixin(
     ).receive = request => this.execute(request);
 
     this._configure(config);
+
+    this.createEndpointsFromConfig(config.endpoints, owner);
   }
 
   get configurationAttributes() {

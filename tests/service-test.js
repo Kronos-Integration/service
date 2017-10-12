@@ -43,11 +43,9 @@ class MyService extends Service {
     return new Promise((f, r) => setTimeout(() => f(), 10));
   }
 
-  configure(config) {
-    return super.configure(config).then(() => {
-      Object.assign(this, config);
-      return Promise.resolve();
-    });
+  async configure(config) {
+    await super.configure(config);
+    Object.assign(this, config);
   }
 }
 
@@ -61,6 +59,8 @@ describe('service', () => {
   );
 
   describe('plain creation', () => {
+    //  it('has a description', () =>
+    //    assert.equal(s1.description, 'my description'));
     it('has a type', () => assert.equal(s1.type, 'service'));
     it('has a name', () => assert.equal(s1.name, 'service'));
     it('has a owner', () => assert.equal(s1.owner, owner));
@@ -84,6 +84,26 @@ describe('service', () => {
         name: 'myName',
         type: 'service',
         endpoints: {}
+      }));
+  });
+
+  describe('create with endpoints', () => {
+    const s2 = new Service(
+      {
+        endpoints: {
+          ep1: { in: true }
+        }
+      },
+      owner
+    );
+
+    it('json', () =>
+      assert.deepEqual(s2.toJSON(), {
+        name: 'service',
+        type: 'service',
+        endpoints: {
+          ep1: { in: true }
+        }
       }));
   });
 

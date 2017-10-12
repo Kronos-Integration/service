@@ -41,18 +41,14 @@ export default function EndpointsMixin(superclass) {
     /**
      * Creates the endpoint objects defined as a combination from
      * implementation and definition
-     * @param {Object} def The step configuration
+     * @param {Object} def endpoints definition
      * @param {Object} interceptorFactory
      * @api protected
      */
     createEndpointsFromConfig(def, interceptorFactory) {
-      if (def !== undefined && def.endpoints !== undefined) {
-        Object.keys(def.endpoints).forEach(name =>
-          this.createEndpointFromConfig(
-            name,
-            def.endpoints[name],
-            interceptorFactory
-          )
+      if (def !== undefined) {
+        Object.keys(def).forEach(name =>
+          this.createEndpointFromConfig(name, def[name], interceptorFactory)
         );
       }
     }
