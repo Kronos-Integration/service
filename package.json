@@ -36,8 +36,8 @@
     "jsdoc-to-markdown": "^3.0.0",
     "markdown-doctest": "^0.9.1",
     "rollup": "^0.50.0",
-    "semantic-release": "^8.2.1",
-    "nyc": "^11.2.1"
+    "semantic-release": "^8.2.2",
+    "nyc": "^11.3.0"
   },
   "contributors": [
     {
