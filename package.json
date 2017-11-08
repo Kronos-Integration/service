@@ -35,7 +35,7 @@
     "chai": "^4.1.2",
     "jsdoc-to-markdown": "^3.0.1",
     "markdown-doctest": "^0.9.1",
-    "rollup": "^0.51.0",
+    "rollup": "^0.51.1",
     "semantic-release": "^9.1.0",
     "nyc": "^11.3.0"
   },
@@ -51,7 +51,7 @@
   ],
   "license": "BSD-2-Clause",
   "engines": {
-    "node": ">=8.9.0"
+    "node": ">=8.9.1"
   },
   "keywords": [],
   "nyc": {
