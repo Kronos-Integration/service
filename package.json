@@ -5,7 +5,7 @@
   "main": "dist/module.js",
   "module": "src/module.js",
   "scripts": {
-    "cover": "nyc npm test",
+    "cover": "nyc --temp-directory build/nyc npm test",
     "docs": "jsdoc2md -l off -t doc/README.hbs -f src/*.js >README.md",
     "test": "mocha tests/*-test.js",
     "semantic-release": "semantic-release",
