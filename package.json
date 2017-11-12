@@ -35,8 +35,8 @@
     "chai": "^4.1.2",
     "jsdoc-to-markdown": "^3.0.1",
     "markdown-doctest": "^0.9.1",
-    "rollup": "^0.51.3",
-    "semantic-release": "^9.1.0",
+    "rollup": "^0.51.5",
+    "semantic-release": "^9.1.1",
     "nyc": "^11.3.0"
   },
   "contributors": [
