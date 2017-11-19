@@ -1,19 +1,9 @@
-/* global xdescribe, describe, it, xit, before, beforeEach, after, afterEach */
-/* jslint node: true, esnext: true */
-
-'use strict';
-
-const chai = require('chai'),
-  assert = chai.assert,
-  expect = chai.expect,
-  should = chai.should(),
-  endpoint = require('kronos-endpoint'),
-  {
-    Service,
-    ServiceProviderMixin,
-    ServiceLogger,
-    ServiceConfig
-  } = require('../dist/module');
+import { SendEndpoint } from 'kronos-endpoint';
+import Service from '../src/service';
+import ServiceConfig from '../src/service-config';
+import ServiceLogger from '../src/service-logger';
+import ServiceProviderMixin from '../src/service-provider-mixin';
+import test from 'ava';
 
 class ServiceProvider extends ServiceProviderMixin(Service) {
   static get name() {
@@ -37,7 +27,7 @@ class ServiceTest extends Service {
   }
 }
 
-describe('service provider', () => {
+test('service provider config service', async t => {
   const sp = new ServiceProvider([
     {
       name: 'a'
@@ -48,21 +38,27 @@ describe('service provider', () => {
     }
   ]);
 
-  describe('initial setup', () => {
-    describe('config service', () => {
-      it('present', () => assert.equal(sp.services.config.name, 'config'));
-      it('preserved initial config', () =>
-        assert.deepEqual(Object.keys(sp.services.config.preservedConfigs), [
-          'a',
-          'test'
-        ]));
-    });
+  t.is(sp.services.config.name, 'config');
+  t.deepEqual(Object.keys(sp.services.config.preservedConfigs), ['a', 'test']);
 
-    it('logger service', () => assert.equal(sp.services.logger.name, 'logger'));
-    it('can be started', () =>
-      sp.start().then(() => assert.equal(sp.state, 'running')));
-    it('service provider service', () => assert.equal(sp.services.a.name, 'a'));
-  });
+  t.is(sp.services.logger.name, 'logger');
+
+  await sp.start();
+  t.is(sp.state, 'running');
+
+  t.is(sp.services.a.name, 'a');
+});
+
+describe('service provider', () => {
+  const sp = new ServiceProvider([
+    {
+      name: 'a'
+    },
+    {
+      name: 'test',
+      key3: 3
+    }
+  ]);
 
   describe('without initial config', () => {
     const sp = new ServiceProvider();
