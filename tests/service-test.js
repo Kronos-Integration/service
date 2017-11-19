@@ -166,7 +166,7 @@ test('service derived configuration change start timeout', async t => {
     }
   });
 
-  t.is(s2.timeout.start, 123.45);
+  t.is(s1.timeout.start, 123.45);
 });
 
 test('service states', async t => {
