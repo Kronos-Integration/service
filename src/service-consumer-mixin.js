@@ -8,31 +8,30 @@ export function defineServiceConsumerProperties(
   provider,
   waitUntilFactoryPresent
 ) {
-  const promises = [];
+  return Promise.all(
+    Object.keys(config).map(async name => {
+      let entry = config[name];
 
-  Object.keys(config).forEach(name => {
-    let entry = config[name];
-
-    if (typeof entry === 'string') {
-      entry = {
-        name: name,
-        type: entry
-      };
-    } else {
-      if (entry.name === undefined) {
-        entry.name = name;
+      if (typeof entry === 'string') {
+        entry = {
+          name: name,
+          type: entry
+        };
+      } else {
+        if (entry.name === undefined) {
+          entry.name = name;
+        }
       }
-    }
 
-    promises.push(
-      provider.declareService(entry, waitUntilFactoryPresent).then(service => {
-        Object.defineProperty(object, name, {
-          value: service
-        });
-        return service.start();
-      })
-    );
-  });
+      const service = await provider.declareService(
+        entry,
+        waitUntilFactoryPresent
+      );
 
-  return Promise.all(promises);
+      Object.defineProperty(object, name, {
+        value: service
+      });
+      return service.start();
+    })
+  );
 }

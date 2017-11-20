@@ -14,13 +14,14 @@ export default class ServiceLogger extends Service {
   constructor(config, owner) {
     super(config, owner);
 
-    this.addEndpoint(new ReceiveEndpoint('log', this)).receive = entry => {
+    this.addEndpoint(
+      new ReceiveEndpoint('log', this)
+    ).receive = async entry => {
       if (entry.severity === 'error') {
         console.error(safeStringify(entry));
       } else {
         console.log(safeStringify(entry));
       }
-      return Promise.resolve();
     };
   }
 
