@@ -116,7 +116,7 @@ test('service create with logLevel', t => {
     logLevel: 'na sowas'
   });
 
-  t.is(s1.logLevel, 'info');
+  t.is(s2.logLevel, 'info');
 });
 
 test('service derived creation', t => {
