@@ -73,13 +73,12 @@ const dummyLogReceiver = new ReceiveEndpoint('logReceiver', {
   }
 });
 
-dummyLogReceiver.receive = entry => {
+dummyLogReceiver.receive = async entry => {
   if (entry.severity === 'error') {
     console.error(safeStringify(entry));
   } else {
     console.log(safeStringify(entry));
   }
-  return Promise.resolve();
 };
 
 /**
@@ -151,9 +150,9 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-	 * @param {object} config
-	 * @param {object} [owner]
-	 */
+   * @param {object} config
+   * @param {object} [owner]
+   */
   constructor(config, owner) {
     super();
 
@@ -234,11 +233,11 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-	 * Called when the service state changes.
-	 * Emits a serviceStateChanged event to the owner
-	 * @param {string} oldState
-	 * @param {string} newState
-	 */
+   * Called when the service state changes.
+   * Emits a serviceStateChanged event to the owner
+   * @param {string} oldState
+   * @param {string} newState
+   */
   stateChanged(oldState, newState) {
     this.owner.emit('serviceStateChanged', this, oldState, newState);
     this.trace({
@@ -259,10 +258,10 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-	 * Called when state transition is not allowed
-	 * @param {string} action originating action name
-	 * @return {Promise} rejecting with an Error
-	 */
+   * Called when state transition is not allowed
+   * @param {string} action originating action name
+   * @return {Promise} rejecting with an Error
+   */
   rejectWrongState(action) {
     return Promise.reject(
       new Error(`Can't ${action} ${this} in ${this.state} state`)
@@ -278,19 +277,19 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-	 * default implementation does a _stop() and a _start()
-	 * @return {Promise}
-	 */
+   * default implementation does a _stop() and a _start()
+   * @return {Promise}
+   */
   async _restart() {
     await this._stop();
     return this._start();
   }
 
   /**
-	 * Restarts if in running mode
-	 * Otherwise does nothing
-	 * @returns {Promise} resolves when restart is done (or immediate if no restart triggered)
-	 */
+   * Restarts if in running mode
+   * Otherwise does nothing
+   * @returns {Promise} resolves when restart is done (or immediate if no restart triggered)
+   */
   async restartIfRunning() {
     if (this.state === 'running') {
       return this.restart();
@@ -298,9 +297,9 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-	 * Returns the string representation of this step
-	 * @return {string} human readable name
-	 */
+   * Returns the string representation of this step
+   * @return {string} human readable name
+   */
   toString() {
     return `${this.name}: ${this.state}`;
   }
@@ -315,15 +314,15 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-	 * Deliver json representation
-	 * @param {object} [options]
-	 *  with the following flags:
-	 *    includeRuntimeInfo - include runtime informtion like state
-	 *    includeDefaults - also include default endpoints
-	 *    includeName - name of the service
-	 *    includeConfig - also include config attributes
-	 * @return {object} json representation
-	 */
+   * Deliver json representation
+   * @param {object} [options]
+   *  with the following flags:
+   *    includeRuntimeInfo - include runtime informtion like state
+   *    includeDefaults - also include default endpoints
+   *    includeName - name of the service
+   *    includeConfig - also include config attributes
+   * @return {object} json representation
+   */
   toJSONWithOptions(options = {}) {
     const json = {
       type: this.type,
@@ -359,30 +358,30 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-	 * defaults to the type
-	 */
+   * defaults to the type
+   */
   get name() {
     return this.type;
   }
 
   /**
-	 * Should we start when beeing registered
-	 * @return {boolean} false
-	 */
+   * Should we start when beeing registered
+   * @return {boolean} false
+   */
   get autostart() {
     return false;
   }
 
   /**
-	 * Takes attribute values from config parameters
-	 * and copies them over to the object.
-	 * Copying is done according to configurationAttributes
-	 * Which means we loop over all configuration attributes
-	 * and then for each attribute decide if we use the default, call a setter function
-	 * or simply assign the attribute value
-	 * @param {object} config
-	 * @return {Set} of modified attributes
-	 */
+   * Takes attribute values from config parameters
+   * and copies them over to the object.
+   * Copying is done according to configurationAttributes
+   * Which means we loop over all configuration attributes
+   * and then for each attribute decide if we use the default, call a setter function
+   * or simply assign the attribute value
+   * @param {object} config
+   * @return {Set} of modified attributes
+   */
   _configure(config) {
     const modified = new Set();
     setAttributes(
@@ -402,13 +401,13 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-	 * Use new configuration.
-	 * Internally calls _configure(config) as the constructor does
-	 * If attribute with needsRestart are touched the restartIfRunning method
-	 * will be called
-	 * @param {pbject} new config
-	 * @return {Promise} fillfills when config is applied
-	 */
+   * Use new configuration.
+   * Internally calls _configure(config) as the constructor does
+   * If attribute with needsRestart are touched the restartIfRunning method
+   * will be called
+   * @param {pbject} new config
+   * @return {Promise} fillfills when config is applied
+   */
   async configure(config) {
     const modified = this._configure(config);
 
@@ -420,10 +419,10 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-	 * Adds service name to the log event
-	 * @param {string} level the log level
-	 * @param {object} arg log content
-	 */
+   * Adds service name to the log event
+   * @param {string} level the log level
+   * @param {object} arg log content
+   */
   log(level, arg) {
     this.endpoints.log.receive(
       makeLogEvent(level, arg, {
@@ -433,8 +432,8 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-	 * @return {string} separator between service name and endpoint name
-	 **/
+   * @return {string} separator between service name and endpoint name
+   **/
   get endpointParentSeparator() {
     return ':';
   }
