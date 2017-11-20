@@ -1,19 +1,9 @@
-/* global xdescribe, describe, it, xit, before, beforeEach, after, afterEach */
-/* jslint node: true, esnext: true */
-
-'use strict';
-
-const chai = require('chai'),
-  assert = chai.assert,
-  expect = chai.expect,
-  should = chai.should(),
-  endpoint = require('kronos-endpoint'),
-  {
-    Service,
-    ServiceProviderMixin,
-    ServiceLogger,
-    ServiceConfig
-  } = require('../dist/module');
+import { SendEndpoint } from 'kronos-endpoint';
+import Service from '../src/service';
+import ServiceConfig from '../src/service-config';
+import ServiceLogger from '../src/service-logger';
+import ServiceProviderMixin from '../src/service-provider-mixin';
+import test from 'ava';
 
 class ServiceProvider extends ServiceProviderMixin(Service) {
   static get name() {
@@ -37,7 +27,7 @@ class ServiceTest extends Service {
   }
 }
 
-describe('service provider', () => {
+test('service provider config service', async t => {
   const sp = new ServiceProvider([
     {
       name: 'a'
@@ -48,291 +38,138 @@ describe('service provider', () => {
     }
   ]);
 
-  describe('initial setup', () => {
-    describe('config service', () => {
-      it('present', () => assert.equal(sp.services.config.name, 'config'));
-      it('preserved initial config', () =>
-        assert.deepEqual(Object.keys(sp.services.config.preservedConfigs), [
-          'a',
-          'test'
-        ]));
-    });
+  await sp.start();
 
-    it('logger service', () => assert.equal(sp.services.logger.name, 'logger'));
-    it('can be started', () =>
-      sp.start().then(() => assert.equal(sp.state, 'running')));
-    it('service provider service', () => assert.equal(sp.services.a.name, 'a'));
+  t.is(sp.services.config.name, 'config');
+  t.deepEqual(Object.keys(sp.services.config.preservedConfigs), ['a', 'test']);
+
+  t.is(sp.services.logger.name, 'logger');
+
+  t.is(sp.state, 'running');
+
+  t.is(sp.services.a.name, 'a');
+});
+
+test('service provider without initial config', async t => {
+  const sp = new ServiceProvider();
+
+  await sp.start();
+
+  t.is(sp.services.config.name, 'config');
+
+  sp.info(`logging`);
+});
+
+async function makeServices() {
+  const sp = new ServiceProvider();
+
+  await sp.start();
+
+  await sp.registerService(new ServiceTest({}, sp));
+  await sp.registerService(
+    new ServiceTest(
+      {
+        name: 't2'
+      },
+      sp
+    )
+  );
+
+  return sp;
+}
+
+test('service provider additional service', async t => {
+  const sp = await makeServices();
+
+  t.is(sp.services.test.name, 'test');
+});
+
+test('service provider additional service configure service', async t => {
+  const sp = await makeServices();
+
+  await sp.services.test.configure({
+    key: 'new value'
   });
 
-  describe('without initial config', () => {
-    const sp = new ServiceProvider();
-    it('present', () => assert.equal(sp.services.config.name, 'config'));
-  });
+  t.is(sp.services.test.key, 'new value');
+});
 
-  describe('logging', () => {
-    // TODO wait until logger service has fullfilled
-    sp.info(`logging`);
-  });
+test('service provider additional service send change request over config service', async t => {
+  const sp = await makeServices();
 
-  describe('command endpoint', () => {
-    const testEndpoint = new endpoint.SendEndpoint('test');
-    testEndpoint.connected = sp.endpoints.command;
+  await sp.services.config.endpoints.config.receive([
+    {
+      name: 'config'
+    },
+    {
+      name: 'unknown'
+    },
+    {
+      name: 'test',
+      key1: 4711,
+      key2: '2'
+    }
+  ]);
 
-    describe('info', () => {
-      it('has response', () =>
-        testEndpoint
-          .receive({
-            action: 'list'
-          })
-          .then(r =>
-            assert.deepEqual(r.sort((a, b) => a.name.localeCompare(b.name)), [
-              {
-                endpoints: {},
-                name: 'a',
-                type: 'service-provider'
-              },
-              {
-                endpoints: {
-                  config: {
-                    in: true
-                  }
-                },
-                name: 'config',
-                type: 'config'
-              },
-              {
-                endpoints: {
-                  log: {
-                    in: true
-                  }
-                },
-                name: 'logger',
-                type: 'logger'
-              }
-            ])
-          ));
-    });
-    describe('get', () => {
-      it('has response ', () =>
-        testEndpoint
-          .receive({
-            action: 'get',
-            service: 'logger',
-            options: {
-              includeRuntimeInfo: true,
-              includeDefaults: true,
-              includeConfig: true,
-              includeName: true
-            }
-          })
-          .then(r => {
-            assert.deepEqual(r, {
-              description:
-                'This service is the base class for service implementations',
-              endpoints: {
-                command: {
-                  in: true
-                },
-                config: {
-                  in: true
-                },
-                log: {
-                  in: true
-                }
-              },
-              timeout: {
-                start: 5
-              },
-              logLevel: 'info',
-              state: 'running',
-              name: 'logger',
-              type: 'logger'
-            });
-          }));
-    });
+  t.is(sp.services.test.key1, 4711);
+});
 
-    describe('start', () => {
-      it('is running', () =>
-        testEndpoint
-          .receive({
-            action: 'start',
-            service: 'logger'
-          })
-          .then(r => {
-            assert.equal(r.state, 'running');
-          }));
-    });
-    describe('stop', () => {
-      it('is stopped', () =>
-        testEndpoint
-          .receive({
-            action: 'stop',
-            service: 'logger'
-          })
-          .then(r => {
-            assert.equal(r.state, 'stopped');
-          }));
-    });
+test('service provider additional service can be unregistered', async t => {
+  const sp = await makeServices();
 
-    describe('restart', () => {
-      it('is running', () =>
-        testEndpoint
-          .receive({
-            action: 'restart',
-            service: 'logger'
-          })
-          .then(r => {
-            assert.equal(r.state, 'running');
-          }));
-    });
+  await sp.unregisterService('t2');
 
-    describe('several restarts', () => {
-      it('is running', () =>
-        testEndpoint
-          .receive([
-            {
-              action: 'restart',
-              service: 'logger'
-            },
-            {
-              action: 'restart',
-              service: 'logger'
-            }
-          ])
-          .then(r => {
-            assert.equal(r[1].state, 'running');
-          }));
-    });
+  t.is(sp.services.t2, undefined);
+});
 
-    describe('restart unknown service', () => {
-      it('is running', () =>
-        testEndpoint
-          .receive({
-            action: 'restart',
-            service: 'invalid'
-          })
-          .then(
-            r => {
-              assert.equal(r.state, 'xxrunning');
-            },
-            e => {
-              assert.ok(true);
-            }
-          ));
-    });
+test('service provider additional service declare service with type', async t => {
+  const sp = await makeServices();
 
-    describe('unknown command', () => {
-      it('rejects', () =>
-        testEndpoint
-          .receive({
-            action: 'unknown',
-            service: 'logger'
-          })
-          .then(
-            r => {
-              assert.equal(r.state, 'xxrunning');
-            },
-            e => {
-              assert.ok(true);
-            }
-          ));
-    });
-  });
+  setTimeout(() => sp.registerServiceFactory(ServiceTest), 30);
 
-  describe('additional service', () => {
-    before(() => {
-      sp.registerService(new ServiceTest({}, sp));
-      sp.registerService(
-        new ServiceTest(
-          {
-            name: 't2'
-          },
-          sp
-        )
-      );
-    });
+  await sp.declareService(
+    {
+      name: 's2',
+      type: 'test'
+    },
+    true
+  );
+  await sp.declareService(
+    {
+      name: 's2',
+      type: 'test'
+    },
+    true
+  );
 
-    it('test service', () => assert.equal(sp.services.test.name, 'test'));
+  let s = await sp.declareService(
+    {
+      name: 's2',
+      type: 'test',
+      key: 1
+    },
+    true
+  );
 
-    describe('configure service', () => {
-      it('direct', () =>
-        sp.services.test
-          .configure({
-            key: 'new value'
-          })
-          .then(() => assert.equal(sp.services.test.key, 'new value')));
+  t.is(s.name, 's2');
+  t.is(s.type, 'test');
+  t.is(s.key, 1);
 
-      it('send change request over config service', () =>
-        sp.services.config.endpoints.config
-          .receive([
-            {
-              name: 'config'
-            },
-            {
-              name: 'unknown'
-            },
-            {
-              name: 'test',
-              key1: 4711,
-              key2: '2'
-            }
-          ])
-          .then(() => assert.equal(sp.services.test.key1, 4711)));
-    });
+  s = await sp.declareService(
+    {
+      name: 's2',
+      type: 'test',
+      key: 2
+    },
+    true
+  );
 
-    it('can be unregistered', () =>
-      sp.unregisterService('t2').then(s => assert.isUndefined(sp.services.t2)));
-  });
+  t.is(s.name, 's2');
+  t.is(s.type, 'test');
+  t.is(s.key, 2);
+});
 
-  describe('declare service', () => {
-    describe('with type', () => {
-      before(() => {
-        setTimeout(() => sp.registerServiceFactory(ServiceTest), 30);
-
-        // force pending promises
-        /*
-        sp.declareService({
-          name: 's2',
-          type: 'test'
-        }, true);
-        sp.declareService({
-          name: 's2',
-          type: 'test'
-        }, true);
-        */
-      });
-
-      it('can be declared', () =>
-        sp
-          .declareService(
-            {
-              name: 's2',
-              type: 'test',
-              key: 1
-            },
-            true
-          )
-          .then(s => {
-            assert.equal(s.name, 's2');
-            assert.equal(s.type, 'test');
-          }));
-
-      it('can be declared again', () =>
-        sp
-          .declareService(
-            {
-              name: 's2',
-              type: 'test',
-              key: 2
-            },
-            true
-          )
-          .then(s => {
-            assert.equal(s.name, 's2');
-            assert.equal(s.key, 2);
-          }));
-    });
-
+/*
     xdescribe('without type', () => {
       const sp = new ServiceProvider([
         {},
@@ -366,3 +203,4 @@ describe('service provider', () => {
     });
   });
 });
+*/
