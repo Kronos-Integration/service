@@ -15,10 +15,10 @@ export default function EndpointsMixin(superclass) {
     }
 
     /**
-		 * Add a endpoint
-		 * @param {Endpoint} ep
-		 * @return {Endpoint} the added endpoint
-		 */
+     * Add a endpoint
+     * @param {Endpoint} ep
+     * @return {Endpoint} the added endpoint
+     */
     addEndpoint(ep) {
       this.endpoints[ep.name] = ep;
       return ep;
@@ -29,7 +29,7 @@ export default function EndpointsMixin(superclass) {
      * @return {Object} suiable to pass as options to the endpoint factory
      */
     endpointOptions(name, def) {
-      let options = {};
+      const options = {};
 
       if (def.opposite) {
         options.createOpposite = true;
@@ -60,13 +60,11 @@ export default function EndpointsMixin(superclass) {
      * @param {Object} interceptorFactory
      */
     createEndpointFromConfig(name, def, interceptorFactory) {
-      let ep;
-
-      if (def.in) {
-        ep = new ReceiveEndpoint(name, this, this.endpointOptions(name, def));
-      } else if (def.out) {
-        ep = new SendEndpoint(name, this, this.endpointOptions(name, def));
-      }
+      const ep = new (def.in ? ReceiveEndpoint : SendEndpoint)(
+        name,
+        this,
+        this.endpointOptions(name, def)
+      );
 
       this.addEndpoint(ep);
 
@@ -78,19 +76,19 @@ export default function EndpointsMixin(superclass) {
     }
 
     /**
-		 * removes a endpoint
-		 * @param {string} name name of the endpoint
-		 * @return {undefined}
-		 */
+     * removes a endpoint
+     * @param {string} name name of the endpoint
+     * @return {undefined}
+     */
     removeEndpoint(name) {
       delete this.endpoints[name];
     }
 
     /**
-		 * Deliver an identifier suitable as target name.
-		 * @param {Endpoint} ep endpoint to be identified
-		 * @return {string} endpoint identifier
-		 */
+     * Deliver an identifier suitable as target name.
+     * @param {Endpoint} ep endpoint to be identified
+     * @return {string} endpoint identifier
+     */
     endpointIdentifier(ep) {
       return `${this.name}${this.endpointParentSeparator}${ep.name}`;
     }

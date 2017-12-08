@@ -14,7 +14,7 @@ export function defineServiceConsumerProperties(
 
       if (typeof entry === 'string') {
         entry = {
-          name: name,
+          name,
           type: entry
         };
       } else {

@@ -10,9 +10,9 @@ import ServiceConfig from './service-config';
 export default function ServiceProviderMixin(superclass) {
   return class extends superclass {
     /**
-		 * if config is an array entry 0 then entry 0 will be passed to super and all other entries
-		 * are handed over as initial config to the config services
-		 */
+     * if config is an array entry 0 then entry 0 will be passed to super and all other entries
+     * are handed over as initial config to the config services
+     */
     constructor(config, owner) {
       super(Array.isArray(config) ? config[0] : config, undefined);
 
@@ -115,16 +115,16 @@ export default function ServiceProviderMixin(superclass) {
     }
 
     /**
-		 * Add a new service based on its configuration
-		 * If a service for the name is already present and it has a matching type
-		 * then its configure() is called and then returned.
-		 * Otherwise a new service will be created eventually replacing an already existing service with the same name.
-		 * @param {object} config with
-		 *     name - the service name
-		 *     type - the service factory name - defaults to config.name
-		 * @param {boolean} waitUntilFactoryPresent waits until someone registers a matching service factory
-		 * @return {Promise} resolving to the declared service
-		 */
+     * Add a new service based on its configuration
+     * If a service for the name is already present and it has a matching type
+     * then its configure() is called and then returned.
+     * Otherwise a new service will be created eventually replacing an already existing service with the same name.
+     * @param {object} config with
+     *     name - the service name
+     *     type - the service factory name - defaults to config.name
+     * @param {boolean} waitUntilFactoryPresent waits until someone registers a matching service factory
+     * @return {Promise} resolving to the declared service
+     */
     declareService(config, waitUntilFactoryPresent) {
       const name = config.name;
       const service = this.services[name];
@@ -144,7 +144,7 @@ export default function ServiceProviderMixin(superclass) {
         if (this._declareServiceByNamePromises) {
           const p = this._declareServiceByNamePromises.get(name);
 
-          if (p) {
+          if (p !== undefined) {
             return p;
           }
         } else {
@@ -153,7 +153,7 @@ export default function ServiceProviderMixin(superclass) {
 
         if (this.services.config) {
           const pc = this.services.config.preservedConfigs[name];
-          if (pc) {
+          if (pc !== undefined) {
             Object.assign(config, pc);
           }
         }
@@ -162,7 +162,7 @@ export default function ServiceProviderMixin(superclass) {
         if (waitUntilFactoryPresent && !this.serviceFactories[type]) {
           if (this._declareServiceFactoryByTypePromises) {
             const p = this._declareServiceFactoryByTypePromises.get(type);
-            if (p) {
+            if (p !== undefined) {
               return p;
             }
           } else {
@@ -215,9 +215,9 @@ export default function ServiceProviderMixin(superclass) {
     }
 
     /**
-		 * Stop all services
-		 * @return {Promise} that fullfills when all services are stopped
-		 */
+     * Stop all services
+     * @return {Promise} that fullfills when all services are stopped
+     */
     async _stop() {
       await super._stop();
       return Promise.all(

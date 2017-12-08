@@ -251,8 +251,8 @@ export default class Service extends EndpointsMixin(
     const p = super.stateTransitionRejection(rejected, newState);
     this.error({
       message: 'transition rejected',
-      rejected: rejected,
-      newState: newState
+      rejected,
+      newState
     });
     return p;
   }
