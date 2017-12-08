@@ -6,7 +6,8 @@
   "module": "src/module.js",
   "scripts": {
     "cover": "nyc --temp-directory build/nyc ava",
-    "docs": "jsdoc2md --configure doc/jsdoc.json -l off -t doc/README.hbs -f src/*.js >README.md",
+    "docs":
+      "jsdoc2md --configure doc/jsdoc.json -l off -t doc/README.hbs -f src/*.js >README.md",
     "test": "ava",
     "semantic-release": "semantic-release",
     "pretest": "rollup -c tests/rollup.config.js",
@@ -57,15 +58,6 @@
     "node": ">=8.9.3"
   },
   "keywords": [],
-  "nyc": {
-    "include": [
-      "dist/**/*.js"
-    ],
-    "reporter": [
-      "lcov"
-    ],
-    "report-dir": "./coverage"
-  },
   "template": {
     "repository": {
       "url": "https://github.com/arlac77/npm-package-template.git"
@@ -75,14 +67,13 @@
     "space": true
   },
   "ava": {
-    "files": [
-      "build/*-test.js"
-    ],
-    "presets": [
-      "env"
-    ],
-    "require": [
-      "babel-register"
-    ]
+    "files": ["build/*-test.js"],
+    "presets": ["env"],
+    "require": ["babel-register"]
+  },
+  "nyc": {
+    "include": ["build/*-test.js"],
+    "reporter": ["lcov"],
+    "report-dir": "./build/coverage"
   }
 }
