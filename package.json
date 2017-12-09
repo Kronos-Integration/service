@@ -27,7 +27,7 @@
     "kronos-endpoint": "^2.14.13",
     "loglevel-mixin": "^2.0.1",
     "model-attributes": "^3.0.10",
-    "registry-mixin": "^2.1.15",
+    "registry-mixin": "^2.1.16",
     "statetransition-mixin": "^4.0.0"
   },
   "devDependencies": {
