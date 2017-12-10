@@ -1,7 +1,3 @@
-/* jslint node: true, esnext: true */
-
-'use strict';
-
 const Service = require('../dist/service'),
   ServiceProviderMixin = require('../lib/service-provider-mixin');
 

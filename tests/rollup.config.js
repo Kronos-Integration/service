@@ -13,7 +13,8 @@ export default {
     'kronos-endpoint',
     'loglevel-mixin',
     'statetransition-mixin',
-    'model-attributes'
+    'model-attributes',
+    'kronos-interceptor'
   ],
   plugins: [multiEntry()]
 };
