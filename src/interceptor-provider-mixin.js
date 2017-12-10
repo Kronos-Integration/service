@@ -1,12 +1,14 @@
 /**
  * Register & provide Interceptors.
  */
-export function InterceptorProviderMixin(superclass) {
+export default function InterceptorProviderMixin(superclass) {
   return class InterceptorProviderMixin extends superclass {
     constructor(...args) {
       super(...args);
 
-      Object.defineProperty(this, 'registeredInterceptors', { value: new Map() });
+      Object.defineProperty(this, 'registeredInterceptors', {
+        value: new Map()
+      });
     }
 
     registerInterceptor(interceptor) {
@@ -14,7 +16,7 @@ export function InterceptorProviderMixin(superclass) {
     }
 
     declareInterceptor(config, ...args) {
-      const factory = this.registeredInterceptor.get(config.type);
+      const factory = this.registeredInterceptors.get(config.type);
       return new factory(config, ...args);
     }
   };
