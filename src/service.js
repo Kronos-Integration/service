@@ -149,6 +149,23 @@ export default class Service extends EndpointsMixin(
     return _ca;
   }
 
+  static get endpoints() {
+    return {
+      log: {
+        out: true,
+        default: true
+      },
+      config: {
+        in: true,
+        default: true
+      },
+      command: {
+        in: true,
+        default: true
+      }
+    };
+  }
+
   /**
    * @param {object} config
    * @param {object} [owner]
@@ -184,19 +201,13 @@ export default class Service extends EndpointsMixin(
         : defaultLogLevels.info
     );
 
-    this.addEndpoint(
-      new SendEndpointDefault('log', this)
-    ).connected = dummyLogReceiver;
-    this.addEndpoint(
-      new ReceiveEndpointDefault('config', this)
-    ).receive = request => this.configure(request);
-    this.addEndpoint(
-      new ReceiveEndpointDefault('command', this)
-    ).receive = request => this.execute(request);
+    this.createEndpointsFromConfig(config.endpoints, owner);
+
+    this.endpoints.log.connected = dummyLogReceiver;
+    this.endpoints.config.receive = request => this.configure(request);
+    this.endpoints.command.receive = request => this.execute(request);
 
     this._configure(config);
-
-    this.createEndpointsFromConfig(config.endpoints, owner);
   }
 
   get configurationAttributes() {

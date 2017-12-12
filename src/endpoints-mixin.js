@@ -1,4 +1,9 @@
-import { SendEndpoint, ReceiveEndpoint } from 'kronos-endpoint';
+import {
+  SendEndpoint,
+  SendEndpointDefault,
+  ReceiveEndpoint,
+  ReceiveEndpointDefault
+} from 'kronos-endpoint';
 
 /**
  * Endpoint accessor mixin
@@ -6,6 +11,13 @@ import { SendEndpoint, ReceiveEndpoint } from 'kronos-endpoint';
  */
 export default function EndpointsMixin(superclass) {
   return class extends superclass {
+    /**
+     * default set of endpoints to create
+     */
+    static get endpoints() {
+      return {};
+    }
+
     constructor() {
       super();
 
@@ -46,11 +58,25 @@ export default function EndpointsMixin(superclass) {
      * @api protected
      */
     createEndpointsFromConfig(def, interceptorFactory) {
-      if (def !== undefined) {
-        Object.keys(def).forEach(name =>
-          this.createEndpointFromConfig(name, def[name], interceptorFactory)
-        );
-      }
+      const combinedDef = Object.assign(this.constructor.endpoints, def);
+      Object.keys(combinedDef).forEach(name =>
+        this.createEndpointFromConfig(
+          name,
+          combinedDef[name],
+          interceptorFactory
+        )
+      );
+    }
+
+    /**
+     * determine endpoint factory from the endpoint config
+     * @param {Object} def endpoints definition
+     * @return {Object} endpoint factory
+     */
+    endpointFactoryFromConfig(def) {
+      return def.default
+        ? def.in ? ReceiveEndpointDefault : SendEndpointDefault
+        : def.in ? ReceiveEndpoint : SendEndpoint;
     }
 
     /**
@@ -60,7 +86,9 @@ export default function EndpointsMixin(superclass) {
      * @param {Object} interceptorFactory
      */
     createEndpointFromConfig(name, def, interceptorFactory) {
-      const ep = new (def.in ? ReceiveEndpoint : SendEndpoint)(
+      SendEndpointDefault;
+
+      const ep = new (this.endpointFactoryFromConfig(def))(
         name,
         this,
         this.endpointOptions(name, def)
