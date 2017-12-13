@@ -1,8 +1,8 @@
 import { TimeoutInterceptor } from 'kronos-interceptor';
-import InterceptorproviderMixin from '../src/interceptor-provider-mixin';
+import InterceptorProviderMixin from '../src/interceptor-provider-mixin';
 import test from 'ava';
 
-class InterceptorProvider extends InterceptorproviderMixin(class {}) {}
+class InterceptorProvider extends InterceptorProviderMixin(class {}) {}
 
 test('interceptor provider', async t => {
   const ip = new InterceptorProvider();
