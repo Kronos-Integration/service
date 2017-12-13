@@ -13,6 +13,7 @@ export default function EndpointsMixin(superclass) {
   return class extends superclass {
     /**
      * default set of endpoints to create
+     * @return empty set
      */
     static get endpoints() {
       return {};
@@ -112,6 +113,22 @@ export default function EndpointsMixin(superclass) {
       delete this.endpoints[name];
     }
 
+    /**
+     * @return array of all in endpoints
+     */
+    get inEndpoints()
+    {
+      return Object.values(this.endpoints).filter(e => e.isIn);
+    }
+
+     /**
+     * @return array of all out endpoints
+     */
+    get outEndpoints()
+    {
+      return Object.values(this.endpoints).filter(e => e.isOut);
+    }
+    
     /**
      * Deliver an identifier suitable as target name.
      * @param {Endpoint} ep endpoint to be identified
