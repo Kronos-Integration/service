@@ -11,3 +11,18 @@ test('interceptor provider', async t => {
 
   t.is(ip.declareInterceptor({ type: 'timeout' }).type, 'timeout');
 });
+
+test('interceptor unknown type', async t => {
+  const ip = new InterceptorProvider();
+
+  try {
+    ip.declareInterceptor(
+      {
+        type: 'unknown-interceptor'
+      },
+      {}
+    );
+  } catch (e) {
+    t.is(e.message, 'Undefined interceptor unknown-interceptor');
+  }
+});

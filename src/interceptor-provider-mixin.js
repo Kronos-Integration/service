@@ -17,6 +17,10 @@ export default function InterceptorProviderMixin(superclass) {
 
     declareInterceptor(config, ...args) {
       const factory = this.registeredInterceptors.get(config.type);
+
+      if (factory === undefined) {
+        throw new Error(`Undefined interceptor ${config.type}`);
+      }
       return new factory(config, ...args);
     }
   };
