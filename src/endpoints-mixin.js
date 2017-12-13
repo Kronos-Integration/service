@@ -13,13 +13,14 @@ export default function EndpointsMixin(superclass) {
   return class extends superclass {
     /**
      * default set of endpoints to create
+     * @return empty set
      */
     static get endpoints() {
       return {};
     }
 
-    constructor() {
-      super();
+    constructor(...args) {
+      super(...args);
 
       Object.defineProperty(this, 'endpoints', {
         value: {}
@@ -86,8 +87,6 @@ export default function EndpointsMixin(superclass) {
      * @param {Object} interceptorFactory
      */
     createEndpointFromConfig(name, def, interceptorFactory) {
-      SendEndpointDefault;
-
       const ep = new (this.endpointFactoryFromConfig(def))(
         name,
         this,
@@ -110,6 +109,20 @@ export default function EndpointsMixin(superclass) {
      */
     removeEndpoint(name) {
       delete this.endpoints[name];
+    }
+
+    /**
+     * @return array of all in endpoints
+     */
+    get inEndpoints() {
+      return Object.values(this.endpoints).filter(e => e.isIn);
+    }
+
+    /**
+     * @return array of all out endpoints
+     */
+    get outEndpoints() {
+      return Object.values(this.endpoints).filter(e => e.isOut);
     }
 
     /**
