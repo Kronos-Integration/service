@@ -19,8 +19,8 @@ export default function EndpointsMixin(superclass) {
       return {};
     }
 
-    constructor() {
-      super();
+    constructor(...args) {
+      super(...args);
 
       Object.defineProperty(this, 'endpoints', {
         value: {}
@@ -116,19 +116,17 @@ export default function EndpointsMixin(superclass) {
     /**
      * @return array of all in endpoints
      */
-    get inEndpoints()
-    {
+    get inEndpoints() {
       return Object.values(this.endpoints).filter(e => e.isIn);
     }
 
-     /**
+    /**
      * @return array of all out endpoints
      */
-    get outEndpoints()
-    {
+    get outEndpoints() {
       return Object.values(this.endpoints).filter(e => e.isOut);
     }
-    
+
     /**
      * Deliver an identifier suitable as target name.
      * @param {Endpoint} ep endpoint to be identified
