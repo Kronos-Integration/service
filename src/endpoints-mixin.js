@@ -87,8 +87,6 @@ export default function EndpointsMixin(superclass) {
      * @param {Object} interceptorFactory
      */
     createEndpointFromConfig(name, def, interceptorFactory) {
-      SendEndpointDefault;
-
       const ep = new (this.endpointFactoryFromConfig(def))(
         name,
         this,
