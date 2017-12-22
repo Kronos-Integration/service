@@ -20,66 +20,7 @@ kronos-service
 =====
 Base service implementation
 
-# API Reference
-
-* <a name="EndpointsMixin"></a>
-
-## EndpointsMixin()
-Endpoint accessor mixin
-Manages endpoints in a container
-
-**Kind**: global function  
-
-* <a name="defineServiceConsumerProperties"></a>
-
-## defineServiceConsumerProperties()
-assign services based on a configuration
-
-**Kind**: global function  
-
-* <a name="ServiceProviderMixin"></a>
-
-## ServiceProviderMixin()
-Provide services and hold service configuration.
-By default a service provider has two build in services
-'logger' and 'config'.
-
-**Kind**: global function  
-
-* <a name="value"></a>
-
-## value(config) ⇒ <code>Set</code>
-Takes attribute values from config parameters
-and copies them over to the object.
-Copying is done according to configurationAttributes
-Which means we loop over all configuration attributes
-and then for each attribute decide if we use the default, call a setter function
-or simply assign the attribute value
-
-**Kind**: global function  
-**Returns**: <code>Set</code> - of modified attributes  
-
-| Param | Type |
-| --- | --- |
-| config | <code>object</code> | 
-
-
-* <a name="<anonymous>..ServiceConfig...receive"></a>
-
-## &lt;anonymous&gt;~ServiceConfig~.receive()
-requests can be an array of config entries
-
-**Kind**: static method of <code>&lt;anonymous&gt;~ServiceConfig~</code>  
-
-* <a name="<anonymous>.._class"></a>
-
-## &lt;anonymous&gt;~_class()
-if config is an array entry 0 then entry 0 will be passed to super and all other entries
-are handed over as initial config to the config services
-
-**Kind**: inner method of <code>&lt;anonymous&gt;</code>  
-
-* * *
+# API
 
 install
 =======
