@@ -167,8 +167,8 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-   * @param {object} config
-   * @param {object} [owner]
+   * @param {Object} config
+   * @param {Object} owner
    */
   constructor(config, owner) {
     super();
@@ -326,13 +326,12 @@ export default class Service extends EndpointsMixin(
 
   /**
    * Deliver json representation
-   * @param {object} [options]
-   *  with the following flags:
-   *    includeRuntimeInfo - include runtime informtion like state
-   *    includeDefaults - also include default endpoints
-   *    includeName - name of the service
-   *    includeConfig - also include config attributes
-   * @return {object} json representation
+   * @param {Object} options
+   * @param {boolean} options.includeRuntimeInfo include runtime informtion like state
+   * @param {boolean} options.includeDefaults  include default endpoints
+   * @param {boolean} options.includeName include name of the service
+   * @param {boolean} options.includeConfig  include config attributes
+   * @return {Object} json representation
    */
   toJSONWithOptions(options = {}) {
     const json = {
@@ -390,7 +389,7 @@ export default class Service extends EndpointsMixin(
    * Which means we loop over all configuration attributes
    * and then for each attribute decide if we use the default, call a setter function
    * or simply assign the attribute value
-   * @param {object} config
+   * @param {Object} config
    * @return {Set} of modified attributes
    */
   _configure(config) {
@@ -416,7 +415,7 @@ export default class Service extends EndpointsMixin(
    * Internally calls _configure(config) as the constructor does
    * If attribute with needsRestart are touched the restartIfRunning method
    * will be called
-   * @param {pbject} new config
+   * @param {Object} config
    * @return {Promise} fillfills when config is applied
    */
   async configure(config) {
@@ -432,7 +431,7 @@ export default class Service extends EndpointsMixin(
   /**
    * Adds service name to the log event
    * @param {string} level the log level
-   * @param {object} arg log content
+   * @param {Object} arg log content
    */
   log(level, arg) {
     this.endpoints.log.receive(

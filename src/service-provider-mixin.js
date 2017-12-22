@@ -6,12 +6,11 @@ import ServiceConfig from './service-config';
  * Provide services and hold service configuration.
  * By default a service provider has two build in services
  * 'logger' and 'config'.
+ *
  */
 export default function ServiceProviderMixin(superclass) {
   return class extends superclass {
     /**
-     * if config is an array entry 0 then entry 0 will be passed to super and all other entries
-     * are handed over as initial config to the config services
      */
     constructor(config, owner) {
       super(Array.isArray(config) ? config[0] : config, undefined);

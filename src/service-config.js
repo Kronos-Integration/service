@@ -17,7 +17,7 @@ export default class ServiceConfig extends Service {
 
     defineRegistryProperties(this, 'preservedConfig', {});
 
-    /**
+    /*
 		 * requests can be an array of config entries
 		 */
     this.addEndpoint(new ReceiveEndpoint('config', this)).receive = request => {
