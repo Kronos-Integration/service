@@ -7,7 +7,6 @@ const safeStringify = require('fast-safe-stringify');
  * Log receiving service
  */
 export default class ServiceLogger extends Service {
-
   /**
    * @return {string} 'logger'
    */
@@ -29,6 +28,10 @@ export default class ServiceLogger extends Service {
     };
   }
 
+  /**
+   * We always start immediate
+   * @return {boolean} true
+   */
   get autostart() {
     return true;
   }

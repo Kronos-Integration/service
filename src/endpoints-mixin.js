@@ -89,7 +89,7 @@ export default function EndpointsMixin(superclass) {
      * @param {function} interceptorFactory.createInterceptorInstanceFromConfig
      */
     createEndpointFromConfig(name, definition, interceptorFactory) {
-      const ep = new (this.endpointFactoryFromConfig(def))(
+      const ep = new (this.endpointFactoryFromConfig(definition))(
         name,
         this,
         this.endpointOptions(name, definition)
@@ -97,8 +97,8 @@ export default function EndpointsMixin(superclass) {
 
       this.addEndpoint(ep);
 
-      if (def.interceptors !== undefined) {
-        ep.interceptors = def.interceptors.map(icDef =>
+      if (definition.interceptors !== undefined) {
+        ep.interceptors = definition.interceptors.map(icDef =>
           interceptorFactory.createInterceptorInstanceFromConfig(icDef, ep)
         );
       }

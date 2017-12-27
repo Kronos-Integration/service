@@ -24,15 +24,11 @@ import {
   setAttributes
 } from 'model-attributes';
 
+/**
+ * key of the service description
+ */
 const DESCRIPTION = Symbol('description');
 
-/**
- * Meta information for the config attributes.
- * - default optional default value of the attribute
- * - needsRestart optional modification requires a service restart
- * - setter(newValue,attrribute) optional function to be used if simple value assignment is not enough
- * The Service class only defines the logLevel, ans start timeout attribute
- */
 const _ca = createAttributes({
   description: {
     type: 'string',
@@ -147,10 +143,25 @@ export default class Service extends EndpointsMixin(
     return 'service';
   }
 
+  /**
+   * Meta information for the config attributes.
+   * - default optional default value of the attribute
+   * - needsRestart optional modification requires a service restart
+   * - setter(newValue,attrribute) optional function to be used if simple value assignment is not enough
+   * The Service class only defines the logLevel, ans start timeout attribute
+   * @return {Object}
+   */
   static get configurationAttributes() {
     return _ca;
   }
 
+  /**
+   * Definition of the predefined endpoints
+   * - log _out_
+   * - config _in_
+   * - command _in_
+   * @return {Object} predefined endpoints
+   */
   static get endpoints() {
     return {
       log: {
@@ -271,10 +282,8 @@ export default class Service extends EndpointsMixin(
    * @param {string} action originating action name
    * @return {Promise} rejecting with an Error
    */
-  rejectWrongState(action) {
-    return Promise.reject(
-      new Error(`Can't ${action} ${this} in ${this.state} state`)
-    );
+  async rejectWrongState(action) {
+    throw new Error(`Can't ${action} ${this} in ${this.state} state`);
   }
 
   timeoutForTransition(transition) {
@@ -286,8 +295,9 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
+   * Restart action
    * default implementation does a _stop() and a _start()
-   * @return {Promise}
+   * @return {Promise} fulfills after start
    */
   async _restart() {
     await this._stop();

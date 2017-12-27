@@ -1,9 +1,12 @@
 /**
  * assign services based on a configuration
+ * @param {Object} target object
+ * @param {Object} config service defintion
+ * @param {Object} provider service provider
+ * @param {boolean} waitUntilFactoryPresent
  */
-
 export function defineServiceConsumerProperties(
-  object,
+  target,
   config,
   provider,
   waitUntilFactoryPresent
@@ -28,7 +31,7 @@ export function defineServiceConsumerProperties(
         waitUntilFactoryPresent
       );
 
-      Object.defineProperty(object, name, {
+      Object.defineProperty(target, name, {
         value: service
       });
       return service.start();
