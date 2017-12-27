@@ -9,9 +9,7 @@ import ServiceConfig from './service-config';
  *
  */
 export default function ServiceProviderMixin(superclass) {
-  return class extends superclass {
-    /**
-     */
+  return class ServiceProvider extends superclass {
     constructor(config, owner) {
       super(Array.isArray(config) ? config[0] : config, undefined);
 

@@ -87,6 +87,8 @@ dummyLogReceiver.receive = async entry => {
  * All services have at least two endpoints:
  * - log out: log events
  * - config in: configuration request
+ * @param {Object} config
+ * @param {Object} owner
  */
 export default class Service extends EndpointsMixin(
   StateTransitionMixin(
@@ -166,10 +168,6 @@ export default class Service extends EndpointsMixin(
     };
   }
 
-  /**
-   * @param {Object} config
-   * @param {Object} owner
-   */
   constructor(config, owner) {
     super();
 

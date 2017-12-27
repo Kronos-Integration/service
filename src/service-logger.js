@@ -7,6 +7,10 @@ const safeStringify = require('fast-safe-stringify');
  * Log receiving service
  */
 export default class ServiceLogger extends Service {
+
+  /**
+   * @return {string} 'logger'
+   */
   static get name() {
     return 'logger';
   }

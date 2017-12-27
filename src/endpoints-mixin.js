@@ -13,7 +13,7 @@ export default function EndpointsMixin(superclass) {
   return class extends superclass {
     /**
      * default set of endpoints to create
-     * @return empty set
+     * @return {Object} {} empty set
      */
     static get endpoints() {
       return {};
@@ -56,7 +56,7 @@ export default function EndpointsMixin(superclass) {
      * implementation and definition
      * @param {Object} def endpoints definition
      * @param {Object} interceptorFactory
-     * @api protected
+     * @param {function} interceptorFactory.createInterceptorInstanceFromConfig
      */
     createEndpointsFromConfig(def, interceptorFactory) {
       const combinedDef = Object.assign(this.constructor.endpoints, def);
@@ -81,16 +81,18 @@ export default function EndpointsMixin(superclass) {
     }
 
     /**
-     * creates a new endpoint form a defintion
+     * Creates a new endpoint form a defintion.
+     * Also creates interceptors if the are present in the definition
      * @param {string} name of the new endpoint
-     * @param {Object} def endpoint attributes
+     * @param {Object} definition endpoint attributes
      * @param {Object} interceptorFactory
+     * @param {function} interceptorFactory.createInterceptorInstanceFromConfig
      */
-    createEndpointFromConfig(name, def, interceptorFactory) {
+    createEndpointFromConfig(name, definition, interceptorFactory) {
       const ep = new (this.endpointFactoryFromConfig(def))(
         name,
         this,
-        this.endpointOptions(name, def)
+        this.endpointOptions(name, definition)
       );
 
       this.addEndpoint(ep);
@@ -104,7 +106,7 @@ export default function EndpointsMixin(superclass) {
 
     /**
      * removes a endpoint
-     * @param {string} name name of the endpoint
+     * @param {string} name name of the endpoint to be removed
      * @return {undefined}
      */
     removeEndpoint(name) {
@@ -112,6 +114,7 @@ export default function EndpointsMixin(superclass) {
     }
 
     /**
+     * Deliver all _in_ endpoints
      * @return array of all in endpoints
      */
     get inEndpoints() {
@@ -119,6 +122,7 @@ export default function EndpointsMixin(superclass) {
     }
 
     /**
+     * Deliver all _out_ endpoints
      * @return array of all out endpoints
      */
     get outEndpoints() {

@@ -5,9 +5,13 @@ import Service from './service';
 /**
  * Config providing service
  * Dispatches config requests to services
- * or preserves them for future use
+ * or preserves them until a maching service becomes avaliable
  */
 export default class ServiceConfig extends Service {
+
+  /**
+   * @return {string} 'config'
+   */
   static get name() {
     return 'config';
   }
