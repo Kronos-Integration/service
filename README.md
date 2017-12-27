@@ -26,7 +26,7 @@ Base service implementation
 
 ### Table of Contents
 
--   [\_ca](#_ca)
+-   [DESCRIPTION](#description)
 -   [Service](#service)
     -   [stateChanged](#statechanged)
     -   [rejectWrongState](#rejectwrongstate)
@@ -40,22 +40,22 @@ Base service implementation
     -   [configure](#configure)
     -   [log](#log)
     -   [endpointParentSeparator](#endpointparentseparator)
+    -   [configurationAttributes](#configurationattributes)
+    -   [endpoints](#endpoints)
 -   [ServiceLogger](#servicelogger)
+    -   [autostart](#autostart-1)
+    -   [name](#name-1)
 -   [ServiceConfig](#serviceconfig)
+    -   [name](#name-2)
 -   [defineServiceConsumerProperties](#defineserviceconsumerproperties)
 -   [ServiceProviderMixin](#serviceprovidermixin)
 -   [InterceptorProviderMixin](#interceptorprovidermixin)
 -   [EndpointsMixin](#endpointsmixin)
--   [endpoints](#endpoints)
+-   [endpoints](#endpoints-1)
 
-## \_ca
+## DESCRIPTION
 
-Meta information for the config attributes.
-
--   default optional default value of the attribute
--   needsRestart optional modification requires a service restart
--   setter(newValue,attrribute) optional function to be used if simple value assignment is not enough
-    The Service class only defines the logLevel, ans start timeout attribute
+key of the service description
 
 ## Service
 
@@ -112,8 +112,8 @@ All services have at least two endpoints:
 
 **Parameters**
 
--   `config`  
--   `owner`  
+-   `config` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+-   `owner` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
 
 ### stateChanged
 
@@ -137,9 +137,10 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 
 ### \_restart
 
+Restart action
 default implementation does a \_stop() and a \_start()
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** fulfills after start
 
 ### restartIfRunning
 
@@ -219,6 +220,27 @@ Adds service name to the log event
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** separator between service name and endpoint name
 
+### configurationAttributes
+
+Meta information for the config attributes.
+
+-   default optional default value of the attribute
+-   needsRestart optional modification requires a service restart
+-   setter(newValue,attrribute) optional function to be used if simple value assignment is not enough
+    The Service class only defines the logLevel, ans start timeout attribute
+
+Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+
+### endpoints
+
+Definition of the predefined endpoints
+
+-   log _out_
+-   config _in_
+-   command _in_
+
+Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** predefined endpoints
+
 ## ServiceLogger
 
 **Extends Service**
@@ -230,18 +252,32 @@ Log receiving service
 -   `config`  
 -   `owner`  
 
+### autostart
+
+We always start immediate
+
+Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true
+
+### name
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'logger'
+
 ## ServiceConfig
 
 **Extends Service**
 
 Config providing service
 Dispatches config requests to services
-or preserves them for future use
+or preserves them until a maching service becomes avaliable
 
 **Parameters**
 
 -   `config`  
 -   `owner`  
+
+### name
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'config'
 
 ## defineServiceConsumerProperties
 
@@ -249,10 +285,10 @@ assign services based on a configuration
 
 **Parameters**
 
--   `object`  
--   `config`  
--   `provider`  
--   `waitUntilFactoryPresent`  
+-   `target` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** object
+-   `config` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** service defintion
+-   `provider` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** service provider
+-   `waitUntilFactoryPresent` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** 
 
 ## ServiceProviderMixin
 
@@ -285,7 +321,7 @@ Manages endpoints in a container
 
 default set of endpoints to create
 
-Returns **any** empty set
+Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** {} empty set
 
 # install
 
