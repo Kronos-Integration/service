@@ -10,7 +10,7 @@ import {
  * Manages endpoints in a container
  */
 export default function EndpointsMixin(superclass) {
-  return class extends superclass {
+  return class EndpointMixin extends superclass {
     /**
      * default set of endpoints to create
      * @return {Object} {} empty set
