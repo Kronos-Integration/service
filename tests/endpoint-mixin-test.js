@@ -27,3 +27,15 @@ test('inEndpoints', async t => {
 
   t.deepEqual(o.inEndpoints, [r1]);
 });
+
+test('endpointForExpression', async t => {
+  const o = new Owner();
+
+  const s1 = new SendEndpoint('s1');
+  const r1 = new ReceiveEndpoint('r1');
+
+  o.addEndpoint(s1);
+  o.addEndpoint(r1);
+
+  t.deepEqual(o.endpointForExpression('r1'), r1);
+});

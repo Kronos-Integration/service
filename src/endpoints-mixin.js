@@ -89,17 +89,20 @@ export default function EndpointsMixin(superclass) {
      * Creates a new endpoint form a defintion.
      * Also creates interceptors if the are present in the definition
      * @param {string} name of the new endpoint
-     * @param {Object} definition endpoint attributes
+     * @param {Object|string} definition endpoint attributes or expression
      * @param {Object} interceptorFactory
      * @param {function} interceptorFactory.createInterceptorInstanceFromConfig
      * @return {Endpoint} newly created endpoint
      */
     createEndpointFromConfig(name, definition, interceptorFactory) {
-      const ep = new (this.endpointFactoryFromConfig(definition))(
-        name,
-        this,
-        this.endpointOptions(name, definition)
-      );
+      const ep =
+        typeof definition === 'string'
+          ? this.endpointForExpression(definition)
+          : new (this.endpointFactoryFromConfig(definition))(
+              name,
+              this,
+              this.endpointOptions(name, definition)
+            );
 
       this.addEndpoint(ep);
 
@@ -119,6 +122,16 @@ export default function EndpointsMixin(superclass) {
      */
     removeEndpoint(name) {
       delete this.endpoints[name];
+    }
+
+    /**
+     * Find Endpoint for a given  expression
+     * Default implementation only supports direct named endpoints
+     * @param {string} expression to identify endpoint
+     * @return {Endpoint} for a given expression
+     */
+    endpointForExpression(expression) {
+      return this.endpoints[expression];
     }
 
     /**
