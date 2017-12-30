@@ -47,6 +47,7 @@ Base service implementation
     -   [name](#name-1)
     -   [endpoints](#endpoints-1)
 -   [ServiceConfig](#serviceconfig)
+    -   [autostart](#autostart-2)
     -   [name](#name-2)
 -   [defineServiceConsumerProperties](#defineserviceconsumerproperties)
 -   [ServiceProviderMixin](#serviceprovidermixin)
@@ -284,6 +285,12 @@ or preserves them until a maching service becomes avaliable
 
 -   `config`  
 -   `owner`  
+
+### autostart
+
+We always start immediate
+
+Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true
 
 ### name
 

@@ -23,7 +23,8 @@ export default class ServiceConfig extends Service {
     /*
 		 * requests can be an array of config entries
 		 */
-    this.addEndpoint(new ReceiveEndpoint('config', this)).receive = request => {
+
+    this.endpoints.config.receive = request => {
       if (!Array.isArray(request)) {
         request = [request];
       }
@@ -43,6 +44,10 @@ export default class ServiceConfig extends Service {
     };
   }
 
+  /**
+   * We always start immediate
+   * @return {boolean} true
+   */
   get autostart() {
     return true;
   }
