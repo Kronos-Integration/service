@@ -80,9 +80,10 @@ dummyLogReceiver.receive = async entry => {
 /**
  * Service
  * The initial state is 'stopped'
- * All services have at least two endpoints:
- * - log out: log events
- * - config in: configuration request
+ * All services have at least three endpoints:
+ * - log _out_: log events
+ * - config _in_: configuration request
+ * - command _in_: administrative actions to be executed by the step
  * @param {Object} config
  * @param {Object} owner
  */
@@ -377,6 +378,7 @@ export default class Service extends EndpointsMixin(
 
   /**
    * defaults to the type
+   * @return {string} type
    */
   get name() {
     return this.type;

@@ -105,10 +105,11 @@ key of the service description
 
 Service
 The initial state is 'stopped'
-All services have at least two endpoints:
+All services have at least three endpoints:
 
--   log out: log events
--   config in: configuration request
+-   log _out_: log events
+-   config _in_: configuration request
+-   command _in_: administrative actions to be executed by the step
 
 **Parameters**
 
@@ -172,6 +173,8 @@ Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 ### name
 
 defaults to the type
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** type
 
 ### autostart
 
