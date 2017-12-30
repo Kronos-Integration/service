@@ -8,7 +8,6 @@ import Service from './service';
  * or preserves them until a maching service becomes avaliable
  */
 export default class ServiceConfig extends Service {
-
   /**
    * @return {string} 'config'
    */

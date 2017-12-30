@@ -45,13 +45,14 @@ Base service implementation
 -   [ServiceLogger](#servicelogger)
     -   [autostart](#autostart-1)
     -   [name](#name-1)
+    -   [endpoints](#endpoints-1)
 -   [ServiceConfig](#serviceconfig)
     -   [name](#name-2)
 -   [defineServiceConsumerProperties](#defineserviceconsumerproperties)
 -   [ServiceProviderMixin](#serviceprovidermixin)
 -   [InterceptorProviderMixin](#interceptorprovidermixin)
 -   [EndpointsMixin](#endpointsmixin)
--   [endpoints](#endpoints-1)
+-   [endpoints](#endpoints-2)
 
 ## DESCRIPTION
 
@@ -264,6 +265,12 @@ Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 ### name
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'logger'
+
+### endpoints
+
+Adds a log input endpoint to the set of Service endpoints
+
+Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** predefined endpoints
 
 ## ServiceConfig
 

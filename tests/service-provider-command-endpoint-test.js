@@ -53,11 +53,7 @@ test('service provider command endpoint', async t => {
       type: 'config'
     },
     {
-      endpoints: {
-        log: {
-          in: true
-        }
-      },
+      endpoints: {},
       name: 'logger',
       type: 'logger'
     }

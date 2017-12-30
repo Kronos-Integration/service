@@ -213,7 +213,11 @@ export default class Service extends EndpointsMixin(
 
     this.createEndpointsFromConfig(config.endpoints, owner);
 
-    this.endpoints.log.connected = dummyLogReceiver;
+    // TODO special case for log endpoint in and out for logger service ?
+    if (this.endpoints.log.isOut) {
+      this.endpoints.log.connected = dummyLogReceiver;
+    }
+
     this.endpoints.config.receive = request => this.configure(request);
     this.endpoints.command.receive = request => this.execute(request);
 

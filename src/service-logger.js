@@ -14,12 +14,23 @@ export default class ServiceLogger extends Service {
     return 'logger';
   }
 
+  /**
+   * Adds a log input endpoint to the set of Service endpoints
+   * @return {Object} predefined endpoints
+   */
+  static get endpoints() {
+    return Object.assign({}, Service.endpoints, {
+      log: {
+        in: true,
+        default: true
+      }
+    });
+  }
+
   constructor(config, owner) {
     super(config, owner);
 
-    this.addEndpoint(
-      new ReceiveEndpoint('log', this)
-    ).receive = async entry => {
+    this.endpoints.log.receive = async entry => {
       if (entry.severity === 'error') {
         console.error(safeStringify(entry));
       } else {
