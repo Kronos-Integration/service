@@ -318,7 +318,9 @@ Manages endpoints in a container
 
 **Parameters**
 
--   `superclass`  
+-   `superclass` **Class** class to be extended
+
+Returns **Class** extended class
 
 ## endpoints
 

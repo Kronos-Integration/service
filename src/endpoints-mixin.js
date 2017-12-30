@@ -8,9 +8,11 @@ import {
 /**
  * Endpoint accessor mixin
  * Manages endpoints in a container
+ * @param {Class} superclass class to be extended
+ * @return {Class} extended class
  */
 export default function EndpointsMixin(superclass) {
-  return class EndpointMixin extends superclass {
+  return class EndpointsMixin extends superclass {
     /**
      * default set of endpoints to create
      * @return {Object} {} empty set
@@ -54,12 +56,12 @@ export default function EndpointsMixin(superclass) {
     /**
      * Creates the endpoint objects defined as a combination from
      * implementation and definition
-     * @param {Object} def endpoints definition
+     * @param {Object} definition endpoints definition
      * @param {Object} interceptorFactory
      * @param {function} interceptorFactory.createInterceptorInstanceFromConfig
      */
-    createEndpointsFromConfig(def, interceptorFactory) {
-      const combinedDef = Object.assign(this.constructor.endpoints, def);
+    createEndpointsFromConfig(definition, interceptorFactory) {
+      const combinedDef = Object.assign(this.constructor.endpoints, definition);
       Object.keys(combinedDef).forEach(name =>
         this.createEndpointFromConfig(
           name,
@@ -70,14 +72,17 @@ export default function EndpointsMixin(superclass) {
     }
 
     /**
-     * determine endpoint factory from the endpoint config
-     * @param {Object} def endpoints definition
+     * Determine endpoint factory from the endpoint config
+     * @param {Object} definition endpoints definition
+     * @param {boolean} definition.in true will result in a ReceiveEndpoint
+     * @param {boolean} definition.out true will result in a SendEndpoint
+     * @param {boolean} definition.default true will result in a (Send|Receive)DefaultEndpoint
      * @return {Object} endpoint factory
      */
-    endpointFactoryFromConfig(def) {
-      return def.default
-        ? def.in ? ReceiveEndpointDefault : SendEndpointDefault
-        : def.in ? ReceiveEndpoint : SendEndpoint;
+    endpointFactoryFromConfig(definition) {
+      return definition.default
+        ? definition.in ? ReceiveEndpointDefault : SendEndpointDefault
+        : definition.in ? ReceiveEndpoint : SendEndpoint;
     }
 
     /**
@@ -105,7 +110,7 @@ export default function EndpointsMixin(superclass) {
     }
 
     /**
-     * removes a endpoint
+     * Removes a endpoint
      * @param {string} name name of the endpoint to be removed
      * @return {undefined}
      */
@@ -115,7 +120,7 @@ export default function EndpointsMixin(superclass) {
 
     /**
      * Deliver all _in_ endpoints
-     * @return array of all in endpoints
+     * @return {Endpoint[]} of all in endpoints
      */
     get inEndpoints() {
       return Object.values(this.endpoints).filter(e => e.isIn);
@@ -123,7 +128,7 @@ export default function EndpointsMixin(superclass) {
 
     /**
      * Deliver all _out_ endpoints
-     * @return array of all out endpoints
+     * @return {Endpoint[]} of all out endpoints
      */
     get outEndpoints() {
       return Object.values(this.endpoints).filter(e => e.isOut);
