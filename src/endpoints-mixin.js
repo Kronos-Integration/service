@@ -92,6 +92,7 @@ export default function EndpointsMixin(superclass) {
      * @param {Object} definition endpoint attributes
      * @param {Object} interceptorFactory
      * @param {function} interceptorFactory.createInterceptorInstanceFromConfig
+     * @return {Endpoint} newly created endpoint
      */
     createEndpointFromConfig(name, definition, interceptorFactory) {
       const ep = new (this.endpointFactoryFromConfig(definition))(
@@ -107,6 +108,8 @@ export default function EndpointsMixin(superclass) {
           interceptorFactory.createInterceptorInstanceFromConfig(icDef, ep)
         );
       }
+
+      return ep;
     }
 
     /**
