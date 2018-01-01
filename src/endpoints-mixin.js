@@ -90,6 +90,7 @@ export default function EndpointsMixin(superclass) {
      * Also creates interceptors if the are present in the definition
      * @param {string} name of the new endpoint
      * @param {Object|string} definition endpoint attributes or alias expression
+     * @param {string} definition.target expression pointing to the connected endpoint
      * @param {Object} interceptorFactory
      * @param {function} interceptorFactory.createInterceptorInstanceFromConfig
      * @return {Endpoint} newly created endpoint
