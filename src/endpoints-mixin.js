@@ -89,7 +89,7 @@ export default function EndpointsMixin(superclass) {
      * Creates a new endpoint form a defintion.
      * Also creates interceptors if the are present in the definition
      * @param {string} name of the new endpoint
-     * @param {Object|string} definition endpoint attributes or expression
+     * @param {Object|string} definition endpoint attributes or alias expression
      * @param {Object} interceptorFactory
      * @param {function} interceptorFactory.createInterceptorInstanceFromConfig
      * @return {Endpoint} newly created endpoint
@@ -130,12 +130,19 @@ export default function EndpointsMixin(superclass) {
      * @param {string} expression to identify endpoint
      * @param {boolean} wait for endpoint to become present (deliver a promise)
      * @return {Endpoint} for a given expression
+     * @throws if no Endpoint can be found
      */
     endpointForExpression(expression, wait = false) {
       console.log(
         `endpointForExpression: ${expression} -> ${this.endpoints[expression]}`
       );
-      return this.endpoints[expression];
+
+      const endpoint = this.endpoints[expression];
+      if (endpoint === undefined) {
+        throw new Error(`Endpoint '${expression}' not found in ${this}`);
+      }
+
+      return endpoint;
     }
 
     /**
