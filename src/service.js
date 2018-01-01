@@ -60,6 +60,12 @@ const _ca = createAttributes({
         default: 5
       }
     }
+  },
+  endpoints: {
+    setter(newValue) {
+      //console.log(`endpoints setter: ${newValue}`);
+      this.createEndpointsFromConfig(newValue, this.owner);
+    }
   }
 });
 
@@ -85,6 +91,9 @@ dummyLogReceiver.receive = async entry => {
  * - config _in_: configuration request
  * - command _in_: administrative actions to be executed by the step
  * @param {Object} config
+ * @param {string} config.logLevel
+ * @param {string} config.description
+ * @param {Object} config.endpoints
  * @param {Object} owner
  */
 export default class Service extends EndpointsMixin(
@@ -199,12 +208,6 @@ export default class Service extends EndpointsMixin(
       }
     }
 
-    /*
-    Object.defineProperty(this, 'config', {
-      value: {}
-    });
-*/
-
     defineLogLevelProperties(
       this,
       defaultLogLevels,
@@ -218,8 +221,6 @@ export default class Service extends EndpointsMixin(
     this.endpoints.log.connected = dummyLogReceiver;
 
     this._configure(config);
-
-    this.createEndpointsFromConfig(config.endpoints, owner);
 
     // TODO cleanup
     if (this.endpoints.log.isOut) {
@@ -291,12 +292,17 @@ export default class Service extends EndpointsMixin(
   /**
    * Called when state transition is not allowed
    * @param {string} action originating action name
-   * @return {Promise} rejecting with an Error
+   * @throws always
    */
   async rejectWrongState(action) {
     throw new Error(`Can't ${action} ${this} in ${this.state} state`);
   }
 
+  /**
+   * Deliver transtion timeout
+   * @param {Object} transition
+   * @return {number} milliseconds before throwing for a logn running transition
+   */
   timeoutForTransition(transition) {
     if (transition.name.startsWith('start')) {
       return this.timeout.start * 1000;

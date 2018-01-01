@@ -125,12 +125,16 @@ export default function EndpointsMixin(superclass) {
     }
 
     /**
-     * Find Endpoint for a given  expression
+     * Find Endpoint for a given expression
      * Default implementation only supports direct named endpoints
      * @param {string} expression to identify endpoint
+     * @param {boolean} wait for endpoint to become present (deliver a promise)
      * @return {Endpoint} for a given expression
      */
-    endpointForExpression(expression) {
+    endpointForExpression(expression, wait = false) {
+      console.log(
+        `endpointForExpression: ${expression} -> ${this.endpoints[expression]}`
+      );
       return this.endpoints[expression];
     }
 

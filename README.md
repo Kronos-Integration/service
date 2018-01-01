@@ -30,6 +30,7 @@ Base service implementation
 -   [Service](#service)
     -   [stateChanged](#statechanged)
     -   [rejectWrongState](#rejectwrongstate)
+    -   [timeoutForTransition](#timeoutfortransition)
     -   [\_restart](#_restart)
     -   [restartIfRunning](#restartifrunning)
     -   [toString](#tostring)
@@ -116,6 +117,9 @@ All services have at least three endpoints:
 **Parameters**
 
 -   `config` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+    -   `config.logLevel` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+    -   `config.description` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+    -   `config.endpoints` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
 -   `owner` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
 
 ### stateChanged
@@ -136,7 +140,18 @@ Called when state transition is not allowed
 
 -   `action` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** originating action name
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** rejecting with an Error
+
+-   Throws **any** always
+
+### timeoutForTransition
+
+Deliver transtion timeout
+
+**Parameters**
+
+-   `transition` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+
+Returns **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** milliseconds before throwing for a logn running transition
 
 ### \_restart
 
