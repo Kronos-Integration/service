@@ -199,9 +199,11 @@ export default class Service extends EndpointsMixin(
       }
     }
 
+    /*
     Object.defineProperty(this, 'config', {
       value: {}
     });
+*/
 
     defineLogLevelProperties(
       this,
@@ -211,17 +213,21 @@ export default class Service extends EndpointsMixin(
         : defaultLogLevels.info
     );
 
+    // TODO special case for log endpoint in and out for logger service ?
+    this.addEndpoint(new SendEndpointDefault('log', this));
+    this.endpoints.log.connected = dummyLogReceiver;
+
+    this._configure(config);
+
     this.createEndpointsFromConfig(config.endpoints, owner);
 
-    // TODO special case for log endpoint in and out for logger service ?
+    // TODO cleanup
     if (this.endpoints.log.isOut) {
       this.endpoints.log.connected = dummyLogReceiver;
     }
 
     this.endpoints.config.receive = request => this.configure(request);
     this.endpoints.command.receive = request => this.execute(request);
-
-    this._configure(config);
   }
 
   get configurationAttributes() {
