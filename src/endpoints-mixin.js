@@ -96,22 +96,27 @@ export default function EndpointsMixin(superclass) {
      * @return {Endpoint} newly created endpoint
      */
     createEndpointFromConfig(name, definition, interceptorFactory) {
-      const ep =
-        typeof definition === 'string'
-          ? this.endpointForExpression(definition)
-          : new (this.endpointFactoryFromConfig(definition))(
-              name,
-              this,
-              this.endpointOptions(name, definition)
-            );
+      if (typeof definition === 'string') {
+        return this.endpointForExpression(definition);
+      }
 
-      this.addEndpoint(ep);
+      const ep = new (this.endpointFactoryFromConfig(definition))(
+        name,
+        this,
+        this.endpointOptions(name, definition)
+      );
+
+      if (definition.target !== undefined) {
+        ep.connected = this.endpointForExpression(definition.target);
+      }
 
       if (definition.interceptors !== undefined) {
         ep.interceptors = definition.interceptors.map(icDef =>
           interceptorFactory.createInterceptorInstanceFromConfig(icDef, ep)
         );
       }
+
+      this.addEndpoint(ep);
 
       return ep;
     }

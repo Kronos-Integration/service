@@ -8,7 +8,7 @@ class Owner extends EndpointMixin(class {}) {
   }
 }
 
-test('outEndpoints', async t => {
+test('outEndpoints', t => {
   const o = new Owner();
 
   const s1 = new SendEndpoint('s1');
@@ -20,7 +20,7 @@ test('outEndpoints', async t => {
   t.deepEqual(o.outEndpoints, [s1]);
 });
 
-test('inEndpoints', async t => {
+test('inEndpoints', t => {
   const o = new Owner();
 
   const s1 = new SendEndpoint('s1');
@@ -32,7 +32,7 @@ test('inEndpoints', async t => {
   t.deepEqual(o.inEndpoints, [r1]);
 });
 
-test('endpointForExpression', async t => {
+test('endpointForExpression', t => {
   const o = new Owner();
   const s1 = new SendEndpoint('s1');
   const r1 = new ReceiveEndpoint('r1');
@@ -43,7 +43,7 @@ test('endpointForExpression', async t => {
   t.deepEqual(o.endpointForExpression('r1'), r1);
 });
 
-test('endpointForExpression throwing', async t => {
+test('endpointForExpression throwing', t => {
   const o = new Owner();
   const r1 = new ReceiveEndpoint('r1');
 
@@ -54,4 +54,15 @@ test('endpointForExpression throwing', async t => {
   }, Error);
 
   t.is(error.message, "Endpoint 'r2' not found in owner");
+});
+
+test('endpointFromConfig target', t => {
+  const o = new Owner();
+  const r1 = new ReceiveEndpoint('r1');
+  o.addEndpoint(r1);
+
+  const e = o.createEndpointFromConfig('e', { target: 'r1' }, o);
+
+  t.is(e.name, 'e');
+  t.is(e.connected.name, 'r1');
 });
