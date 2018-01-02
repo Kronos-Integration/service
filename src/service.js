@@ -63,7 +63,6 @@ const _ca = createAttributes({
   },
   endpoints: {
     setter(newValue) {
-      //console.log(`endpoints setter: ${newValue}`);
       this.createEndpointsFromConfig(newValue, this.owner);
     }
   }

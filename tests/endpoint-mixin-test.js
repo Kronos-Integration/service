@@ -1,8 +1,10 @@
 import { SendEndpoint, ReceiveEndpoint } from 'kronos-endpoint';
+import Service from '../src/service';
 import EndpointMixin from '../src/endpoints-mixin';
+import ServiceProviderMixin from '../src/service-provider-mixin';
 import test from 'ava';
 
-class Owner extends EndpointMixin(class {}) {
+class Owner extends ServiceProviderMixin(Service) {
   toString() {
     return 'owner';
   }
@@ -10,29 +12,15 @@ class Owner extends EndpointMixin(class {}) {
 
 test('outEndpoints', t => {
   const o = new Owner();
-
-  const s1 = new SendEndpoint('s1');
-  const r1 = new ReceiveEndpoint('r1');
-
-  o.addEndpoint(s1);
-  o.addEndpoint(r1);
-
-  t.deepEqual(o.outEndpoints, [s1]);
+  t.deepEqual(o.outEndpoints, [o.endpoints.log]);
 });
 
 test('inEndpoints', t => {
   const o = new Owner();
-
-  const s1 = new SendEndpoint('s1');
-  const r1 = new ReceiveEndpoint('r1');
-
-  o.addEndpoint(s1);
-  o.addEndpoint(r1);
-
-  t.deepEqual(o.inEndpoints, [r1]);
+  t.deepEqual(o.inEndpoints.map(e => e.name), ['config', 'command']);
 });
 
-test('endpointForExpression', t => {
+test('endpointForExpression simple', t => {
   const o = new Owner();
   const s1 = new SendEndpoint('s1');
   const r1 = new ReceiveEndpoint('r1');
@@ -41,6 +29,12 @@ test('endpointForExpression', t => {
   o.addEndpoint(r1);
 
   t.deepEqual(o.endpointForExpression('r1'), r1);
+});
+
+test.skip('endpointForExpression service', t => {
+  const o = new Owner();
+
+  t.is(o.endpointForExpression('service(config).command').name, 'command');
 });
 
 test('endpointForExpression throwing', t => {
@@ -58,6 +52,7 @@ test('endpointForExpression throwing', t => {
 
 test('endpointFromConfig target', t => {
   const o = new Owner();
+
   const r1 = new ReceiveEndpoint('r1');
   o.addEndpoint(r1);
 

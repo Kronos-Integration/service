@@ -139,12 +139,31 @@ export default function EndpointsMixin(superclass) {
      * @throws if no Endpoint can be found
      */
     endpointForExpression(expression, wait = false) {
-      console.log(
+      /*console.log(
         `endpointForExpression: ${expression} -> ${this.endpoints[expression]}`
-      );
+      );*/
 
       const endpoint = this.endpoints[expression];
       if (endpoint === undefined) {
+        const m = expression.match(/^service\(([^\)]+)\).(.*)/);
+        if (m) {
+          const serviceName = m[1];
+          const suffixExpression = m[2];
+          const serviceProvider = this.owner;
+
+          const service = serviceProvider.services[serviceName];
+
+          if (service === undefined) {
+            throw new Error(
+              `Service '${serviceName}' not found in ${serviceProvider} (${Object.keys(
+                serviceProvider.services
+              )})`
+            );
+          }
+
+          return service.endpointForExpression(suffixExpression, wait);
+        }
+
         throw new Error(`Endpoint '${expression}' not found in ${this}`);
       }
 
