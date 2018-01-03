@@ -42,7 +42,6 @@
     "nyc": "^11.4.1",
     "ava": "^0.24.0",
     "rollup-plugin-multi-entry": "^2.0.2",
-    "xo": "^0.19.0",
     "documentation": "^5.3.5"
   },
   "engines": {
