@@ -5,7 +5,7 @@ import ServiceProviderMixin from '../src/service-provider-mixin';
 import test from 'ava';
 
 class Owner extends ServiceProviderMixin(Service) {
-  toString() {
+  get name() {
     return 'owner';
   }
 }
@@ -31,20 +31,26 @@ test('endpointForExpression simple', t => {
   t.deepEqual(o.endpointForExpression('r1'), r1);
 });
 
-test.skip('endpointForExpression service', t => {
+test('endpointForExpression service', async t => {
   const o = new Owner();
+  await o.start();
 
+  //console.log(o.services);
   t.is(o.endpointForExpression('service(config).command').name, 'command');
 });
 
-test('endpointForExpression service throwing', t => {
+test('endpointForExpression service throwing', async t => {
   const o = new Owner();
+  await o.start();
 
   const error = t.throws(() => {
     o.endpointForExpression('service(something).something');
   }, Error);
 
-  t.is(error.message, "Service 'something' not found in owner ()");
+  t.is(
+    error.message,
+    "Service 'something' not found in owner (logger,config,owner)"
+  );
 });
 
 test('endpointForExpression throwing', t => {

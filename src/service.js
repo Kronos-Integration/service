@@ -93,7 +93,7 @@ dummyLogReceiver.receive = async entry => {
  * @param {string} config.logLevel
  * @param {string} config.description
  * @param {Object} config.endpoints
- * @param {Object} owner
+ * @param {Service} owner
  */
 export default class Service extends EndpointsMixin(
   StateTransitionMixin(
