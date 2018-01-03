@@ -37,6 +37,16 @@ test.skip('endpointForExpression service', t => {
   t.is(o.endpointForExpression('service(config).command').name, 'command');
 });
 
+test('endpointForExpression service throwing', t => {
+  const o = new Owner();
+
+  const error = t.throws(() => {
+    o.endpointForExpression('service(something).something');
+  }, Error);
+
+  t.is(error.message, "Service 'something' not found in owner ()");
+});
+
 test('endpointForExpression throwing', t => {
   const o = new Owner();
   const r1 = new ReceiveEndpoint('r1');
