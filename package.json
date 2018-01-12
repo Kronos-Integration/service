@@ -28,7 +28,7 @@
     "lint": "documentation lint src/module.js"
   },
   "dependencies": {
-    "fast-safe-stringify": "^1.2.2",
+    "fast-safe-stringify": "^2.0.0",
     "kronos-endpoint": "^2.14.15",
     "loglevel-mixin": "^2.0.1",
     "model-attributes": "^3.0.10",
