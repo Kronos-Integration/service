@@ -1,6 +1,9 @@
 {
   "name": "kronos-service",
   "version": "0.0.0-semantic-release",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/module.js",
   "module": "src/module.js",
   "description": "Base service implementation",
