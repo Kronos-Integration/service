@@ -1,7 +1,6 @@
 import { ReceiveEndpoint } from 'kronos-endpoint';
 import Service from './service';
-
-const safeStringify = require('fast-safe-stringify');
+import safeStringify from 'fast-safe-stringify';
 
 /**
  * Log receiving service

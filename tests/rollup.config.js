@@ -5,10 +5,13 @@ export default {
   output: {
     file: 'build/bundle-test.js',
     format: 'cjs',
-    sourcemap: true
+    sourcemap: true,
+    interop: false
   },
   external: [
     'ava',
+    'events',
+    'fast-safe-stringify',
     'registry-mixin',
     'kronos-endpoint',
     'loglevel-mixin',

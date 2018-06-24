@@ -1,7 +1,7 @@
 import EndpointsMixin from './endpoints-mixin';
 
-const events = require('events');
-const safeStringify = require('fast-safe-stringify');
+import events from 'events';
+import safeStringify from 'fast-safe-stringify';
 
 import {
   ReceiveEndpoint,
