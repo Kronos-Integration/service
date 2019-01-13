@@ -30,7 +30,7 @@
   "dependencies": {
     "fast-safe-stringify": "^2.0.2",
     "kronos-endpoint": "^2.14.15",
-    "loglevel-mixin": "^2.0.2",
+    "loglevel-mixin": "^3.0.0",
     "model-attributes": "^3.0.10",
     "registry-mixin": "^2.1.16",
     "statetransition-mixin": "^5.0.0"
