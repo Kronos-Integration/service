@@ -1,6 +1,6 @@
 import test from 'ava';
 import { createAttributes } from 'model-attributes';
-import { SendEndpoint } from '@kronos-integration/kronos-endpoint';
+import { SendEndpoint } from '@kronos-integration/endpoint';
 import Service from '../src/service.mjs';
 
 const owner = {

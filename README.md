@@ -25,32 +25,46 @@ Base service implementation
 
 -   [DESCRIPTION](#description)
 -   [Service](#service)
+    -   [Parameters](#parameters)
     -   [stateChanged](#statechanged)
+        -   [Parameters](#parameters-1)
     -   [rejectWrongState](#rejectwrongstate)
+        -   [Parameters](#parameters-2)
     -   [timeoutForTransition](#timeoutfortransition)
+        -   [Parameters](#parameters-3)
     -   [\_restart](#_restart)
     -   [restartIfRunning](#restartifrunning)
     -   [toString](#tostring)
     -   [toJSONWithOptions](#tojsonwithoptions)
+        -   [Parameters](#parameters-4)
     -   [name](#name)
     -   [autostart](#autostart)
     -   [\_configure](#_configure)
+        -   [Parameters](#parameters-5)
     -   [configure](#configure)
+        -   [Parameters](#parameters-6)
     -   [log](#log)
+        -   [Parameters](#parameters-7)
     -   [endpointParentSeparator](#endpointparentseparator)
     -   [configurationAttributes](#configurationattributes)
     -   [endpoints](#endpoints)
 -   [ServiceLogger](#servicelogger)
+    -   [Parameters](#parameters-8)
     -   [autostart](#autostart-1)
     -   [name](#name-1)
     -   [endpoints](#endpoints-1)
 -   [ServiceConfig](#serviceconfig)
+    -   [Parameters](#parameters-9)
     -   [autostart](#autostart-2)
     -   [name](#name-2)
 -   [defineServiceConsumerProperties](#defineserviceconsumerproperties)
+    -   [Parameters](#parameters-10)
 -   [ServiceProviderMixin](#serviceprovidermixin)
+    -   [Parameters](#parameters-11)
 -   [InterceptorProviderMixin](#interceptorprovidermixin)
+    -   [Parameters](#parameters-12)
 -   [EndpointsMixin](#endpointsmixin)
+    -   [Parameters](#parameters-13)
 -   [endpoints](#endpoints-2)
 
 ## DESCRIPTION
@@ -111,7 +125,7 @@ All services have at least three endpoints:
 -   config _in_: configuration request
 -   command _in_: administrative actions to be executed by the step
 
-**Parameters**
+### Parameters
 
 -   `config` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
     -   `config.logLevel` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
@@ -124,7 +138,7 @@ All services have at least three endpoints:
 Called when the service state changes.
 Emits a serviceStateChanged event to the owner
 
-**Parameters**
+#### Parameters
 
 -   `oldState` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 -   `newState` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
@@ -133,7 +147,7 @@ Emits a serviceStateChanged event to the owner
 
 Called when state transition is not allowed
 
-**Parameters**
+#### Parameters
 
 -   `action` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** originating action name
 
@@ -144,7 +158,7 @@ Called when state transition is not allowed
 
 Deliver transtion timeout
 
-**Parameters**
+#### Parameters
 
 -   `transition` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
 
@@ -174,7 +188,7 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 Deliver json representation
 
-**Parameters**
+#### Parameters
 
 -   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `{}`)
     -   `options.includeRuntimeInfo` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** include runtime informtion like state
@@ -205,7 +219,7 @@ Which means we loop over all configuration attributes
 and then for each attribute decide if we use the default, call a setter function
 or simply assign the attribute value
 
-**Parameters**
+#### Parameters
 
 -   `config` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
 
@@ -218,7 +232,7 @@ Internally calls \_configure(config) as the constructor does
 If attribute with needsRestart are touched the restartIfRunning method
 will be called
 
-**Parameters**
+#### Parameters
 
 -   `config` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
 
@@ -228,7 +242,7 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 
 Adds service name to the log event
 
-**Parameters**
+#### Parameters
 
 -   `level` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** the log level
 -   `arg` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** log content
@@ -236,6 +250,7 @@ Adds service name to the log event
 ### endpointParentSeparator
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** separator between service name and endpoint name
+\*
 
 ### configurationAttributes
 
@@ -264,7 +279,7 @@ Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 Log receiving service
 
-**Parameters**
+### Parameters
 
 -   `config`  
 -   `owner`  
@@ -293,7 +308,7 @@ Config providing service
 Dispatches config requests to services
 or preserves them until a maching service becomes avaliable
 
-**Parameters**
+### Parameters
 
 -   `config`  
 -   `owner`  
@@ -312,7 +327,7 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 assign services based on a configuration
 
-**Parameters**
+### Parameters
 
 -   `target` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** object
 -   `config` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** service defintion
@@ -325,7 +340,7 @@ Provide services and hold service configuration.
 By default a service provider has two build in services
 'logger' and 'config'.
 
-**Parameters**
+### Parameters
 
 -   `superclass`  
 
@@ -333,7 +348,7 @@ By default a service provider has two build in services
 
 Register & provide Interceptors.
 
-**Parameters**
+### Parameters
 
 -   `superclass`  
 
@@ -342,7 +357,7 @@ Register & provide Interceptors.
 Endpoint accessor mixin
 Manages endpoints in a container
 
-**Parameters**
+### Parameters
 
 -   `superclass` **Class** class to be extended
 
