@@ -1,6 +1,7 @@
-import { TimeoutInterceptor } from 'kronos-interceptor';
-import InterceptorProviderMixin from '../src/interceptor-provider-mixin';
 import test from 'ava';
+
+import { TimeoutInterceptor } from '@kronos-integration/interceptor';
+import InterceptorProviderMixin from '../src/interceptor-provider-mixin.mjs';
 
 class InterceptorProvider extends InterceptorProviderMixin(class {}) {}
 

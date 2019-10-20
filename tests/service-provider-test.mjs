@@ -1,9 +1,6 @@
-import { SendEndpoint } from 'kronos-endpoint';
-import Service from '../src/service';
-import ServiceConfig from '../src/service-config';
-import ServiceLogger from '../src/service-logger';
-import ServiceProviderMixin from '../src/service-provider-mixin';
 import test from 'ava';
+import Service from '../src/service.mjs';
+import ServiceProviderMixin from '../src/service-provider-mixin.mjs';
 
 class ServiceProvider extends ServiceProviderMixin(Service) {
   static get name() {

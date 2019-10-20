@@ -1,7 +1,7 @@
-import { SendEndpoint } from 'kronos-endpoint';
-import Service from '../src/service';
-import { createAttributes } from 'model-attributes';
 import test from 'ava';
+import { createAttributes } from 'model-attributes';
+import { SendEndpoint } from '@kronos-integration/kronos-endpoint';
+import Service from '../src/service.mjs';
 
 const owner = {
   emit(name, arg1, arg2) {}, // dummy event emitter

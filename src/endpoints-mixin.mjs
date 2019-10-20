@@ -3,7 +3,7 @@ import {
   SendEndpointDefault,
   ReceiveEndpoint,
   ReceiveEndpointDefault
-} from 'kronos-endpoint';
+} from '@kronos-integration/endpoint';
 
 /**
  * Endpoint accessor mixin

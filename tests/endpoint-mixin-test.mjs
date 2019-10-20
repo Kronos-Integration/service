@@ -1,8 +1,7 @@
-import { SendEndpoint, ReceiveEndpoint } from 'kronos-endpoint';
-import Service from '../src/service';
-import EndpointMixin from '../src/endpoints-mixin';
-import ServiceProviderMixin from '../src/service-provider-mixin';
 import test from 'ava';
+import { SendEndpoint, ReceiveEndpoint } from '@kronos-integration/endpoint';
+import Service from '../src/service.mjs';
+import ServiceProviderMixin from '../src/service-provider-mixin.mjs';
 
 class Owner extends ServiceProviderMixin(Service) {
   get name() {

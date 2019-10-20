@@ -1,6 +1,6 @@
 import { defineRegistryProperties } from 'registry-mixin';
-import ServiceLogger from './service-logger';
-import ServiceConfig from './service-config';
+import ServiceLogger from './service-logger.mjs';
+import ServiceConfig from './service-config.mjs';
 
 /**
  * Provide services and hold service configuration.

@@ -1,9 +1,7 @@
-import { SendEndpoint } from 'kronos-endpoint';
-import Service from '../src/service';
-import ServiceProviderMixin from '../src/service-provider-mixin';
-import { defineServiceConsumerProperties } from '../src/service-consumer-mixin';
-import { createAttributes } from 'model-attributes';
 import test from 'ava';
+import Service from '../src/service.mjs';
+import ServiceProviderMixin from '../src/service-provider-mixin.mjs';
+import { defineServiceConsumerProperties } from '../src/service-consumer-mixin.mjs';
 
 class ServiceProvider extends ServiceProviderMixin(Service) {}
 

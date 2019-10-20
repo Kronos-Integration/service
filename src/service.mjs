@@ -1,4 +1,3 @@
-import EndpointsMixin from './endpoints-mixin';
 
 import events from 'events';
 import safeStringify from 'fast-safe-stringify';
@@ -6,8 +5,7 @@ import safeStringify from 'fast-safe-stringify';
 import {
   ReceiveEndpoint,
   SendEndpointDefault,
-  ReceiveEndpointDefault
-} from 'kronos-endpoint';
+} from '@kronos-integration/endpoint';
 
 import {
   defaultLogLevels,
@@ -23,6 +21,8 @@ import {
   getAttribute,
   setAttributes
 } from 'model-attributes';
+
+import EndpointsMixin from './endpoints-mixin.mjs';
 
 /**
  * key of the service description

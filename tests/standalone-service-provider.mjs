@@ -1,5 +1,4 @@
-const Service = require('../dist/service'),
-  ServiceProviderMixin = require('../lib/service-provider-mixin');
+import { Service, ServiceProviderMixin } from '../src/module.mjs';
 
 class ServiceProvider extends ServiceProviderMixin(Service) {}
 

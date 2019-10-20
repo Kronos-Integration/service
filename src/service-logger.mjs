@@ -1,6 +1,5 @@
-import { ReceiveEndpoint } from 'kronos-endpoint';
-import Service from './service';
 import safeStringify from 'fast-safe-stringify';
+import Service from './service.mjs';
 
 /**
  * Log receiving service

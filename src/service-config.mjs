@@ -1,6 +1,5 @@
 import { defineRegistryProperties } from 'registry-mixin';
-import { ReceiveEndpoint } from 'kronos-endpoint';
-import Service from './service';
+import Service from './service.mjs';
 
 /**
  * Config providing service
