@@ -343,6 +343,8 @@ By default a service provider has two build in services
 ### Parameters
 
 -   `superclass`  
+-   `serviceLoggerClass`   (optional, default `ServiceLogger`)
+-   `serviceConfigClass`   (optional, default `ServiceConfig`)
 
 ## InterceptorProviderMixin
 
