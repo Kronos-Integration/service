@@ -13,11 +13,6 @@ export default function ServiceProviderMixin(superclass) {
     constructor(config, owner) {
       super(Array.isArray(config) ? config[0] : config, undefined);
 
-      // by default be our own owner
-      Object.defineProperty(this, 'owner', {
-        value: this
-      });
-
       const loggerService = new ServiceLogger({}, this);
       const configService = new ServiceConfig({}, this);
 
@@ -98,6 +93,11 @@ export default function ServiceProviderMixin(superclass) {
       }
     }
 
+    /** be default be our own owner */ 
+    get owner() {
+      return this;
+    }
+
     insertIntoDeclareByNamePromisesAndDeliver(config, name, type) {
       const p = this.registerService(
         this.createServiceFactoryInstanceFromConfig(config, this)
@@ -114,7 +114,7 @@ export default function ServiceProviderMixin(superclass) {
     /**
      * Add a new service based on its configuration
      * If a service for the name is already present and it has a matching type
-     * then its configure() is called and then returned.
+     * then its configure() is called and returned.
      * Otherwise a new service will be created eventually replacing an already existing service with the same name.
      * @param {object} config with
      *     name - the service name
@@ -213,7 +213,7 @@ export default function ServiceProviderMixin(superclass) {
 
     /**
      * Stop all services
-     * @return {Promise} that fullfills when all services are stopped
+     * @return {Promise} that resolves when all services are stopped
      */
     async _stop() {
       await super._stop();

@@ -17,12 +17,13 @@ export default class ServiceLogger extends Service {
    * @return {Object} predefined endpoints
    */
   static get endpoints() {
-    return Object.assign({}, Service.endpoints, {
+    return {
+      ...super.endpoints,
       log: {
         in: true,
         default: true
       }
-    });
+    };
   }
 
   constructor(config, owner) {
