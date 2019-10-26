@@ -1,32 +1,43 @@
-import { defineRegistryProperties } from 'registry-mixin';
-import ServiceLogger from './service-logger.mjs';
-import ServiceConfig from './service-config.mjs';
+import { defineRegistryProperties } from "registry-mixin";
+import ServiceLogger from "./service-logger.mjs";
+import ServiceConfig from "./service-config.mjs";
 
 /**
  * Provide services and hold service configuration.
  * By default a service provider has two build in services
  * 'logger' and 'config'.
  *
+ * @param serviceLoggerClass
+ * @param serviceConfigClass
  */
-export default function ServiceProviderMixin(superclass) {
+export default function ServiceProviderMixin(
+  superclass,
+  serviceLoggerClass = ServiceLogger,
+  serviceConfigClass = ServiceConfig
+) {
   return class ServiceProvider extends superclass {
-    constructor(config, owner) {
+    constructor(config) {
       super(Array.isArray(config) ? config[0] : config, undefined);
 
-      const loggerService = new ServiceLogger({}, this);
-      const configService = new ServiceConfig({}, this);
+      /*
+      Object.defineProperties(this, {
+        services: { value: {} }
+      });
+*/
+      const loggerService = new serviceLoggerClass({}, this);
+      const configService = new serviceConfigClass({}, this);
 
       this.endpoints.log.connected = loggerService.endpoints.log;
       configService.endpoints.log.connected = loggerService.endpoints.log;
 
-      defineRegistryProperties(this, 'serviceFactory', {
-        pluralName: 'serviceFactories',
+      defineRegistryProperties(this, "serviceFactory", {
+        pluralName: "serviceFactories",
         withCreateInstance: true,
         withEvents: true,
-        factoryType: 'new'
+        factoryType: "new"
       });
 
-      defineRegistryProperties(this, 'service', {
+      defineRegistryProperties(this, "service", {
         hasBeenRegistered: service => {
           // connect log endpoint to logger service
           const logger = this.services.logger;
@@ -58,14 +69,11 @@ export default function ServiceProviderMixin(superclass) {
         return Promise.all(command.map(c => this.execute(c)));
       }
 
-      if (command.action === 'list') {
+      if (command.action === "list") {
         return Object.keys(this.services)
           .map(name => this.services[name])
-          .map(
-            s =>
-              command.options
-                ? s.toJSONWithOptions(command.options)
-                : s.toJSON()
+          .map(s =>
+            command.options ? s.toJSONWithOptions(command.options) : s.toJSON()
           );
       }
 
@@ -76,16 +84,16 @@ export default function ServiceProviderMixin(superclass) {
       }
 
       switch (command.action) {
-        case 'get':
+        case "get":
           return service.toJSONWithOptions(command.options);
 
-        case 'start':
+        case "start":
           return service.start();
 
-        case 'stop':
+        case "stop":
           return service.stop();
 
-        case 'restart':
+        case "restart":
           return service.restart();
 
         default:
@@ -93,12 +101,33 @@ export default function ServiceProviderMixin(superclass) {
       }
     }
 
-    /** be default be our own owner */ 
+    /** be default be our own owner */
+
     get owner() {
       return this;
     }
 
-    insertIntoDeclareByNamePromisesAndDeliver(config, name, type) {
+    /*
+    async registerService(service) {
+      this.services[service.name] = service;
+      // connect log endpoint to logger service
+      const logger = this.services.logger;
+      if (service.endpoints.log.isOut && logger) {
+        service.endpoints.log.connected = logger.endpoints.log;
+      }
+
+      if (service.autostart) {
+        return service.start();
+      }
+    }
+
+    async unregisterService(service) {
+      delete this.services[service.name];
+      await service.stop();
+    }
+*/
+
+    async insertIntoDeclareByNamePromisesAndDeliver(config, name, type) {
       const p = this.registerService(
         this.createServiceFactoryInstanceFromConfig(config, this)
       ).then(service => {
@@ -170,12 +199,12 @@ export default function ServiceProviderMixin(superclass) {
             const listener = factory => {
               if (factory.name === type) {
                 this._declareServiceFactoryByTypePromises.delete(type);
-                this.removeListener('serviceFactoryRegistered', listener);
+                this.removeListener("serviceFactoryRegistered", listener);
                 fullfill(factory);
               }
             };
 
-            this.addListener('serviceFactoryRegistered', listener);
+            this.addListener("serviceFactoryRegistered", listener);
           });
 
           this._declareServiceFactoryByTypePromises.set(type, typePromise);
@@ -217,9 +246,8 @@ export default function ServiceProviderMixin(superclass) {
      */
     async _stop() {
       await super._stop();
-      return Promise.all(
-        Object.keys(this.services).map(name => this.services[name].stop())
-      );
+
+      return Promise.all(Object.values(this.services).filter(service => service !== this).stop());
     }
   };
 }
