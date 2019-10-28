@@ -33,7 +33,7 @@
     "loglevel-mixin": "^4.0.0",
     "model-attributes": "^4.0.0",
     "registry-mixin": "^3.0.0",
-    "statetransition-mixin": "^5.0.0"
+    "statetransition-mixin": "^6.0.0"
   },
   "devDependencies": {
     "ava": "^2.4.0",
