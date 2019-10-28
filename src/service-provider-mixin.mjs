@@ -247,7 +247,11 @@ export default function ServiceProviderMixin(
     async _stop() {
       await super._stop();
 
-      return Promise.all(Object.values(this.services).filter(service => service !== this).stop());
+      return Promise.all(
+        Object.values(this.services)
+          .filter(service => service !== this)
+          .map(s => s.stop())
+      );
     }
   };
 }
