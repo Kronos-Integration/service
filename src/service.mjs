@@ -1,43 +1,42 @@
-
-import events from 'events';
-import safeStringify from 'fast-safe-stringify';
+import events from "events";
+import safeStringify from "fast-safe-stringify";
 
 import {
   ReceiveEndpoint,
-  SendEndpointDefault,
-} from '@kronos-integration/endpoint';
+  SendEndpointDefault
+} from "@kronos-integration/endpoint";
 
 import {
   defaultLogLevels,
   defineLogLevelProperties,
   LogLevelMixin,
   makeLogEvent
-} from 'loglevel-mixin';
+} from "loglevel-mixin";
 
-import { prepareActions, StateTransitionMixin } from 'statetransition-mixin';
+import { prepareActions, StateTransitionMixin } from "statetransition-mixin";
 
 import {
   createAttributes,
   getAttribute,
   setAttributes
-} from 'model-attributes';
+} from "model-attributes";
 
-import EndpointsMixin from './endpoints-mixin.mjs';
+import EndpointsMixin from "./endpoints-mixin.mjs";
 
 /**
  * key of the service description
  */
-const DESCRIPTION = Symbol('description');
+const DESCRIPTION = Symbol("description");
 
 const _ca = createAttributes({
   description: {
-    type: 'string',
-    description: 'human readable description of the step'
+    type: "string",
+    description: "human readable description of the step"
   },
   logLevel: {
     description: `logging level one of: ${Object.keys(defaultLogLevels)}`,
     default: defaultLogLevels.info,
-    type: 'string',
+    type: "string",
     setter(newValue) {
       if (newValue !== undefined) {
         const l = defaultLogLevels[newValue];
@@ -55,8 +54,8 @@ const _ca = createAttributes({
   timeout: {
     attributes: {
       start: {
-        description: 'service start timeout',
-        type: 'duration',
+        description: "service start timeout",
+        type: "duration",
         default: 5
       }
     }
@@ -68,18 +67,14 @@ const _ca = createAttributes({
   }
 });
 
-const dummyLogReceiver = new ReceiveEndpoint('logReceiver', {
+const dummyLogReceiver = new ReceiveEndpoint("logReceiver", {
   endpointIdentifier(ep) {
     return undefined; // prevent target;
   }
 });
 
-dummyLogReceiver.receive = async entry => {
-  if (entry.severity === 'error') {
-    console.error(safeStringify(entry));
-  } else {
-    console.log(safeStringify(entry));
-  }
+dummyLogReceiver.receive = entry => {
+  console.log(safeStringify(entry));
 };
 
 /**
@@ -101,55 +96,55 @@ export default class Service extends EndpointsMixin(
     prepareActions({
       start: {
         stopped: {
-          target: 'running',
-          during: 'starting',
-          rejected: 'failed',
+          target: "running",
+          during: "starting",
+          rejected: "failed",
           timeout: 5000
         }
       },
       restart: {
         stopped: {
-          target: 'running',
-          during: 'starting',
-          rejected: 'failed',
+          target: "running",
+          during: "starting",
+          rejected: "failed",
           timeout: 5000
         },
         running: {
-          target: 'running',
-          during: 'restarting',
+          target: "running",
+          during: "restarting",
           timeout: 5000
         }
       },
       stop: {
         running: {
-          target: 'stopped',
-          during: 'stopping',
-          rejected: 'failed',
+          target: "stopped",
+          during: "stopping",
+          rejected: "failed",
           timeout: 5000
         },
         starting: {
-          target: 'stopped',
-          during: 'stopping',
-          rejected: 'failed',
+          target: "stopped",
+          during: "stopping",
+          rejected: "failed",
           timeout: 5000
         },
         failed: {
-          target: 'stopped',
-          during: 'stopping',
-          rejected: 'failed',
+          target: "stopped",
+          during: "stopping",
+          rejected: "failed",
           timeout: 1000
         }
       }
     }),
-    'stopped'
+    "stopped"
   )
 ) {
   static get description() {
-    return 'This service is the base class for service implementations';
+    return "This service is the base class for service implementations";
   }
 
   static get name() {
-    return 'service';
+    return "service";
   }
 
   /**
@@ -192,7 +187,7 @@ export default class Service extends EndpointsMixin(
     super();
 
     if (owner !== undefined) {
-      Object.defineProperty(this, 'owner', {
+      Object.defineProperty(this, "owner", {
         value: owner
       });
     }
@@ -201,7 +196,7 @@ export default class Service extends EndpointsMixin(
       config = {};
     } else {
       if (config.name !== undefined) {
-        Object.defineProperty(this, 'name', {
+        Object.defineProperty(this, "name", {
           value: config.name
         });
       }
@@ -216,7 +211,7 @@ export default class Service extends EndpointsMixin(
     );
 
     // TODO special case for log endpoint in and out for logger service ?
-    this.addEndpoint(new SendEndpointDefault('log', this));
+    this.addEndpoint(new SendEndpointDefault("log", this));
     this.endpoints.log.connected = dummyLogReceiver;
 
     this._configure(config);
@@ -270,9 +265,9 @@ export default class Service extends EndpointsMixin(
    * @param {string} newState
    */
   stateChanged(oldState, newState) {
-    this.owner.emit('serviceStateChanged', this, oldState, newState);
+    this.owner.emit("serviceStateChanged", this, oldState, newState);
     this.trace({
-      message: 'transitioned',
+      message: "transitioned",
       from: oldState,
       to: newState
     });
@@ -281,7 +276,7 @@ export default class Service extends EndpointsMixin(
   stateTransitionRejection(rejected, newState) {
     const p = super.stateTransitionRejection(rejected, newState);
     this.error({
-      message: 'transition rejected',
+      message: "transition rejected",
       rejected,
       newState
     });
@@ -303,7 +298,7 @@ export default class Service extends EndpointsMixin(
    * @return {number} milliseconds before throwing for a logn running transition
    */
   timeoutForTransition(transition) {
-    if (transition.name.startsWith('start')) {
+    if (transition.name.startsWith("start")) {
       return this.timeout.start * 1000;
     }
 
@@ -326,7 +321,7 @@ export default class Service extends EndpointsMixin(
    * @returns {Promise} resolves when restart is done (or immediate if no restart triggered)
    */
   async restartIfRunning() {
-    if (this.state === 'running') {
+    if (this.state === "running") {
       return this.restart();
     }
   }
@@ -425,7 +420,7 @@ export default class Service extends EndpointsMixin(
       config,
       (ca, path, value) => {
         this.trace({
-          message: 'config',
+          message: "config",
           attribute: path,
           value: value
         });
@@ -470,6 +465,6 @@ export default class Service extends EndpointsMixin(
    * @return {string} separator between service name and endpoint name
    **/
   get endpointParentSeparator() {
-    return ':';
+    return ":";
   }
 }
