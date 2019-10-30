@@ -102,7 +102,6 @@ export default function ServiceProviderMixin(
     }
 
     /** be default be our own owner */
-
     get owner() {
       return this;
     }
@@ -151,7 +150,7 @@ export default function ServiceProviderMixin(
      * @param {boolean} waitUntilFactoryPresent waits until someone registers a matching service factory
      * @return {Promise} resolving to the declared service
      */
-    declareService(config, waitUntilFactoryPresent) {
+    async declareService(config, waitUntilFactoryPresent) {
       const name = config.name;
       const service = this.services[name];
 
@@ -195,12 +194,12 @@ export default function ServiceProviderMixin(
             this._declareServiceFactoryByTypePromises = new Map();
           }
 
-          const typePromise = new Promise((fullfill, reject) => {
+          const typePromise = new Promise((resolve, reject) => {
             const listener = factory => {
               if (factory.name === type) {
                 this._declareServiceFactoryByTypePromises.delete(type);
                 this.removeListener("serviceFactoryRegistered", listener);
-                fullfill(factory);
+                resolve(factory);
               }
             };
 
@@ -209,9 +208,7 @@ export default function ServiceProviderMixin(
 
           this._declareServiceFactoryByTypePromises.set(type, typePromise);
 
-          return typePromise.then(() =>
-            this.insertIntoDeclareByNamePromisesAndDeliver(config, name, type)
-          );
+          await typePromise;
         }
 
         return this.insertIntoDeclareByNamePromisesAndDeliver(

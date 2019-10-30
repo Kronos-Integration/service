@@ -66,6 +66,7 @@ Base service implementation
 -   [EndpointsMixin](#endpointsmixin)
     -   [Parameters](#parameters-13)
 -   [endpoints](#endpoints-2)
+-   [StandaloneServiceManager](#standaloneservicemanager)
 
 ## DESCRIPTION
 
@@ -76,46 +77,46 @@ key of the service description
 **Extends EndpointsMixin(StateTransitionMixin(LogLevelMixin(events), prepareActions({
   start: {
     stopped: {
-      target: 'running',
-      during: 'starting',
-      rejected: 'failed',
+      target: "running",
+      during: "starting",
+      rejected: "failed",
       timeout: 5000
     }
   },
   restart: {
     stopped: {
-      target: 'running',
-      during: 'starting',
-      rejected: 'failed',
+      target: "running",
+      during: "starting",
+      rejected: "failed",
       timeout: 5000
     },
     running: {
-      target: 'running',
-      during: 'restarting',
+      target: "running",
+      during: "restarting",
       timeout: 5000
     }
   },
   stop: {
     running: {
-      target: 'stopped',
-      during: 'stopping',
-      rejected: 'failed',
+      target: "stopped",
+      during: "stopping",
+      rejected: "failed",
       timeout: 5000
     },
     starting: {
-      target: 'stopped',
-      during: 'stopping',
-      rejected: 'failed',
+      target: "stopped",
+      during: "stopping",
+      rejected: "failed",
       timeout: 5000
     },
     failed: {
-      target: 'stopped',
-      during: 'stopping',
-      rejected: 'failed',
+      target: "stopped",
+      during: "stopping",
+      rejected: "failed",
       timeout: 1000
     }
   }
-}), 'stopped'))**
+}), "stopped"))**
 
 Service
 The initial state is 'stopped'
@@ -370,6 +371,12 @@ Returns **Class** extended class
 default set of endpoints to create
 
 Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** {} empty set
+
+## StandaloneServiceManager
+
+**Extends ServiceProviderMixin(Service)**
+
+simple service manager (for examples and testing only)
 
 # install
 

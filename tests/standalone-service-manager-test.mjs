@@ -6,9 +6,6 @@ class ServiceTest extends Service {
     return "test";
   }
 
-  constructor(config, owner) {
-    super(config, owner);
-  }
   configure(config) {
     delete config.name;
     Object.assign(this, config);
@@ -17,25 +14,43 @@ class ServiceTest extends Service {
 }
 
 test("declareService", async t => {
-  const sp = new StandaloneServiceManager();
-  sp.registerServiceFactory(ServiceTest);
+  const ssm = new StandaloneServiceManager();
+  ssm.registerServiceFactory(ServiceTest);
 
-  for (const n of ["s1", "s2", "s3", "s4", "s5"]) {
-    const s = await sp.declareService(
-      {
-        name: n,
-        type: "test"
-      },
-      true
-    );
+  const s = await Promise.all(["s1", "s2", "s3", "s4", "s5"].map(
+    name =>
+    ssm.declareService(
+        {
+          name,
+          type: "test"
+        },
+        true
+      )
+  ));
 
-    // .then(s => console.log(`declare: ${s}`), r => console.log)
-  }
+ // console.log(s.map(s => s.name));
 
-  t.is(sp.services.s1.name, "s1");
+  t.is(ssm.services.s1.name, "s1");
+//  t.is(ssm.services.s3.name, "s3");
 });
 
-/*
-setTimeout(() => sp.registerServiceFactory(ServiceTest), 2000);
-setTimeout(() => console.log('done'), 5000);
-*/
+test("declareService delayed", async t => {
+  const ssm = new StandaloneServiceManager();
+
+  const declarations = Promise.all(["s1", "s2", "s3", "s4", "s5"].map(
+    name =>
+    ssm.declareService(
+        {
+          name,
+          type: "test"
+        },
+        true
+      )
+  ));
+
+  await ssm.registerServiceFactory(ServiceTest);
+
+  await declarations;
+  t.is(ssm.services.s1.name, "s1");
+ // t.is(ssm.services.s3.name, "s3");
+});
