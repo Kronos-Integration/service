@@ -54,3 +54,25 @@ test("declareService delayed", async t => {
   t.is(ssm.services.s1.name, "s1");
  // t.is(ssm.services.s3.name, "s3");
 });
+
+
+test("configure", async t => {
+  const ssm = new StandaloneServiceManager();
+  ssm.registerServiceFactory(ServiceTest);
+
+  const s1 = await ssm.declareService(
+    {
+      name: "s1",
+      type: "test"
+    },
+    true
+  );
+
+  await ssm.services.config.configure({
+    s1: {
+      value: "for s1"
+    }
+  });
+
+  t.is(s1.value, "for s1");
+});

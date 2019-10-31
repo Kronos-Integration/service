@@ -38,13 +38,13 @@ export default function ServiceProviderMixin(
       });
 
       defineRegistryProperties(this, "service", {
-        hasBeenRegistered: service => {
+        hasBeenRegistered: async service => {
           // connect log endpoint to logger service
           const logger = this.services.logger;
           if (service.endpoints.log.isOut && logger) {
             service.endpoints.log.connected = logger.endpoints.log;
           }
-          return service.autostart ? service.start() : Promise.resolve();
+          if(service.autostart) { return service.start(); }
         },
         willBeUnregistered: service => service.stop()
       });
@@ -54,12 +54,8 @@ export default function ServiceProviderMixin(
 
       // register config service and let it know about the initial config
       this.registerService(configService);
-
-      if (Array.isArray(config)) {
-        config.forEach(entry => configService.registerPreservedConfig(entry));
-      } else if (config !== undefined) {
-        configService.registerPreservedConfig(config);
-      }
+      
+      configService.configure(config);
 
       this.registerService(this);
     }
@@ -177,7 +173,7 @@ export default function ServiceProviderMixin(
         }
 
         if (this.services.config) {
-          const pc = this.services.config.preservedConfigs[name];
+          const pc = this.services.config.preservedConfigs.get(name);
           if (pc !== undefined) {
             Object.assign(config, pc);
           }

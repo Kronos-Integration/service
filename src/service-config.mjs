@@ -1,5 +1,4 @@
-import { defineRegistryProperties } from 'registry-mixin';
-import Service from './service.mjs';
+import Service from "./service.mjs";
 
 /**
  * Config providing service
@@ -11,36 +10,41 @@ export default class ServiceConfig extends Service {
    * @return {string} 'config'
    */
   static get name() {
-    return 'config';
+    return "config";
   }
 
   constructor(config, owner) {
     super(config, owner);
 
-    defineRegistryProperties(this, 'preservedConfig', {});
+    Object.defineProperties(this, {
+      preservedConfigs: { value: new Map() }
+    });
+  }
 
-    /*
-		 * requests can be an array of config entries
-		 */
-
-    this.endpoints.config.receive = request => {
-      if (!Array.isArray(request)) {
-        request = [request];
+  /**
+   * 
+   * @param {Array|Object} config 
+   */
+  async configure(config) {
+    const update = async(name, c) => {
+      const s = this.owner.services[name];
+      if (s === undefined) {
+        delete c.name;
+        this.preservedConfigs.set(name, c);
+      } else {
+        return s.endpoints.config.receive(c);
       }
-
-      const responses = [];
-
-      request.forEach(entry => {
-        const service = owner.services[entry.name];
-        if (service !== undefined && service !== this) {
-          responses.push(service.endpoints.config.receive(entry));
-        } else {
-          this.registerPreservedConfig(entry);
-        }
-      });
-
-      return Promise.all(responses);
     };
+
+    if(config === undefined) {
+      return;
+    }
+
+    await Promise.all(
+      Array.isArray(config)
+        ? config.map(c => update(c.name, c))
+        : Object.entries(config).map(([k, v]) => update(k, v))
+    );
   }
 
   /**
