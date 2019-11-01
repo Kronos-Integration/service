@@ -5,6 +5,7 @@ import Service from './service.mjs';
  * Log receiving service
  */
 export default class ServiceLogger extends Service {
+
   /**
    * @return {string} 'logger'
    */
@@ -44,5 +45,9 @@ export default class ServiceLogger extends Service {
    */
   get autostart() {
     return true;
+  }
+
+  get name() {
+    return 'logger';
   }
 }

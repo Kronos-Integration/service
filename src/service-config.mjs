@@ -54,4 +54,8 @@ export default class ServiceConfig extends Service {
   get autostart() {
     return true;
   }
+
+  get name() {
+    return 'config';
+  }
 }

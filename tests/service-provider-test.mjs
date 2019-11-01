@@ -1,8 +1,21 @@
 import test from "ava";
 import Service from "../src/service.mjs";
+import ServiceLogger from "../src/service-logger.mjs";
 import ServiceProviderMixin from "../src/service-provider-mixin.mjs";
 
-class ServiceProvider extends ServiceProviderMixin(Service) {
+const logEntries = [];
+class TestLogger extends ServiceLogger {
+
+  constructor(config, owner) {
+    super(config, owner);
+
+    this.endpoints.log.receive = entry => {
+      logEntries.push(entry);
+    };
+  }
+}
+
+class ServiceProvider extends ServiceProviderMixin(Service, TestLogger) {
   static get name() {
     return "service-provider";
   }
@@ -40,7 +53,7 @@ test("service provider config service", async t => {
   t.is(sp.services.config.name, "config");
   t.deepEqual(
     sp.services.config.preservedConfigs,
-    new Map([["a", {}], ["test", {key3: 3}]])
+    new Map([["a", {}], ["test", { key3: 3 }]])
   );
 
   t.is(sp.services.logger.name, "logger");
