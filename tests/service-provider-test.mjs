@@ -3,15 +3,22 @@ import Service from "../src/service.mjs";
 import ServiceLogger from "../src/service-logger.mjs";
 import ServiceProviderMixin from "../src/service-provider-mixin.mjs";
 
+async function wait(msecs) {
+  return new Promise((resolve, reject) => setTimeout(() => resolve(), msecs));
+}
+
 const logEntries = [];
 class TestLogger extends ServiceLogger {
-
   constructor(config, owner) {
     super(config, owner);
 
     this.endpoints.log.receive = entry => {
       logEntries.push(entry);
     };
+  }
+
+  async _start() {
+    return wait(1000);
   }
 }
 
@@ -51,12 +58,15 @@ test("service provider config service", async t => {
   await sp.start();
 
   t.is(sp.services.config.name, "config");
+  t.is(sp.services.config.state, "running");
+
   t.deepEqual(
     sp.services.config.preservedConfigs,
     new Map([["a", {}], ["test", { key3: 3 }]])
   );
 
   t.is(sp.services.logger.name, "logger");
+  t.is(sp.services.logger.state, "running");
 
   t.is(sp.state, "running");
 

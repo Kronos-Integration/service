@@ -44,7 +44,9 @@ export default function ServiceProviderMixin(
           if (service.endpoints.log.isOut && logger) {
             service.endpoints.log.connected = logger.endpoints.log;
           }
-          if(service.autostart) { return service.start(); }
+          if (service.autostart) {
+            return service.start();
+          }
         },
         willBeUnregistered: service => service.stop()
       });
@@ -54,7 +56,7 @@ export default function ServiceProviderMixin(
 
       // register config service and let it know about the initial config
       this.registerService(configService);
-      
+
       configService.configure(config);
 
       this.registerService(this);
@@ -231,6 +233,19 @@ export default function ServiceProviderMixin(
 			*/
 
       return this.registerServiceAs(newService, name);
+    }
+
+    /**
+     * start all registered services which hangin autostart set
+     */
+    async _start() {
+      await super._start();
+
+      return Promise.all(
+        Object.values(this.services)
+          .filter(service => service !== this && service.autostart)
+          .map(s => s.start())
+      );
     }
 
     /**
