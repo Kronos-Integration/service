@@ -1,4 +1,6 @@
 import test from 'ava';
+import { wait } from './util.mjs';
+
 import { createAttributes } from 'model-attributes';
 import { SendEndpoint } from '@kronos-integration/endpoint';
 import Service from '../src/service.mjs';
@@ -31,8 +33,8 @@ class MyService extends Service {
     );
   }
 
-  _start() {
-    return new Promise((f, r) => setTimeout(() => f(), 10));
+  async _start() {
+    await wait(10);
   }
 
   async configure(config) {

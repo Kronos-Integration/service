@@ -1,21 +1,18 @@
 import test from 'ava';
+import { TestService } from './util.mjs';
+
 import Service from '../src/service.mjs';
 import ServiceProviderMixin from '../src/service-provider-mixin.mjs';
 import { defineServiceConsumerProperties } from '../src/service-consumer-mixin.mjs';
 
 class ServiceProvider extends ServiceProviderMixin(Service) {}
 
-class ServiceTest extends Service {
-  static get name() {
-    return 'test';
-  }
-}
 
 test('service consumer define with name and type', async t => {
   const sp = new ServiceProvider({});
   const object = {};
 
-  await sp.registerServiceFactory(ServiceTest);
+  await sp.registerServiceFactory(TestService);
 
   await defineServiceConsumerProperties(
     object,
@@ -34,7 +31,7 @@ test('service consumer define with type', async t => {
   const sp = new ServiceProvider({});
   const object = {};
 
-  await sp.registerServiceFactory(ServiceTest);
+  await sp.registerServiceFactory(TestService);
 
   await defineServiceConsumerProperties(
     object,
@@ -53,7 +50,7 @@ test('service consumer define with type simple', async t => {
   const sp = new ServiceProvider({});
   const object = {};
 
-  await sp.registerServiceFactory(ServiceTest);
+  await sp.registerServiceFactory(TestService);
 
   await defineServiceConsumerProperties(
     object,
@@ -70,7 +67,7 @@ test('service consumer with wait', async t => {
   const sp = new ServiceProvider({});
   const object = {};
 
-  setTimeout(() => sp.registerServiceFactory(ServiceTest), 300);
+  setTimeout(() => sp.registerServiceFactory(TestService), 300);
 
   await defineServiceConsumerProperties(
     object,

@@ -32,7 +32,7 @@ export default class ServiceConfig extends Service {
         delete c.name;
         this.preservedConfigs.set(name, c);
       } else {
-        return s.endpoints.config.receive(c);
+        return s.configure(c);
       }
     };
 

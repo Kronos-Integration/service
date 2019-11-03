@@ -1,11 +1,9 @@
 import test from "ava";
+import { wait, TestService } from './util.mjs';
 import Service from "../src/service.mjs";
 import ServiceLogger from "../src/service-logger.mjs";
 import ServiceProviderMixin from "../src/service-provider-mixin.mjs";
 
-async function wait(msecs) {
-  return new Promise((resolve, reject) => setTimeout(() => resolve(), msecs));
-}
 
 const logEntries = [];
 class TestLogger extends ServiceLogger {
@@ -25,22 +23,6 @@ class TestLogger extends ServiceLogger {
 class ServiceProvider extends ServiceProviderMixin(Service, TestLogger) {
   static get name() {
     return "service-provider";
-  }
-}
-
-class TestService extends Service {
-  static get name() {
-    return "test";
-  }
-
-  get autostart() {
-    return true;
-  }
-
-  configure(config) {
-    delete config.name;
-    Object.assign(this, config);
-    return this.restartIfRunning();
   }
 }
 
@@ -152,14 +134,7 @@ test("service provider additional service declare service with type", async t =>
 
   setTimeout(() => sp.registerServiceFactory(TestService), 30);
 
-  await sp.declareService(
-    {
-      name: "s2",
-      type: "test"
-    },
-    true
-  );
-  await sp.declareService(
+  const s2a = await sp.declareService(
     {
       name: "s2",
       type: "test"
@@ -167,7 +142,19 @@ test("service provider additional service declare service with type", async t =>
     true
   );
 
-  let s = await sp.declareService(
+  t.is(s2a.name, "s2");
+
+  const s2b = await sp.declareService(
+    {
+      name: "s2",
+      type: "test"
+    },
+    true
+  );
+
+  t.is(s2b.name, "s2");
+
+  const s2c = await sp.declareService(
     {
       name: "s2",
       type: "test",
@@ -176,11 +163,11 @@ test("service provider additional service declare service with type", async t =>
     true
   );
 
-  t.is(s.name, "s2");
-  t.is(s.type, "test");
-  t.is(s.key, 1);
+  t.is(s2c.name, "s2");
+  t.is(s2c.type, "test");
+  t.is(s2c.key, 1);
 
-  s = await sp.declareService(
+  const s2d = await sp.declareService(
     {
       name: "s2",
       type: "test",
@@ -189,43 +176,7 @@ test("service provider additional service declare service with type", async t =>
     true
   );
 
-  t.is(s.name, "s2");
-  t.is(s.type, "test");
-  t.is(s.key, 2);
+  t.is(s2d.name, "s2");
+  t.is(s2d.type, "test");
+  t.is(s2d.key, 2);
 });
-
-/*
-    xdescribe('without type', () => {
-      const sp = new ServiceProvider([
-        {},
-        {
-          name: 'test',
-          value: 77
-        }
-      ]);
-
-      sp.declareService(
-        {
-          name: 'test'
-        },
-        true
-      );
-
-      setTimeout(() => sp.registerServiceFactory(TestService), 50);
-
-      it('can be declared', () =>
-        sp
-          .declareService(
-            {
-              name: 'test'
-            },
-            true
-          )
-          .then(s => {
-            assert.equal(s.name, 'test');
-            //assert.equal(s.value, 77);
-          }));
-    });
-  });
-});
-*/

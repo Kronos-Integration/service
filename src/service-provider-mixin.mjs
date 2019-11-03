@@ -1,4 +1,3 @@
-import { defineRegistryProperties } from "registry-mixin";
 import ServiceLogger from "./service-logger.mjs";
 import ServiceConfig from "./service-config.mjs";
 
@@ -19,37 +18,19 @@ export default function ServiceProviderMixin(
     constructor(config) {
       super(Array.isArray(config) ? config[0] : config, undefined);
 
-      /*
       Object.defineProperties(this, {
-        services: { value: {} }
+        serviceFactories: { value: {} },
+        services: { value: {} },
+        _declareServiceByNamePromises: { value: new Map() },
+        _declareServiceFactoryByTypePromises: { value: new Map() }
       });
-*/
+
       const loggerService = new serviceLoggerClass({}, this);
       const configService = new serviceConfigClass({}, this);
 
       // connect logger endpoints
       this.endpoints.log.connected = loggerService.endpoints.log;
       configService.endpoints.log.connected = loggerService.endpoints.log;
-
-      defineRegistryProperties(this, "serviceFactory", {
-        pluralName: "serviceFactories",
-        withCreateInstance: true,
-        withEvents: true,
-        factoryType: "new"
-      });
-
-      defineRegistryProperties(this, "service", {
-        hasBeenRegistered: async service => {
-          // connect log endpoint to logger service
-          if (service.endpoints.log.isOut) {
-            service.endpoints.log.connected = loggerService.endpoints.log;
-          }
-          if (service.autostart) {
-            return service.start();
-          }
-        },
-        willBeUnregistered: service => service.stop()
-      });
 
       // let our own logging go into the logger service
       this.registerService(loggerService);
@@ -104,37 +85,49 @@ export default function ServiceProviderMixin(
       return this;
     }
 
-    /*
+    async registerServiceFactory(factory) {
+      this.serviceFactories[factory.name] = factory;
+
+      this.emit("serviceFactoryRegistered", factory);
+    }
+
+    async unregisterServiceFactory(factory) {
+      delete this.serviceFactories[factory.name];
+    }
+
+    createService(config) {
+      const Clazz = this.serviceFactories[config.type];
+      return new Clazz(config, this);
+    }
+
     async registerService(service) {
       this.services[service.name] = service;
       // connect log endpoint to logger service
       const logger = this.services.logger;
-      if (service.endpoints.log.isOut && logger) {
+      if (service.endpoints.log.isOut) {
         service.endpoints.log.connected = logger.endpoints.log;
       }
 
       if (service.autostart) {
         return service.start();
       }
+
+      return service;
     }
 
-    async unregisterService(service) {
-      delete this.services[service.name];
+    async unregisterService(serviceName) {
+      const service = this.services[serviceName];
+
       await service.stop();
+      delete this.services[serviceName];
     }
-*/
 
-    async insertIntoDeclareByNamePromisesAndDeliver(config, name, type) {
-      const p = this.registerService(
-        this.createServiceFactoryInstanceFromConfig(config, this)
-      ).then(service => {
-        this._declareServiceByNamePromises.delete(name);
-        return Promise.resolve(service);
-      });
-
-      this._declareServiceByNamePromises.set(name, p);
-
-      return p;
+    async insertIntoDeclareByNamePromisesAndDeliver(config, name) {
+      const servicePromise = this.registerService(this.createService(config));
+      this._declareServiceByNamePromises.set(name, servicePromise);
+      const service = await servicePromise;
+      this._declareServiceByNamePromises.delete(name);
+      return service;
     }
 
     /**
@@ -149,29 +142,18 @@ export default function ServiceProviderMixin(
      * @return {Promise} resolving to the declared service
      */
     async declareService(config, waitUntilFactoryPresent) {
+      const type = config.type;
       const name = config.name;
       const service = this.services[name];
-
-      /*
-					if (config.type === undefined) {
-						config.type = name;
-					}
-			*/
-
-      const type = config.type;
 
       if (
         service === undefined ||
         (type !== undefined && service.type !== type)
       ) {
-        if (this._declareServiceByNamePromises) {
-          const p = this._declareServiceByNamePromises.get(name);
+        const p = this._declareServiceByNamePromises.get(name);
 
-          if (p !== undefined) {
-            return p;
-          }
-        } else {
-          this._declareServiceByNamePromises = new Map();
+        if (p !== undefined) {
+          return p;
         }
 
         if (this.services.config) {
@@ -183,13 +165,9 @@ export default function ServiceProviderMixin(
 
         // service factory not present: wait until one arrives
         if (waitUntilFactoryPresent && !this.serviceFactories[type]) {
-          if (this._declareServiceFactoryByTypePromises) {
-            const p = this._declareServiceFactoryByTypePromises.get(type);
-            if (p !== undefined) {
-              return p;
-            }
-          } else {
-            this._declareServiceFactoryByTypePromises = new Map();
+          const p = this._declareServiceFactoryByTypePromises.get(type);
+          if (p !== undefined) {
+            return p;
           }
 
           const typePromise = new Promise((resolve, reject) => {
@@ -209,30 +187,18 @@ export default function ServiceProviderMixin(
           await typePromise;
         }
 
-        return this.insertIntoDeclareByNamePromisesAndDeliver(
-          config,
-          name,
-          type
-        );
+        return this.insertIntoDeclareByNamePromisesAndDeliver(config, name);
       }
 
       delete config.type;
 
-      const p = service.configure(config).then(() => Promise.resolve(service));
-      this._declareServiceByNamePromises.set(name, p);
+      const configPromise = service.configure(config);
 
-      return p;
-    }
+      //this._declareServiceByNamePromises.set(name, configPromise.then( x => service));
 
-    replaceService(name, newService) {
-      /*
-			const oldService = this.services[name];
-					if (oldService) {
-						// TODO take over endpoints
-					}
-			*/
+      await configPromise;
 
-      return this.registerServiceAs(newService, name);
+      return service;
     }
 
     /**

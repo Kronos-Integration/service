@@ -1,21 +1,10 @@
 import test from "ava";
-import { Service, StandaloneServiceManager } from "../src/module.mjs";
-
-class ServiceTest extends Service {
-  static get name() {
-    return "test";
-  }
-
-  configure(config) {
-    delete config.name;
-    Object.assign(this, config);
-    return this.restartIfRunning();
-  }
-}
+import { TestService } from './util.mjs';
+import { StandaloneServiceManager } from "../src/module.mjs";
 
 test("declareService", async t => {
   const ssm = new StandaloneServiceManager();
-  ssm.registerServiceFactory(ServiceTest);
+  ssm.registerServiceFactory(TestService);
 
   const s = await Promise.all(["s1", "s2", "s3", "s4", "s5"].map(
     name =>
@@ -48,7 +37,7 @@ test("declareService delayed", async t => {
       )
   ));
 
-  await ssm.registerServiceFactory(ServiceTest);
+  await ssm.registerServiceFactory(TestService);
 
   await declarations;
   t.is(ssm.services.s1.name, "s1");
@@ -58,7 +47,7 @@ test("declareService delayed", async t => {
 
 test("configure", async t => {
   const ssm = new StandaloneServiceManager();
-  ssm.registerServiceFactory(ServiceTest);
+  ssm.registerServiceFactory(TestService);
 
   const s1 = await ssm.declareService(
     {
@@ -67,6 +56,8 @@ test("configure", async t => {
     },
     true
   );
+
+  t.is(s1.type, 'test');
 
   await ssm.services.config.configure({
     s1: {
