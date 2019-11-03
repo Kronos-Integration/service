@@ -28,7 +28,7 @@ class ServiceProvider extends ServiceProviderMixin(Service, TestLogger) {
   }
 }
 
-class ServiceTest extends Service {
+class TestService extends Service {
   static get name() {
     return "test";
   }
@@ -88,9 +88,9 @@ async function makeServices() {
 
   await sp.start();
 
-  await sp.registerService(new ServiceTest({}, sp));
+  await sp.registerService(new TestService({}, sp));
   await sp.registerService(
-    new ServiceTest(
+    new TestService(
       {
         name: "t2"
       },
@@ -105,6 +105,8 @@ test("service provider additional service", async t => {
   const sp = await makeServices();
 
   t.is(sp.services.test.name, "test");
+  sp.services.test.info('hello');
+  t.is(sp.services.test.endpoints.log.connected, sp.services.logger.endpoints.log);
 });
 
 test("service provider additional service configure service", async t => {
@@ -148,7 +150,7 @@ test("service provider additional service can be unregistered", async t => {
 test("service provider additional service declare service with type", async t => {
   const sp = await makeServices();
 
-  setTimeout(() => sp.registerServiceFactory(ServiceTest), 30);
+  setTimeout(() => sp.registerServiceFactory(TestService), 30);
 
   await sp.declareService(
     {
@@ -209,7 +211,7 @@ test("service provider additional service declare service with type", async t =>
         true
       );
 
-      setTimeout(() => sp.registerServiceFactory(ServiceTest), 50);
+      setTimeout(() => sp.registerServiceFactory(TestService), 50);
 
       it('can be declared', () =>
         sp

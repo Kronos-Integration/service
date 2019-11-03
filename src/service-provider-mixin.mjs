@@ -27,6 +27,7 @@ export default function ServiceProviderMixin(
       const loggerService = new serviceLoggerClass({}, this);
       const configService = new serviceConfigClass({}, this);
 
+      // connect logger endpoints
       this.endpoints.log.connected = loggerService.endpoints.log;
       configService.endpoints.log.connected = loggerService.endpoints.log;
 
@@ -40,9 +41,8 @@ export default function ServiceProviderMixin(
       defineRegistryProperties(this, "service", {
         hasBeenRegistered: async service => {
           // connect log endpoint to logger service
-          const logger = this.services.logger;
-          if (service.endpoints.log.isOut && logger) {
-            service.endpoints.log.connected = logger.endpoints.log;
+          if (service.endpoints.log.isOut) {
+            service.endpoints.log.connected = loggerService.endpoints.log;
           }
           if (service.autostart) {
             return service.start();
