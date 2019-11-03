@@ -119,6 +119,29 @@ test('service create with logLevel', t => {
   t.is(s2.logLevel, 'info');
 });
 
+test('service create with DEBUG=1', t => {
+  process.env.DEBUG=1;
+
+  const s1 = new Service(
+    {
+      key1: 'value1'
+    },
+    owner
+  );
+
+  t.is(s1.logLevel, 'debug');
+
+
+  const s2 = new Service({
+    key1: 'value1',
+    logLevel: 'warn'
+  });
+
+  t.is(s2.logLevel, 'debug');
+
+  delete process.env.DEBUG;
+});
+
 test('service derived creation', t => {
   const s1 = new MyService(
     {

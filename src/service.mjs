@@ -202,11 +202,13 @@ export default class Service extends EndpointsMixin(
       }
     }
 
+    const logLevel = process.env.DEBUG ? 'debug' : config.logLevel;
+
     defineLogLevelProperties(
       this,
       defaultLogLevels,
-      config.logLevel !== undefined
-        ? defaultLogLevels[config.logLevel] || defaultLogLevels.info
+      logLevel !== undefined
+        ? defaultLogLevels[logLevel] || defaultLogLevels.info
         : defaultLogLevels.info
     );
 
