@@ -3,7 +3,7 @@ import {
   SendEndpointDefault,
   ReceiveEndpoint,
   ReceiveEndpointDefault
-} from '@kronos-integration/endpoint';
+} from "@kronos-integration/endpoint";
 
 /**
  * Endpoint accessor mixin
@@ -24,7 +24,7 @@ export default function EndpointsMixin(superclass) {
     constructor(...args) {
       super(...args);
 
-      Object.defineProperty(this, 'endpoints', {
+      Object.defineProperty(this, "endpoints", {
         value: {}
       });
     }
@@ -81,8 +81,12 @@ export default function EndpointsMixin(superclass) {
      */
     endpointFactoryFromConfig(definition) {
       return definition.default
-        ? definition.in ? ReceiveEndpointDefault : SendEndpointDefault
-        : definition.in ? ReceiveEndpoint : SendEndpoint;
+        ? definition.in
+          ? ReceiveEndpointDefault
+          : SendEndpointDefault
+        : definition.in
+        ? ReceiveEndpoint
+        : SendEndpoint;
     }
 
     /**
@@ -96,7 +100,7 @@ export default function EndpointsMixin(superclass) {
      * @return {Endpoint} newly created endpoint
      */
     createEndpointFromConfig(name, definition, interceptorFactory) {
-      if (typeof definition === 'string') {
+      if (typeof definition === "string") {
         return this.endpointForExpression(definition);
       }
 
@@ -106,8 +110,15 @@ export default function EndpointsMixin(superclass) {
         this.endpointOptions(name, definition)
       );
 
-      if (definition.target !== undefined) {
-        ep.connected = this.endpointForExpression(definition.target);
+      if (ep.isOut) {
+        if (definition.target !== undefined) {
+          ep.connected = this.endpointForExpression(definition.target);
+        } else {
+          const old = this.endpoints[name];
+          if (old && old.connected) {
+            ep.connected = old.connected;
+          }
+        }
       }
 
       if (definition.interceptors !== undefined) {
@@ -118,7 +129,7 @@ export default function EndpointsMixin(superclass) {
 
       this.addEndpoint(ep);
 
-      if(definition.receive) {
+      if (definition.receive) {
         ep.receive = request => this[definition.receive](request);
       }
 
