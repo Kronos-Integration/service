@@ -1,5 +1,5 @@
 import test from 'ava';
-import { wait } from './util.mjs';
+import { TestService, wait } from './util.mjs';
 
 import { createAttributes } from 'model-attributes';
 import { SendEndpoint } from '@kronos-integration/endpoint';
@@ -11,37 +11,6 @@ const owner = {
     return `name:${e.name}`;
   }
 };
-
-class MyService extends Service {
-  static get name() {
-    return 'my-service';
-  }
-
-  static get description() {
-    return 'my description';
-  }
-
-  static get configurationAttributes() {
-    return Object.assign(
-      createAttributes({
-        key3: {
-          needsRestart: true
-        },
-        key4: {}
-      }),
-      Service.configurationAttributes
-    );
-  }
-
-  async _start() {
-    await wait(10);
-  }
-
-  async configure(config) {
-    await super.configure(config);
-    Object.assign(this, config);
-  }
-}
 
 test('service plain create', t => {
   const s1 = new Service(
@@ -159,22 +128,22 @@ test('service create with LOGLEVEL=trace', t => {
 });
 
 test('service derived creation', t => {
-  const s1 = new MyService(
+  const s1 = new TestService(
     {
       key3: 'value3',
       key4: 4
     },
     owner
   );
-  t.is(s1.type, 'my-service');
+  t.is(s1.type, 'test');
   t.is(s1.description, 'my description');
-  t.is(s1.toString(), 'my-service: stopped');
+  t.is(s1.toString(), 'test: stopped');
   t.is(s1.configurationAttributes.key3.name, 'key3');
   t.is(s1.key4, 4);
 });
 
 test('service derived configuration', async t => {
-  const s1 = new MyService({
+  const s1 = new TestService({
     key7: 1
   });
 
@@ -195,7 +164,7 @@ test('service derived configuration', async t => {
 });
 
 test('service derived configuration change start timeout', async t => {
-  const s1 = new MyService({
+  const s1 = new TestService({
     key7: 1
   });
 
@@ -209,7 +178,7 @@ test('service derived configuration change start timeout', async t => {
 });
 
 test('service states', async t => {
-  const s1 = new MyService(
+  const s1 = new TestService(
     {
       key1: 'value1',
       key2: 2
@@ -228,7 +197,7 @@ test('service states', async t => {
   await s1.restart();
   t.is(s1.state, 'running');
 
-  const s2 = new MyService({
+  const s2 = new TestService({
     key1: 'value1',
     key2: 2
   });

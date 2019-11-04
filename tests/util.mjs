@@ -1,3 +1,4 @@
+import { createAttributes } from 'model-attributes';
 import Service from "../src/service.mjs";
 
 export async function wait(msecs=1000) {
@@ -7,6 +8,22 @@ export async function wait(msecs=1000) {
 export class TestService extends Service {
   static get name() {
     return "test";
+  }
+
+  static get description() {
+    return 'my description';
+  }
+
+  static get configurationAttributes() {
+    return Object.assign(
+      createAttributes({
+        key3: {
+          needsRestart: true
+        },
+        key4: {}
+      }),
+      Service.configurationAttributes
+    );
   }
 
   get autostart() {
