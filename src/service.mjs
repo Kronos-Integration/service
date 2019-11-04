@@ -29,6 +29,11 @@ import EndpointsMixin from "./endpoints-mixin.mjs";
 const DESCRIPTION = Symbol("description");
 
 const _ca = createAttributes({
+  endpoints: {
+    setter(newValue) {
+      this.createEndpointsFromConfig(newValue, this.owner);
+    }
+  },
   description: {
     type: "string",
     description: "human readable description of the step"
@@ -58,11 +63,6 @@ const _ca = createAttributes({
         type: "duration",
         default: 5
       }
-    }
-  },
-  endpoints: {
-    setter(newValue) {
-      this.createEndpointsFromConfig(newValue, this.owner);
     }
   }
 });
@@ -224,11 +224,6 @@ export default class Service extends EndpointsMixin(
     this.endpoints.log.connected = dummyLogReceiver;
 
     this._configure(config);
-
-    // TODO cleanup
-    if (this.endpoints.log.isOut) {
-      this.endpoints.log.connected = dummyLogReceiver;
-    }
   }
 
   get configurationAttributes() {
