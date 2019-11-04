@@ -22,11 +22,38 @@ export default class ServiceConfig extends Service {
   }
 
   /**
-   * 
-   * @param {Array|Object} config 
+   * set config entry 
+   * @param key 
+   * @param value 
+   */
+  async setEntry(key, value) {
+    /*
+    const path = key.split(/\./);
+    const name = path.shift();
+    const s = this.owner.services[name];
+    if (s === undefined) {
+
+    }
+
+    let c = config;
+
+    do {
+      let slot = path.shift();
+      if (path.length === 0) {
+        c[slot] = listener.fd;
+        break;
+      }
+      c = c[slot];
+    } while (true);
+    */
+  }
+
+  /**
+   *
+   * @param {Array|Object} config
    */
   async configure(config) {
-    const update = async(name, c) => {
+    const update = async (name, c) => {
       const s = this.owner.services[name];
       if (s === undefined) {
         delete c.name;
@@ -36,7 +63,7 @@ export default class ServiceConfig extends Service {
       }
     };
 
-    if(config === undefined) {
+    if (config === undefined) {
       return;
     }
 
@@ -56,6 +83,6 @@ export default class ServiceConfig extends Service {
   }
 
   get name() {
-    return 'config';
+    return "config";
   }
 }
