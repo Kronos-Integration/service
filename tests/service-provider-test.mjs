@@ -1,5 +1,5 @@
 import test from "ava";
-import { TestService, TestLogger } from './util.mjs';
+import { TestService, TestLogger } from "./util.mjs";
 import Service from "../src/service.mjs";
 import ServiceProviderMixin from "../src/service-provider-mixin.mjs";
 
@@ -48,20 +48,13 @@ test("service provider without initial config", async t => {
   sp.info(`logging`);
 });
 
-async function makeServices() {
-  const sp = new ServiceProvider();
+async function makeServices(logLevel = "info") {
+  const sp = new ServiceProvider({ logLevel });
 
   await sp.start();
 
-  await sp.registerService(new TestService({}, sp));
-  await sp.registerService(
-    new TestService(
-      {
-        name: "t2"
-      },
-      sp
-    )
-  );
+  await sp.registerService(new TestService({ logLevel }, sp));
+  await sp.registerService(new TestService({ logLevel, name: "t2" }, sp));
 
   return sp;
 }
@@ -70,8 +63,11 @@ test("service provider additional service", async t => {
   const sp = await makeServices();
 
   t.is(sp.services.test.name, "test");
-  sp.services.test.info('hello');
-  t.is(sp.services.test.endpoints.log.connected, sp.services.logger.endpoints.log);
+  sp.services.test.info("hello");
+  t.is(
+    sp.services.test.endpoints.log.connected,
+    sp.services.logger.endpoints.log
+  );
 });
 
 test("service provider additional service configure service", async t => {
@@ -85,8 +81,6 @@ test("service provider additional service configure service", async t => {
 });
 
 test("service provider additional service send change request over config service", async t => {
-  process.env.LOGLEVEL="trace";
-
   const sp = await makeServices();
 
   await sp.services.config.endpoints.config.receive([
@@ -104,8 +98,27 @@ test("service provider additional service send change request over config servic
   ]);
 
   t.is(sp.services.test.key1, 4711);
+});
 
-  delete process.env.LOGLEVEL;
+test("service provider additional service logging", async t => {
+  const sp = await makeServices("trace");
+
+  await sp.services.config.endpoints.config.receive([
+    {
+      name: "config"
+    },
+    {
+      name: "unknown"
+    },
+    {
+      name: "test",
+      key1: 4711,
+      key2: "2"
+    }
+  ]);
+  //console.log(sp.services.logger.logEntries);
+
+  t.is(sp.services.logger.logEntries.length, 6 /*+ 2*/);
 });
 
 test("service provider additional service can be unregistered", async t => {
