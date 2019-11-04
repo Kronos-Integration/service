@@ -103,8 +103,8 @@ export default function ServiceProviderMixin(
     async registerService(service) {
       this.services[service.name] = service;
       // connect log endpoint to logger service
-      const logger = this.services.logger;
       if (service.endpoints.log.isOut) {
+        const logger = this.services.logger;
         service.endpoints.log.connected = logger.endpoints.log;
       }
 

@@ -49,24 +49,23 @@ Base service implementation
     -   [configurationAttributes](#configurationattributes)
     -   [endpoints](#endpoints)
 -   [ServiceLogger](#servicelogger)
-    -   [Parameters](#parameters-8)
     -   [autostart](#autostart-1)
     -   [name](#name-1)
     -   [endpoints](#endpoints-1)
 -   [ServiceConfig](#serviceconfig)
-    -   [Parameters](#parameters-9)
+    -   [Parameters](#parameters-8)
     -   [configure](#configure-1)
-        -   [Parameters](#parameters-10)
+        -   [Parameters](#parameters-9)
     -   [autostart](#autostart-2)
     -   [name](#name-2)
 -   [defineServiceConsumerProperties](#defineserviceconsumerproperties)
-    -   [Parameters](#parameters-11)
+    -   [Parameters](#parameters-10)
 -   [ServiceProviderMixin](#serviceprovidermixin)
-    -   [Parameters](#parameters-12)
+    -   [Parameters](#parameters-11)
 -   [InterceptorProviderMixin](#interceptorprovidermixin)
-    -   [Parameters](#parameters-13)
+    -   [Parameters](#parameters-12)
 -   [EndpointsMixin](#endpointsmixin)
-    -   [Parameters](#parameters-14)
+    -   [Parameters](#parameters-13)
 -   [endpoints](#endpoints-2)
 -   [StandaloneServiceManager](#standaloneservicemanager)
 
@@ -281,11 +280,6 @@ Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 **Extends Service**
 
 Log receiving service
-
-### Parameters
-
--   `config`  
--   `owner`  
 
 ### autostart
 

@@ -1,9 +1,11 @@
 import test from 'ava';
+import { TestLogger } from "./util.mjs";
+
 import { SendEndpoint, ReceiveEndpoint } from '@kronos-integration/endpoint';
 import Service from '../src/service.mjs';
 import ServiceProviderMixin from '../src/service-provider-mixin.mjs';
 
-class Owner extends ServiceProviderMixin(Service) {
+class Owner extends ServiceProviderMixin(Service, TestLogger) {
   get name() {
     return 'owner';
   }
@@ -11,6 +13,9 @@ class Owner extends ServiceProviderMixin(Service) {
 
 test('outEndpoints', t => {
   const o = new Owner();
+
+  t.truthy(o.endpoints.log.receive);
+
   t.deepEqual(o.outEndpoints, [o.endpoints.log]);
 });
 
@@ -28,6 +33,7 @@ test('endpointForExpression simple', t => {
   o.addEndpoint(r1);
 
   t.deepEqual(o.endpointForExpression('r1'), r1);
+  t.deepEqual(o.endpointForExpression('s1'), s1);
 });
 
 test('endpointForExpression service', async t => {
@@ -36,6 +42,7 @@ test('endpointForExpression service', async t => {
 
   //console.log(o.services);
   t.is(o.endpointForExpression('service(config).command').name, 'command');
+  t.is(o.endpointForExpression('service(logger).log').name, 'log');
 });
 
 test('endpointForExpression service throwing', async t => {

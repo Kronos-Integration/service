@@ -22,21 +22,19 @@ export default class ServiceLogger extends Service {
       ...super.endpoints,
       log: {
         in: true,
-        default: true
+        default: true,
+        receive: 'logEntry'
       }
     };
   }
 
-  constructor(config, owner) {
-    super(config, owner);
-
-    this.endpoints.log.receive = async entry => {
-      if (entry.severity === 'error') {
-        console.error(safeStringify(entry));
-      } else {
-        console.log(safeStringify(entry));
-      }
-    };
+  async logEntry(entry)
+  {
+    if (entry.severity === 'error') {
+      console.error(safeStringify(entry));
+    } else {
+      console.log(safeStringify(entry));
+    }
   }
 
   /**

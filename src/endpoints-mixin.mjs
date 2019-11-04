@@ -118,6 +118,10 @@ export default function EndpointsMixin(superclass) {
 
       this.addEndpoint(ep);
 
+      if(definition.receive) {
+        ep.receive = request => this[definition.receive](request);
+      }
+
       return ep;
     }
 

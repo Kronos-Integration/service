@@ -170,15 +170,18 @@ export default class Service extends EndpointsMixin(
     return {
       log: {
         out: true,
-        default: true
+        default: true,
+       // target: 'service(logger).log'
       },
       config: {
         in: true,
-        default: true
+        default: true,
+        receive: "configure"
       },
       command: {
         in: true,
-        default: true
+        default: true,
+        receive: "execute"
       }
     };
   }
@@ -226,9 +229,6 @@ export default class Service extends EndpointsMixin(
     if (this.endpoints.log.isOut) {
       this.endpoints.log.connected = dummyLogReceiver;
     }
-
-    this.endpoints.config.receive = request => this.configure(request);
-    this.endpoints.command.receive = request => this.execute(request);
   }
 
   get configurationAttributes() {
