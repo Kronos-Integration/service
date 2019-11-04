@@ -22,7 +22,7 @@ export default function ServiceProviderMixin(
         serviceFactories: { value: {} },
         services: { value: {} },
         _declareServiceByNamePromises: { value: new Map() },
-        _declareServiceFactoryByTypePromises: { value: new Map() }
+        _serviceFactoryPromises: { value: new Map() }
       });
 
       const loggerService = new serviceLoggerClass({}, this);
@@ -131,6 +131,40 @@ export default function ServiceProviderMixin(
     }
 
     /**
+     * 
+     * @param {string|class} type name if type
+     * @param {boolean} wait until factor apears in registry
+     */
+    async getServiceFactory(type, wait) {
+      const factory = this.serviceFactories[type];
+
+      if (!factory && wait) {
+        const p = this._serviceFactoryPromises.get(type);
+        if (p !== undefined) {
+          return p;
+        }
+
+        const typePromise = new Promise((resolve, reject) => {
+          const listener = factory => {
+            if (factory.name === type) {
+              this._serviceFactoryPromises.delete(type);
+              this.removeListener("serviceFactoryRegistered", listener);
+              resolve(factory);
+            }
+          };
+
+          this.addListener("serviceFactoryRegistered", listener);
+        });
+
+        this._serviceFactoryPromises.set(type, typePromise);
+
+        await typePromise;
+      }
+
+      return factory;
+    }
+
+    /**
      * Add a new service based on its configuration
      * If a service for the name is already present and it has a matching type
      * then its configure() is called and returned.
@@ -164,28 +198,8 @@ export default function ServiceProviderMixin(
         }
 
         // service factory not present: wait until one arrives
-        if (waitUntilFactoryPresent && !this.serviceFactories[type]) {
-          const p = this._declareServiceFactoryByTypePromises.get(type);
-          if (p !== undefined) {
-            return p;
-          }
 
-          const typePromise = new Promise((resolve, reject) => {
-            const listener = factory => {
-              if (factory.name === type) {
-                this._declareServiceFactoryByTypePromises.delete(type);
-                this.removeListener("serviceFactoryRegistered", listener);
-                resolve(factory);
-              }
-            };
-
-            this.addListener("serviceFactoryRegistered", listener);
-          });
-
-          this._declareServiceFactoryByTypePromises.set(type, typePromise);
-
-          await typePromise;
-        }
+        await this.getServiceFactory(type, waitUntilFactoryPresent);
 
         return this.insertIntoDeclareByNamePromisesAndDeliver(config, name);
       }
