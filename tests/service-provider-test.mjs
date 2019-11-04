@@ -1,24 +1,7 @@
 import test from "ava";
-import { wait, TestService } from './util.mjs';
+import { TestService, TestLogger } from './util.mjs';
 import Service from "../src/service.mjs";
-import ServiceLogger from "../src/service-logger.mjs";
 import ServiceProviderMixin from "../src/service-provider-mixin.mjs";
-
-
-const logEntries = [];
-class TestLogger extends ServiceLogger {
-  constructor(config, owner) {
-    super(config, owner);
-
-    this.endpoints.log.receive = entry => {
-      logEntries.push(entry);
-    };
-  }
-
-  async _start() {
-    return wait(1000);
-  }
-}
 
 class ServiceProvider extends ServiceProviderMixin(Service, TestLogger) {
   static get name() {
@@ -102,6 +85,8 @@ test("service provider additional service configure service", async t => {
 });
 
 test("service provider additional service send change request over config service", async t => {
+  process.env.LOGLEVEL="trace";
+
   const sp = await makeServices();
 
   await sp.services.config.endpoints.config.receive([
@@ -119,6 +104,8 @@ test("service provider additional service send change request over config servic
   ]);
 
   t.is(sp.services.test.key1, 4711);
+
+  delete process.env.LOGLEVEL;
 });
 
 test("service provider additional service can be unregistered", async t => {
