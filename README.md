@@ -54,18 +54,20 @@ Base service implementation
     -   [endpoints](#endpoints-1)
 -   [ServiceConfig](#serviceconfig)
     -   [Parameters](#parameters-8)
-    -   [configure](#configure-1)
+    -   [setEntry](#setentry)
         -   [Parameters](#parameters-9)
+    -   [configure](#configure-1)
+        -   [Parameters](#parameters-10)
     -   [autostart](#autostart-2)
     -   [name](#name-2)
 -   [defineServiceConsumerProperties](#defineserviceconsumerproperties)
-    -   [Parameters](#parameters-10)
--   [ServiceProviderMixin](#serviceprovidermixin)
     -   [Parameters](#parameters-11)
--   [InterceptorProviderMixin](#interceptorprovidermixin)
+-   [ServiceProviderMixin](#serviceprovidermixin)
     -   [Parameters](#parameters-12)
--   [EndpointsMixin](#endpointsmixin)
+-   [InterceptorProviderMixin](#interceptorprovidermixin)
     -   [Parameters](#parameters-13)
+-   [EndpointsMixin](#endpointsmixin)
+    -   [Parameters](#parameters-14)
 -   [endpoints](#endpoints-2)
 -   [StandaloneServiceManager](#standaloneservicemanager)
 
@@ -309,6 +311,15 @@ or preserves them until a maching service becomes avaliable
 
 -   `config`  
 -   `owner`  
+
+### setEntry
+
+set config entry
+
+#### Parameters
+
+-   `key`  
+-   `value`  
 
 ### configure
 
