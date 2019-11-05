@@ -9,6 +9,13 @@ class ServiceProvider extends ServiceProviderMixin(Service, TestLogger) {
   }
 }
 
+test("service factory", async t => {
+  const sp = new ServiceProvider();
+
+  t.is(await sp.getServiceFactory("test"), undefined);
+  t.is(await sp.getServiceFactory(TestService), TestService);
+});
+
 test("service provider config service", async t => {
   const sp = new ServiceProvider([
     {
@@ -127,6 +134,22 @@ test("service provider additional service can be unregistered", async t => {
   await sp.unregisterService("t2");
 
   t.is(sp.services.t2, undefined);
+});
+
+test("declare service with factory class", async t => {
+  const sp = await makeServices();
+
+  //sp.registerServiceFactory(TestService);
+
+  const s2a = await sp.declareService(
+    {
+      name: "s2",
+      type: TestService
+    },
+    true
+  );
+  t.is(s2a.name, "s2");
+  t.is(s2a.type, "test");
 });
 
 test("service provider additional service declare service with type", async t => {

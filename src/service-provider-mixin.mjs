@@ -1,5 +1,6 @@
 import ServiceLogger from "./service-logger.mjs";
 import ServiceConfig from "./service-config.mjs";
+import Service from "./service.mjs";
 
 /**
  * Provide services and hold service configuration.
@@ -87,8 +88,8 @@ export default function ServiceProviderMixin(
 
     async registerServiceFactory(factory) {
       this.serviceFactories[factory.name] = factory;
-
       this.emit("serviceFactoryRegistered", factory);
+      return factory;
     }
 
     async unregisterServiceFactory(factory) {
@@ -96,7 +97,7 @@ export default function ServiceProviderMixin(
     }
 
     createService(config) {
-      const Clazz = this.serviceFactories[config.type];
+      const Clazz = config.type instanceof Function ? config.type : this.serviceFactories[config.type];
       return new Clazz(config, this);
     }
 
@@ -133,9 +134,17 @@ export default function ServiceProviderMixin(
     /**
      * 
      * @param {string|class} type name if type
-     * @param {boolean} wait until factor apears in registry
+     * @param {boolean} wait until factory apears in registry
      */
     async getServiceFactory(type, wait) {
+      if(type instanceof Function) {
+        const factory = this.serviceFactories[type.name];
+        if(factory !== undefined) {
+          return factory
+        }
+        return this.registerServiceFactory(type);
+      }
+
       const factory = this.serviceFactories[type];
 
       if (!factory && wait) {
