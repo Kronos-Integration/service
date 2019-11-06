@@ -95,4 +95,5 @@ test('endpointFromConfig foreign target', t => {
 
   t.is(e.name, 'e');
   t.is(e.connected.name, 'log');
+  t.is(e.connected.owner.name, 'logger');
 });
