@@ -116,7 +116,7 @@ test('service provider command endpoint start / stop', async t => {
   t.is(response.state, 'running');
 });
 
-test.skip('service provider command endpoint several restarts', async t => {
+test('service provider command endpoint several restarts', async t => {
   const { sp, testEndpoint } = await makeServiceProvider();
 
   const response = await testEndpoint.receive([
@@ -130,7 +130,8 @@ test.skip('service provider command endpoint several restarts', async t => {
     }
   ]);
 
-  t.is(response.state, 'running');
+  t.is(response[0].state, 'running');
+  t.is(response[1].state, 'running');
 });
 
 test('service provider command endpoint restart unknown service', async t => {

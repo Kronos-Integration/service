@@ -1,6 +1,5 @@
 import ServiceLogger from "./service-logger.mjs";
 import ServiceConfig from "./service-config.mjs";
-import Service from "./service.mjs";
 
 /**
  * Provide services and hold service configuration.
@@ -121,6 +120,10 @@ export default function ServiceProviderMixin(
 
       await service.stop();
       delete this.services[serviceName];
+    }
+
+    getService(name) {
+      return this.services[name];
     }
 
     async insertIntoDeclareByNamePromisesAndDeliver(config, name) {

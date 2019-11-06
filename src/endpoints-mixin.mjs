@@ -165,7 +165,7 @@ export default function EndpointsMixin(superclass) {
           const serviceName = m[1];
           const suffixExpression = m[2];
           const serviceProvider = this.owner;
-          const service = serviceProvider.services[serviceName];
+          const service = serviceProvider.getService(serviceName);
 
           if (service === undefined) {
             throw new Error(

@@ -84,12 +84,8 @@ test('endpointFromConfig simple target', t => {
   t.is(e.connected.name, 'r1');
 });
 
-
-
-import { StandaloneServiceManager } from "../src/module.mjs";
-
 test('endpointFromConfig foreign target', t => {
-  const o = new StandaloneServiceManager();
+  const o = new Owner();
 
   const e = o.createEndpointFromConfig('e', { target: 'service(logger).log' }, o);
 

@@ -171,7 +171,7 @@ export default class Service extends EndpointsMixin(
       log: {
         out: true,
         default: true,
-       // target: 'service(logger).log'
+ //       target: 'service(logger).log'
       },
       config: {
         in: true,
@@ -245,10 +245,6 @@ export default class Service extends EndpointsMixin(
   async execute(command) {
     // TODO admin query language ?
     // for now we return the config
-    const result = {
-      name: this.name,
-      state: this.state
-    };
 
     const ca = this.configurationAttributes;
 
@@ -256,7 +252,10 @@ export default class Service extends EndpointsMixin(
       getAttribute(this, ca, an);
     }
 
-    return result;
+    return {
+      name: this.name,
+      state: this.state
+    };
   }
 
   /**
@@ -270,7 +269,7 @@ export default class Service extends EndpointsMixin(
     this.trace({
       message: "transitioned",
       from: oldState,
-      to: newState
+      state: newState
     });
   }
 
