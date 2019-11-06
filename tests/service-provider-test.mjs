@@ -139,14 +139,11 @@ test("service provider additional service can be unregistered", async t => {
 test("declare service with factory class", async t => {
   const sp = await makeServices();
 
-  //sp.registerServiceFactory(TestService);
-
   const s2a = await sp.declareService(
     {
       name: "s2",
       type: TestService
-    },
-    true
+    }
   );
   t.is(s2a.name, "s2");
   t.is(s2a.type, "test");
