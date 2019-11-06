@@ -72,7 +72,7 @@ test('endpointForExpression throwing', t => {
   t.is(error.message, "Endpoint 'r2' not found in owner");
 });
 
-test('endpointFromConfig target', t => {
+test('endpointFromConfig simple target', t => {
   const o = new Owner();
 
   const r1 = new ReceiveEndpoint('r1');
@@ -82,4 +82,17 @@ test('endpointFromConfig target', t => {
 
   t.is(e.name, 'e');
   t.is(e.connected.name, 'r1');
+});
+
+
+
+import { StandaloneServiceManager } from "../src/module.mjs";
+
+test('endpointFromConfig foreign target', t => {
+  const o = new StandaloneServiceManager();
+
+  const e = o.createEndpointFromConfig('e', { target: 'service(logger).log' }, o);
+
+  t.is(e.name, 'e');
+  t.is(e.connected.name, 'log');
 });
