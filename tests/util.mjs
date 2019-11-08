@@ -30,6 +30,21 @@ export class TestService extends Service {
     return 'my description';
   }
 
+  /**
+   * Adds a log input endpoint to the set of Service endpoints
+   * @return {Object} predefined endpoints
+   */
+  static get endpoints() {
+    return {
+      ...super.endpoints,
+      testIn: {
+        in: true,
+        default: true,
+        receive: 'testReceive'
+      }
+    };
+  }
+
   static get configurationAttributes() {
     return Object.assign(
       createAttributes({
@@ -52,5 +67,10 @@ export class TestService extends Service {
     wait(1000);
 
     return this.restartIfRunning();
+  }
+
+  async testReceive(entry)
+  {
+
   }
 }

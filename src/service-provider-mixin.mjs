@@ -122,8 +122,13 @@ export default function ServiceProviderMixin(
       delete this.services[serviceName];
     }
 
+    get serviceNames()
+    {
+      return this.services === undefined ? [] : Object.keys(this.services);
+    }
+
     getService(name) {
-      return this.services[name];
+      return this.services && this.services[name];
     }
 
     async insertIntoDeclareByNamePromisesAndDeliver(config, name) {

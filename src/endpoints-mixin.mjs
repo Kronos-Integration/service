@@ -110,30 +110,40 @@ export default function EndpointsMixin(superclass) {
         this.endpointOptions(name, definition)
       );
 
-      if (ep.isOut) {
-        if (definition.target !== undefined) {
-          ep.connected = this.endpointForExpression(definition.target);
-        } else {
-          const old = this.endpoints[name];
-          if (old && old.connected) {
-            ep.connected = old.connected;
-          }
-        }
-      }
-
       if (definition.interceptors !== undefined) {
         ep.interceptors = definition.interceptors.map(icDef =>
           interceptorFactory.createInterceptorInstanceFromConfig(icDef, ep)
         );
       }
 
+      this.connectEndpoint(ep, definition, this.endpoints[name], false);
+
       this.addEndpoint(ep);
+
+      return ep;
+    }
+
+    /**
+     *
+     * @param {Endpoint} ep
+     * @param {Object|string} definition endpoint attributes or alias expression
+     * @param {Endpoint} old
+     * @param {Boolean} throwOnError raise exception if connection can´t be established
+     */
+    connectEndpoint(ep, definition, old, throwOnError) {
+      if (ep.isOut) {
+        if (definition.target !== undefined) {
+          ep.connected = this.endpointForExpression(definition.target, false, throwOnError);
+        } else {
+          if (old && old.connected) {
+            ep.connected = old.connected;
+          }
+        }
+      }
 
       if (definition.receive) {
         ep.receive = request => this[definition.receive](request);
       }
-
-      return ep;
     }
 
     /**
@@ -150,14 +160,11 @@ export default function EndpointsMixin(superclass) {
      * Default implementation only supports direct named endpoints
      * @param {string} expression to identify endpoint
      * @param {boolean} wait for endpoint to become present (deliver a promise)
+     * @param {Boolean} throwOnError raise exception if connection can´t be established
      * @return {Endpoint} for a given expression
      * @throws if no Endpoint can be found
      */
-    endpointForExpression(expression, wait = false) {
-      /*console.log(
-        `endpointForExpression: ${expression} -> ${this.endpoints[expression]}`
-      );*/
-
+    endpointForExpression(expression, wait = false, throwOnError = true) {
       const endpoint = this.endpoints[expression];
       if (endpoint === undefined) {
         const m = expression.match(/^service\(([^\)]+)\).(.*)/);
@@ -168,17 +175,27 @@ export default function EndpointsMixin(superclass) {
           const service = serviceProvider.getService(serviceName);
 
           if (service === undefined) {
+            if (throwOnError) {
+
             throw new Error(
               `Service '${serviceName}' not found in ${
                 serviceProvider.name
-              } (${Object.keys(serviceProvider.services)})`
+              } (${serviceProvider.serviceNames})`
             );
+            }
+            return undefined;
           }
 
-          return service.endpointForExpression(suffixExpression, wait);
+          return service.endpointForExpression(
+            suffixExpression,
+            wait,
+            throwOnError
+          );
         }
 
-        throw new Error(`Endpoint '${expression}' not found in ${this.name}`);
+        if (throwOnError) {
+          throw new Error(`Endpoint '${expression}' not found in ${this.name}`);
+        }
       }
 
       return endpoint;
