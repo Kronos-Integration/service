@@ -21,6 +21,25 @@ export class TestLogger extends ServiceLogger {
   }
 }
 
+export class TestServiceWithoutAdditionalEndpoints extends Service {
+  static get name() {
+    return "test-without-additional-endpoints";
+  }
+
+  static get configurationAttributes() {
+    return Object.assign(
+      createAttributes({
+        key3: {
+          needsRestart: true
+        },
+        key4: {}
+      }),
+      Service.configurationAttributes
+    );
+  }
+}
+
+
 export class TestService extends Service {
   static get name() {
     return "test";
