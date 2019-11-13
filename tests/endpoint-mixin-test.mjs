@@ -102,3 +102,26 @@ test("endpointFromConfig foreign target", t => {
   t.is(e.connected.name, "log");
   t.is(e.connected.owner.name, "logger");
 });
+
+test("endpointFromConfig real target", t => {
+  const dummyLogReceiver = new ReceiveEndpoint("log", {
+    endpointIdentifier(ep) {
+      return undefined; // prevent target;
+    }
+  });
+  
+  dummyLogReceiver.receive = entry => {
+    console.log(safeStringify(entry));
+  };
+  
+  const o = new Owner();
+
+  const e = o.createEndpointFromConfig(
+    "e",
+    { target: dummyLogReceiver },
+    o
+  );
+
+  t.is(e.name, "e");
+  t.is(e.connected.name, "log");
+});

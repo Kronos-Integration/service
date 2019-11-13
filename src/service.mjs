@@ -2,8 +2,7 @@ import events from "events";
 import safeStringify from "fast-safe-stringify";
 
 import {
-  ReceiveEndpoint,
-  SendEndpointDefault
+  ReceiveEndpoint
 } from "@kronos-integration/endpoint";
 
 import {
