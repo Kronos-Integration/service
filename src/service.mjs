@@ -28,11 +28,12 @@ import EndpointsMixin from "./endpoints-mixin.mjs";
 const DESCRIPTION = Symbol("description");
 
 const _ca = createAttributes({
-  endpoints: {
+  /*endpoints: {
     setter(newValue) {
       this.createEndpointsFromConfig(newValue, this.owner);
     }
   },
+  */
   description: {
     type: "string",
     description: "human readable description of the step"
@@ -218,6 +219,8 @@ export default class Service extends EndpointsMixin(
         ? defaultLogLevels[logLevel] || defaultLogLevels.info
         : defaultLogLevels.info
     );
+
+    this.createEndpointsFromConfig(config.endpoints, this.owner);
 
     this._configure(config);
   }
