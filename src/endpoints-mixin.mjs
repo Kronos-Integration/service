@@ -54,24 +54,6 @@ export default function EndpointsMixin(superclass) {
     }
 
     /**
-     * Creates the endpoint objects defined as a combination from
-     * implementation and definition
-     * @param {Object} definition endpoints definition
-     * @param {Object} interceptorFactory
-     * @param {function} interceptorFactory.createInterceptorInstanceFromConfig
-     */
-    createEndpointsFromConfig(definition, interceptorFactory) {
-      const combinedDef = Object.assign(this.constructor.endpoints, definition);
-      Object.keys(combinedDef).forEach(name =>
-        this.createEndpointFromConfig(
-          name,
-          combinedDef[name],
-          interceptorFactory
-        )
-      );
-    }
-
-    /**
      * Determine endpoint factory from the endpoint config
      * @param {Object} definition endpoints definition
      * @param {boolean} definition.in true will result in a ReceiveEndpoint
@@ -124,6 +106,21 @@ export default function EndpointsMixin(superclass) {
     }
 
     /**
+     * Creates the endpoint objects defined as a combination from
+     * implementation and definition
+     * @param {Object} definition endpoints definition
+     * @param {Object} interceptorFactory
+     */
+    createEndpointsFromConfig(definition, interceptorFactory) {
+      for (const [name, def] of Object.entries({
+        ...this.constructor.endpoints,
+        ...definition
+      })) {
+        this.createEndpointFromConfig(name, def, interceptorFactory);
+      }
+    }
+
+    /**
      *
      * @param {Endpoint} ep
      * @param {Object|string} definition endpoint attributes or alias expression
@@ -135,11 +132,10 @@ export default function EndpointsMixin(superclass) {
         const target = definition.target;
 
         if (target !== undefined) {
-          ep.connected = target instanceof ReceiveEndpoint ? target : this.endpointForExpression(
-            target,
-            false,
-            throwOnError
-          );
+          ep.connected =
+            target instanceof ReceiveEndpoint
+              ? target
+              : this.endpointForExpression(target, false, throwOnError);
         } else {
           if (old && old.connected) {
             ep.connected = old.connected;
