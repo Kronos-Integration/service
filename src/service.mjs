@@ -350,8 +350,7 @@ export default class Service extends EndpointsMixin(
    */
   toJSONWithOptions(options = {}) {
     const json = {
-      type: this.type,
-      endpoints: {}
+      type: this.type
     };
 
     if (options.includeName) {
@@ -370,12 +369,20 @@ export default class Service extends EndpointsMixin(
 
     for (const endpointName in this.endpoints) {
       const ep = this.endpoints[endpointName];
+
+      function add(ep) {
+        if(json.endpoints === undefined) {
+          json.endpoints = {};
+        }
+        json.endpoints[endpointName] = ep.toJSON();
+      }
+
       if (ep.isDefault) {
         if (options.includeDefaults) {
-          json.endpoints[endpointName] = ep.toJSON();
+          add(ep);
         }
       } else {
-        json.endpoints[endpointName] = ep.toJSON();
+        add(ep);
       }
     }
 

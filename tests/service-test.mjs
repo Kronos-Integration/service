@@ -92,8 +92,7 @@ test("given name", st, Service, {
   },
   json: {
     name: "myName",
-    type: "service",
-    endpoints: {}
+    type: "service"
   }
 });
 

@@ -37,17 +37,14 @@ test('service provider command endpoint', async t => {
 
   t.deepEqual(response.sort((a, b) => a.name.localeCompare(b.name)), [
     {
-      endpoints: {},
       name: 'a',
       type: 'service-provider'
     },
     {
-      endpoints: {},
       name: 'config',
       type: 'config'
     },
     {
-      endpoints: {},
       name: 'logger',
       type: 'logger'
     }
