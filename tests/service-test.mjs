@@ -11,11 +11,15 @@ const owner = {
   }
 };
 
-function st(t, factory, expected = { autostart: false }) {
+function st(t, factory, expected={}) {
   expected = {
     timeout: { start: 5 },
     autostart: false,
-    endpoints: {},
+    endpoints: {
+      log: { isConnected: true },
+      ...expected.entpoints
+    },
+
     options: {
       key3: "value3",
       key4: 4
@@ -35,12 +39,16 @@ function st(t, factory, expected = { autostart: false }) {
   t.is(s1.logLevel, "info");
   t.is(s1.timeout.start, expected.timeout.start);
 
-  t.is(s1.endpoints.log.name, "log", "log entdpoint");
-  t.truthy(s1.endpoints.log.isConnected, "log entdpoint is connected");
-
   for (const [name, e] of Object.entries(expected.endpoints)) {
     t.truthy(s1.endpoints[name], `${name} endpoint`);
     t.is(s1.endpoints[name].name, name, `${name} endpoint`);
+    if (e.isConnected !== undefined) {
+      t.is(
+        s1.endpoints[name].isConnected,
+        e.isConnected,
+        `${name} endpoint connected`
+      );
+    }
   }
 
   for (const [name, c] of Object.entries(expected.configuration)) {
@@ -89,10 +97,27 @@ test("given name", st, Service, {
   }
 });
 
+test("with endpoints", st, Service, {
+  endpoints: { ep1: { isConnected: false } },
+
+  options: {
+    endpoints: {
+      ep1: { in: true }
+    }
+  },
+  json: {
+    name: "service",
+    type: "service",
+    endpoints: {
+      ep1: { in: true }
+    }
+  }
+});
+
 test(st, TestService, {
   description: "my description",
   autostart: true,
-  endpoints: { testIn: {} },
+  endpoints: { testIn: { isConnected: false } },
   configuration: {
     key3: {},
     key4: { value: 4 }
@@ -100,25 +125,6 @@ test(st, TestService, {
 });
 
 test(st, TestServiceWithoutAdditionalEndpoints);
-
-test("service create with endpoints", t => {
-  const s1 = new Service(
-    {
-      endpoints: {
-        ep1: { in: true }
-      }
-    },
-    owner
-  );
-
-  t.deepEqual(s1.toJSON(), {
-    name: "service",
-    type: "service",
-    endpoints: {
-      ep1: { in: true }
-    }
-  });
-});
 
 test("service create with logLevel", t => {
   const s1 = new Service(
