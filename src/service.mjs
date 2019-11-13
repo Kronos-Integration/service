@@ -171,7 +171,8 @@ export default class Service extends EndpointsMixin(
       log: {
         out: true,
         default: true,
- //       target: 'service(logger).log'
+     //   target: 'service(logger).log'
+        target: dummyLogReceiver
       },
       config: {
         in: true,
@@ -218,10 +219,6 @@ export default class Service extends EndpointsMixin(
         ? defaultLogLevels[logLevel] || defaultLogLevels.info
         : defaultLogLevels.info
     );
-
-    // TODO special case for log endpoint in and out for logger service ?
-    this.addEndpoint(new SendEndpointDefault("log", this));
-    this.endpoints.log.connected = dummyLogReceiver;
 
     this._configure(config);
   }

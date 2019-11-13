@@ -132,8 +132,14 @@ export default function EndpointsMixin(superclass) {
      */
     connectEndpoint(ep, definition, old, throwOnError) {
       if (ep.isOut) {
-        if (definition.target !== undefined) {
-          ep.connected = this.endpointForExpression(definition.target, false, throwOnError);
+        const target = definition.target;
+
+        if (target !== undefined) {
+          ep.connected = target instanceof ReceiveEndpoint ? target : this.endpointForExpression(
+            target,
+            false,
+            throwOnError
+          );
         } else {
           if (old && old.connected) {
             ep.connected = old.connected;
@@ -141,8 +147,12 @@ export default function EndpointsMixin(superclass) {
         }
       }
 
-      if (definition.receive) {
-        ep.receive = request => this[definition.receive](request);
+      const receive = definition.receive;
+      if (receive !== undefined) {
+        ep.receive =
+          receive instanceof Function
+            ? receive
+            : request => this[receive](request);
       }
     }
 
@@ -162,7 +172,7 @@ export default function EndpointsMixin(superclass) {
      * @param {boolean} wait for endpoint to become present (deliver a promise)
      * @param {Boolean} throwOnError raise exception if connection can´t be established
      * @return {Endpoint} for a given expression
-     * @throws if no Endpoint can be found
+     * @throws if no Endpoint can be found and throwOnError is true
      */
     endpointForExpression(expression, wait = false, throwOnError = true) {
       const endpoint = this.endpoints[expression];
@@ -176,12 +186,9 @@ export default function EndpointsMixin(superclass) {
 
           if (service === undefined) {
             if (throwOnError) {
-
-            throw new Error(
-              `Service '${serviceName}' not found in ${
-                serviceProvider.name
-              } (${serviceProvider.serviceNames})`
-            );
+              throw new Error(
+                `Service '${serviceName}' not found in ${serviceProvider.name} (${serviceProvider.serviceNames})`
+              );
             }
             return undefined;
           }
