@@ -41,7 +41,7 @@ export default function EndpointsMixin(superclass) {
 
     /**
      * Deliver the endpoint options for a given endpoint definition.
-     * @return {Object} suiable to pass as options to the endpoint factory
+     * @return {Object} suitable to pass as options to the endpoint factory
      */
     endpointOptions(name, def) {
       const options = {};
