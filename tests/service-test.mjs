@@ -6,10 +6,16 @@ import Service from "../src/service.mjs";
 
 const owner = {
   emit(name, arg1, arg2) {}, // dummy event emitter
+  services: { },
+  
+  getService(name) {
+    return this.services[name];
+  },
   endpointIdentifier(e) {
     return `name:${e.name}`;
   }
 };
+owner.services.log = new Service({}, owner);
 
 function st(t, factory, expected={}) {
   expected = {

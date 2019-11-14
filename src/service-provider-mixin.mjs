@@ -96,7 +96,10 @@ export default function ServiceProviderMixin(
     }
 
     createService(config) {
-      const Clazz = config.type instanceof Function ? config.type : this.serviceFactories[config.type];
+      const Clazz =
+        config.type instanceof Function
+          ? config.type
+          : this.serviceFactories[config.type];
       return new Clazz(config, this);
     }
 
@@ -122,8 +125,7 @@ export default function ServiceProviderMixin(
       delete this.services[serviceName];
     }
 
-    get serviceNames()
-    {
+    get serviceNames() {
       return this.services === undefined ? [] : Object.keys(this.services);
     }
 
@@ -140,15 +142,15 @@ export default function ServiceProviderMixin(
     }
 
     /**
-     * 
+     *
      * @param {string|class} type name if type
      * @param {boolean} wait until factory apears in registry
      */
     async getServiceFactory(type, wait) {
-      if(type instanceof Function) {
+      if (type instanceof Function) {
         const factory = this.serviceFactories[type.name];
-        if(factory !== undefined) {
-          return factory
+        if (factory !== undefined) {
+          return factory;
         }
         return this.registerServiceFactory(type);
       }
@@ -179,6 +181,16 @@ export default function ServiceProviderMixin(
       }
 
       return factory;
+    }
+
+    async declareServices(config, waitUntilFactoryPresent) {
+      return Promise.all(Object.entries(config).map(([name, config]) => {
+        if (config.name === undefined) {
+          config.name = name;
+        }
+
+        return this.declareService(config, waitUntilFactoryPresent);
+      }));
     }
 
     /**

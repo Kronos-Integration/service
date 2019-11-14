@@ -60,6 +60,11 @@ export class TestService extends Service {
         in: true,
         default: true,
         receive: 'testReceive'
+      },
+      testOut: {
+        out: true,
+        default: true,
+    //    target: 'service(logger).log'
       }
     };
   }

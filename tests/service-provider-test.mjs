@@ -1,5 +1,9 @@
 import test from "ava";
-import { TestService, TestLogger } from "./util.mjs";
+import {
+  TestService,
+  TestServiceWithoutAdditionalEndpoints,
+  TestLogger
+} from "./util.mjs";
 import Service from "../src/service.mjs";
 import ServiceProviderMixin from "../src/service-provider-mixin.mjs";
 
@@ -34,7 +38,10 @@ test("service provider config service", async t => {
 
   t.deepEqual(
     sp.services.config.preservedConfigs,
-    new Map([["a", {}], ["test", { key3: 3 }]])
+    new Map([
+      ["a", {}],
+      ["test", { key3: 3 }]
+    ])
   );
 
   t.is(sp.services.logger.name, "logger");
@@ -139,14 +146,14 @@ test("service provider additional service can be unregistered", async t => {
 test("declare service with factory class", async t => {
   const sp = await makeServices();
 
-  const s2a = await sp.declareService(
-    {
-      name: "s2",
-      type: TestService
-    }
-  );
+  const s2a = await sp.declareService({
+    name: "s2",
+    type: TestService,
+    key3: 77
+  });
   t.is(s2a.name, "s2");
   t.is(s2a.type, "test");
+  t.is(s2a.key3, 77);
 });
 
 test("service provider additional service declare service with type", async t => {
@@ -199,4 +206,48 @@ test("service provider additional service declare service with type", async t =>
   t.is(s2d.name, "s2");
   t.is(s2d.type, "test");
   t.is(s2d.key, 2);
+});
+
+test("declare services", async t => {
+  const sp = await makeServices();
+
+  const [s2, s3, s4] = await sp.declareServices(
+    {
+      s2: {
+        type: TestService,
+        endpoints: {
+    //      testOut: {}
+        }
+      },
+      s3: {
+        type: TestService,
+        key3: 2,
+        endpoints: {
+          testIn: { receive: "testReceive" }
+        }
+      },
+      s4: {
+        type: TestServiceWithoutAdditionalEndpoints
+      }
+    },
+    true
+  );
+
+  
+  t.is(s3.name, "s3");
+  t.is(s3.type, "test");
+  t.is(s3.key3, 2);
+
+  t.is(s4.name, "s4");
+  t.is(s4.type, "test-without-additional-endpoints");
+
+ // t.true(s2.endpoints.testOut.isConnected);
+
+  //t.true(s3.endpoints.testIn.isConnected);
+
+  /*
+  console.log(s2.endpoints.testOut);
+  console.log(s3.endpoints.testIn);
+*/
+
 });
