@@ -28,12 +28,6 @@ import EndpointsMixin from "./endpoints-mixin.mjs";
 const DESCRIPTION = Symbol("description");
 
 const _ca = createAttributes({
-  /*endpoints: {
-    setter(newValue) {
-      this.createEndpointsFromConfig(newValue, this.owner);
-    }
-  },
-  */
   description: {
     type: "string",
     description: "human readable description of the step"
