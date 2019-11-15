@@ -55,13 +55,14 @@ export default function EndpointsMixin(superclass) {
 
     /**
      * Determine endpoint factory from the endpoint config
+     * @param {string} name of the new endpoint
      * @param {Object} definition endpoints definition
      * @param {boolean} definition.in true will result in a ReceiveEndpoint
      * @param {boolean} definition.out true will result in a SendEndpoint
      * @param {boolean} definition.default true will result in a (Send|Receive)DefaultEndpoint
      * @return {Object} endpoint factory
      */
-    endpointFactoryFromConfig(definition) {
+    endpointFactoryFromConfig(name, definition) {
       return definition.default
         ? definition.in
           ? ReceiveEndpointDefault
@@ -86,7 +87,7 @@ export default function EndpointsMixin(superclass) {
         return this.endpointForExpression(definition);
       }
 
-      const ep = new (this.endpointFactoryFromConfig(definition))(
+      const ep = new (this.endpointFactoryFromConfig(name, definition))(
         name,
         this,
         this.endpointOptions(name, definition)
