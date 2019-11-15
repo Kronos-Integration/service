@@ -4,6 +4,6 @@ import ServiceProviderMixin from './service-provider-mixin.mjs';
 /**
  * simple service manager (for examples and testing only)
  */
-export default class StandaloneServiceManager extends ServiceProviderMixin(Service) {
+export default class StandaloneServiceProvider extends ServiceProviderMixin(Service) {
 
 }

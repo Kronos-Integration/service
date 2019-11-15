@@ -5,7 +5,7 @@ import { defineServiceConsumerProperties } from './service-consumer-mixin.mjs';
 import ServiceProviderMixin from './service-provider-mixin.mjs';
 import InterceptorProviderMixin from './interceptor-provider-mixin.mjs';
 import EndpointsMixin from './endpoints-mixin.mjs';
-import StandaloneServiceManager from './standalone-service-manager.mjs';
+import StandaloneServiceProvider from './standalone-service-provider.mjs';
 
 export {
   EndpointsMixin,
@@ -15,5 +15,5 @@ export {
   ServiceConfig,
   ServiceLogger,
   Service,
-  StandaloneServiceManager
+  StandaloneServiceProvider
 };

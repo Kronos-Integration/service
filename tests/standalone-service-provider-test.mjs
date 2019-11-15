@@ -1,9 +1,9 @@
 import test from "ava";
 import { TestService } from './util.mjs';
-import { StandaloneServiceManager } from "../src/module.mjs";
+import { StandaloneServiceProvider } from "../src/module.mjs";
 
 test("declareService", async t => {
-  const ssm = new StandaloneServiceManager();
+  const ssm = new StandaloneServiceProvider();
   ssm.registerServiceFactory(TestService);
 
   const s = await Promise.all(["s1", "s2", "s3", "s4", "s5"].map(
@@ -24,7 +24,7 @@ test("declareService", async t => {
 });
 
 test("declareService delayed", async t => {
-  const ssm = new StandaloneServiceManager();
+  const ssm = new StandaloneServiceProvider();
 
   const declarations = Promise.all(["s1", "s2", "s3", "s4", "s5"].map(
     name =>
@@ -46,7 +46,7 @@ test("declareService delayed", async t => {
 
 
 test("configure", async t => {
-  const ssm = new StandaloneServiceManager();
+  const ssm = new StandaloneServiceProvider();
   ssm.registerServiceFactory(TestService);
 
   const s1 = await ssm.declareService(
