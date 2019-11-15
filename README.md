@@ -69,7 +69,7 @@ Base service implementation
 -   [EndpointsMixin](#endpointsmixin)
     -   [Parameters](#parameters-14)
 -   [endpoints](#endpoints-2)
--   [StandaloneServiceManager](#standaloneservicemanager)
+-   [StandaloneServiceProvider](#standaloneserviceprovider)
 
 ## DESCRIPTION
 
@@ -385,7 +385,7 @@ default set of endpoints to create
 
 Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** {} empty set
 
-## StandaloneServiceManager
+## StandaloneServiceProvider
 
 **Extends ServiceProviderMixin(Service)**
 

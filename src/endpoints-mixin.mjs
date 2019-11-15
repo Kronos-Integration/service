@@ -41,16 +41,16 @@ export default function EndpointsMixin(superclass) {
 
     /**
      * Deliver the endpoint options for a given endpoint definition.
+     * @param {string} name of the endpoint
+     * @param {Object} definition endpoints definition
      * @return {Object} suitable to pass as options to the endpoint factory
      */
-    endpointOptions(name, def) {
-      const options = {};
-
-      if (def.opposite) {
-        options.createOpposite = true;
+    endpointOptions(name, definition) {
+      if (definition.opposite) {
+        definition.createOpposite = true;
       }
 
-      return options;
+      return definition;
     }
 
     /**
