@@ -1,9 +1,7 @@
 import events from "events";
 import safeStringify from "fast-safe-stringify";
 
-import {
-  ReceiveEndpoint
-} from "@kronos-integration/endpoint";
+import { ReceiveEndpoint } from "@kronos-integration/endpoint";
 
 import {
   defaultLogLevels,
@@ -165,8 +163,8 @@ export default class Service extends EndpointsMixin(
       log: {
         out: true,
         default: true,
-     //   target: 'service(logger).log'
-        target: dummyLogReceiver
+        //   connected: 'service(logger).log'
+        connected: dummyLogReceiver
       },
       config: {
         in: true,
@@ -368,7 +366,7 @@ export default class Service extends EndpointsMixin(
       const ep = this.endpoints[endpointName];
 
       function add(ep) {
-        if(json.endpoints === undefined) {
+        if (json.endpoints === undefined) {
           json.endpoints = {};
         }
         json.endpoints[endpointName] = ep.toJSON();

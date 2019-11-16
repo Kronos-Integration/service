@@ -77,24 +77,24 @@ test("endpointForExpression throwing", t => {
   t.is(error.message, "Endpoint 'r2' not found in owner");
 });
 
-test("endpointFromConfig simple target", t => {
+test("endpointFromConfig simple connected", t => {
   const o = new Owner();
 
   const r1 = new ReceiveEndpoint("r1");
   o.addEndpoint(r1);
 
-  const e = o.createEndpointFromConfig("e", { target: "r1" }, o);
+  const e = o.createEndpointFromConfig("e", { connected: "r1" }, o);
 
   t.is(e.name, "e");
   t.is(e.connected.name, "r1");
 });
 
-test("endpointFromConfig foreign target", t => {
+test("endpointFromConfig foreign connected", t => {
   const o = new Owner();
 
   const e = o.createEndpointFromConfig(
     "e",
-    { target: "service(logger).log" },
+    { connected: "service(logger).log" },
     o
   );
 
@@ -103,7 +103,7 @@ test("endpointFromConfig foreign target", t => {
   t.is(e.connected.owner.name, "logger");
 });
 
-test("endpointFromConfig real target", t => {
+test("endpointFromConfig real connected", t => {
   const dummyLogReceiver = new ReceiveEndpoint("log", {
     endpointIdentifier(ep) {
       return undefined; // prevent target;
@@ -118,7 +118,7 @@ test("endpointFromConfig real target", t => {
 
   const e = o.createEndpointFromConfig(
     "e",
-    { target: dummyLogReceiver },
+    { connected: dummyLogReceiver },
     o
   );
 

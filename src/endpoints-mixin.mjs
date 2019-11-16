@@ -1,4 +1,5 @@
 import {
+  isEndpoint,
   SendEndpoint,
   SendEndpointDefault,
   ReceiveEndpoint,
@@ -129,18 +130,15 @@ export default function EndpointsMixin(superclass) {
      * @param {Boolean} throwOnError raise exception if connection can´t be established
      */
     connectEndpoint(ep, definition, old, throwOnError) {
-      if (ep.isOut) {
-        const target = definition.target;
+      const connected = definition.connected;
 
-        if (target !== undefined) {
-          ep.connected =
-            target instanceof ReceiveEndpoint
-              ? target
-              : this.endpointForExpression(target, false, throwOnError);
-        } else {
-          if (old && old.connected) {
-            ep.connected = old.connected;
-          }
+      if (connected !== undefined) {
+        ep.connected = isEndpoint(connected)
+          ? connected
+          : this.endpointForExpression(connected, false, throwOnError);
+      } else {
+        if (old && old.connected) {
+          ep.connected = old.connected;
         }
       }
 
