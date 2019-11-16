@@ -48,12 +48,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Kronos-Integration/kronos-service.git"
+    "url": "https://github.com/Kronos-Integration/service.git"
   },
   "bugs": {
-    "url": "https://github.com/Kronos-Integration/kronos-service/issues"
+    "url": "https://github.com/Kronos-Integration/service/issues"
   },
-  "homepage": "https://github.com/Kronos-Integration/kronos-service#readme",
+  "homepage": "https://github.com/Kronos-Integration/service#readme",
   "ava": {
     "files": [
       "tests/*-test.mjs"
