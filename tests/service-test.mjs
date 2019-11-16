@@ -6,9 +6,10 @@ import Service from "../src/service.mjs";
 
 const owner = {
   emit(name, arg1, arg2) {}, // dummy event emitter
-  services: { },
+  services: {},
 
   getService(name) {
+    console.log("GET SERVICE", name, this.services[name]);
     return this.services[name];
   },
   endpointIdentifier(e) {
@@ -17,7 +18,9 @@ const owner = {
 };
 owner.services.logger = new Service({}, owner);
 
-function st(t, factory, expected={}) {
+owner.services.logger.endpoints.log.receive = entry => console.log(entry);
+
+function st(t, factory, expected = {}) {
   expected = {
     timeout: { start: 5 },
     autostart: false,
@@ -147,15 +150,18 @@ test("service create with logLevel", t => {
     key1: "value1"
   });
 
-  const s2 = new Service({
-    key1: "value1",
-    logLevel: "na sowas"
-  });
+  const s2 = new Service(
+    {
+      key1: "value1",
+      logLevel: "na sowas"
+    },
+    owner
+  );
 
   t.is(s2.logLevel, "info");
 });
 
-test("service create with DEBUG=1", t => {
+test.only("service create with DEBUG=1", t => {
   process.env.DEBUG = 1;
 
   const s1 = new Service(
@@ -167,10 +173,13 @@ test("service create with DEBUG=1", t => {
 
   t.is(s1.logLevel, "debug");
 
-  const s2 = new Service({
-    key1: "value1",
-    logLevel: "warn"
-  });
+  const s2 = new Service(
+    {
+      key1: "value1",
+      logLevel: "warn"
+    },
+    owner
+  );
 
   t.is(s2.logLevel, "debug");
 
