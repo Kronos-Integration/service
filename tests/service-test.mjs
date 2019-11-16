@@ -161,7 +161,7 @@ test("service create with logLevel", t => {
   t.is(s2.logLevel, "info");
 });
 
-test.only("service create with DEBUG=1", t => {
+test("service create with DEBUG=1", t => {
   process.env.DEBUG = 1;
 
   const s1 = new Service(
