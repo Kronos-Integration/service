@@ -25,8 +25,14 @@ export default function ServiceProviderMixin(
         _serviceFactoryPromises: { value: new Map() }
       });
 
-      const loggerService = new serviceLoggerClass({}, this);
-      const configService = new serviceConfigClass({}, this);
+      const serviceConfig = {
+     /*   endpoints: {
+          log: { connected: this.endpoints.log }
+        }*/
+      };
+
+      const loggerService = new serviceLoggerClass(serviceConfig, this);
+      const configService = new serviceConfigClass(serviceConfig, this);
 
       // connect logger endpoints
       this.endpoints.log.connected = loggerService.endpoints.log;
@@ -184,13 +190,15 @@ export default function ServiceProviderMixin(
     }
 
     async declareServices(config, waitUntilFactoryPresent) {
-      return Promise.all(Object.entries(config).map(([name, config]) => {
-        if (config.name === undefined) {
-          config.name = name;
-        }
+      return Promise.all(
+        Object.entries(config).map(([name, config]) => {
+          if (config.name === undefined) {
+            config.name = name;
+          }
 
-        return this.declareService(config, waitUntilFactoryPresent);
-      }));
+          return this.declareService(config, waitUntilFactoryPresent);
+        })
+      );
     }
 
     /**

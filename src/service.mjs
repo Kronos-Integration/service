@@ -163,8 +163,8 @@ export default class Service extends EndpointsMixin(
       log: {
         out: true,
         default: true,
-        //   connected: 'service(logger).log'
-        connected: dummyLogReceiver
+          // connected: 'service(logger).log'
+          connected: dummyLogReceiver
       },
       config: {
         in: true,
@@ -213,7 +213,6 @@ export default class Service extends EndpointsMixin(
     );
 
     this.createEndpointsFromConfig(config.endpoints, this.owner);
-
     this._configure(config);
   }
 
