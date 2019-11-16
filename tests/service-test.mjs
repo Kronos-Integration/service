@@ -9,7 +9,6 @@ const owner = {
   services: {},
 
   getService(name) {
-    console.log("GET SERVICE", name, this.services[name]);
     return this.services[name];
   },
   endpointIdentifier(e) {
@@ -202,9 +201,12 @@ test("service create with LOGLEVEL=trace", t => {
 });
 
 test("service derived configuration", async t => {
-  const s1 = new TestService({
-    key7: 1
-  });
+  const s1 = new TestService(
+    {
+      key7: 1
+    },
+    owner
+  );
 
   const se = new SendEndpoint("se", {
     get name() {
@@ -225,9 +227,12 @@ test("service derived configuration", async t => {
 });
 
 test("service derived configuration change start timeout", async t => {
-  const s1 = new TestService({
-    key7: 1
-  });
+  const s1 = new TestService(
+    {
+      key7: 1
+    },
+    owner
+  );
 
   await s1.configure({
     timeout: {
@@ -261,7 +266,7 @@ test("service states", async t => {
   const s2 = new TestService({
     key1: "value1",
     key2: 2
-  });
+  }, owner);
 
   t.is(s2.state, "stopped");
 
