@@ -51,6 +51,12 @@ export default function EndpointsMixin(superclass) {
         definition.createOpposite = true;
       }
 
+      const receive = definition.receive;
+
+      if (typeof receive === "string") {
+        definition.receive = request => this[receive](request);
+      }
+
       return definition;
     }
 
@@ -59,18 +65,18 @@ export default function EndpointsMixin(superclass) {
      * @param {string} name of the new endpoint
      * @param {Object} definition endpoints definition
      * @param {boolean} definition.in true will result in a ReceiveEndpoint
+     * @param {boolean} definition.receive true will result in a ReceiveEndpoint
      * @param {boolean} definition.out true will result in a SendEndpoint
      * @param {boolean} definition.default true will result in a (Send|Receive)DefaultEndpoint
      * @return {Object} endpoint factory
      */
     endpointFactoryFromConfig(name, definition) {
-      return definition.default
-        ? definition.in
-          ? ReceiveEndpointDefault
-          : SendEndpointDefault
-        : definition.in
-        ? ReceiveEndpoint
-        : SendEndpoint;
+
+      if(definition.in || definition.receive) {
+        return definition.default ? ReceiveEndpointDefault : ReceiveEndpoint;
+      }
+
+      return definition.default ? SendEndpointDefault : SendEndpoint;
     }
 
     /**
@@ -140,14 +146,6 @@ export default function EndpointsMixin(superclass) {
         if (old && old.connected) {
           ep.connected = old.connected;
         }
-      }
-
-      const receive = definition.receive;
-      if (receive !== undefined) {
-        ep.receive =
-          receive instanceof Function
-            ? receive
-            : request => this[receive](request);
       }
     }
 
