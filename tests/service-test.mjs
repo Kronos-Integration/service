@@ -19,7 +19,7 @@ owner.services.logger = new Service({}, owner);
 
 owner.services.logger.endpoints.log.receive = entry => console.log(entry);
 
-function st(t, factory, expected = {}) {
+function st(t, factory, options, expected = {}) {
   expected = {
     timeout: { start: 5 },
     autostart: false,
@@ -27,16 +27,11 @@ function st(t, factory, expected = {}) {
       log: { isConnected: true },
       ...expected.entpoints
     },
-
-    options: {
-      key3: "value3",
-      key4: 4
-    },
     configuration: {},
     ...expected
   };
 
-  const s1 = new factory(expected.options, owner);
+  const s1 = new factory(options, owner);
 
   t.is(s1.owner, owner, "owner");
 
@@ -71,8 +66,8 @@ function st(t, factory, expected = {}) {
     t.is(s1.description, expected.description, "service description");
   }
 
-  if (expected.name !== undefined) {
-    t.is(s1.name, expected.name, "service name");
+  if (options && options.name !== undefined) {
+    t.is(s1.name, options.name, "service name");
   }
 
   if (expected.json !== undefined) {
@@ -82,54 +77,72 @@ function st(t, factory, expected = {}) {
   t.is(s1.toString(), `${s1.name}: stopped`);
 }
 
-st.title = (providedTitle = "", factory, b) =>
-  `service ${providedTitle} ${factory.name} ${b}`.trim();
+st.title = (providedTitle = "", factory, options) =>
+  `service ${providedTitle} ${factory.name} ${JSON.stringify(options)}`.trim();
 
-test(st, Service, {
-  name: "service",
-  options: {
+test(
+  st,
+  Service,
+  { name: "service", key1: "value1", key2: 2 },
+  {
     key1: "value1",
     key2: 2
   }
-});
+);
 
-test("given name", st, Service, {
-  name: "myName",
-  options: {
-    name: "myName"
-  },
-  json: {
-    name: "myName",
-    type: "service"
-  }
-});
-
-test("with endpoints", st, Service, {
-  endpoints: { ep1: { isConnected: false } },
-
-  options: {
-    endpoints: {
-      ep1: { in: true }
+test(
+  "given name",
+  st,
+  Service,
+  { name: "myName", description: "my description" },
+  {
+    description: "my description",
+    json: {
+      name: "myName",
+      type: "service"
     }
-  },
-  json: {
+  }
+);
+
+test(
+  "with endpoints",
+  st,
+  Service,
+  {
     name: "service",
-    type: "service",
     endpoints: {
       ep1: { in: true }
     }
+  },
+  {
+    endpoints: { ep1: { isConnected: false } },
+    json: {
+      name: "service",
+      type: "service",
+      endpoints: {
+        ep1: { in: true }
+      }
+    }
   }
-});
+);
 
-test(st, TestService, {
-  description: "my description",
-  autostart: true,
-  endpoints: { testIn: { isConnected: false } },
-  configuration: {
-    key3: {},
-    key4: { value: 4 }
+test(
+  st,
+  TestService,
+  { name: "service", description: "my description",
+  key3: "value3",
+  key4: 4
+},
+  {
+    description: "my description",
+    autostart: true,
+    endpoints: { testIn: { isConnected: false } },
+    configuration: {
+      key3: {},
+      key4: { value: 4 }
+    }
   }
-});
+);
 
 test(st, TestServiceWithoutAdditionalEndpoints);
 
@@ -263,10 +276,13 @@ test("service states", async t => {
   await s1.restart();
   t.is(s1.state, "running");
 
-  const s2 = new TestService({
-    key1: "value1",
-    key2: 2
-  }, owner);
+  const s2 = new TestService(
+    {
+      key1: "value1",
+      key2: 2
+    },
+    owner
+  );
 
   t.is(s2.state, "stopped");
 
