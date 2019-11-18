@@ -167,12 +167,10 @@ export default class Service extends EndpointsMixin(
           connected: dummyLogReceiver
       },
       config: {
-        in: true,
         default: true,
         receive: "configure"
       },
       command: {
-        in: true,
         default: true,
         receive: "execute"
       }

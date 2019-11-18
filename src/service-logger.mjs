@@ -21,7 +21,6 @@ export default class ServiceLogger extends Service {
     return {
       ...super.endpoints,
       log: {
-        in: true,
         default: true,
         receive: 'logEntry'
       }

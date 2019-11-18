@@ -47,10 +47,6 @@ export default function EndpointsMixin(superclass) {
      * @return {Object} suitable to pass as options to the endpoint factory
      */
     endpointOptions(name, definition) {
-      if (definition.opposite) {
-        definition.createOpposite = true;
-      }
-
       const receive = definition.receive;
 
       if (typeof receive === "string") {
