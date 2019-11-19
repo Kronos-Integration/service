@@ -1,17 +1,10 @@
 import test from "ava";
 import {
+  ServiceProvider,
   TestService,
-  TestServiceWithoutAdditionalEndpoints,
-  TestLogger
+  makeServices
 } from "./util.mjs";
-import Service from "../src/service.mjs";
-import ServiceProviderMixin from "../src/service-provider-mixin.mjs";
 
-class ServiceProvider extends ServiceProviderMixin(Service, TestLogger) {
-  static get name() {
-    return "service-provider";
-  }
-}
 
 test("service factory", async t => {
   const sp = new ServiceProvider();
@@ -62,16 +55,6 @@ test("service provider without initial config", async t => {
   sp.info(`logging`);
 });
 
-async function makeServices(logLevel = "info") {
-  const sp = new ServiceProvider({ logLevel });
-
-  await sp.start();
-
-  await sp.registerService(new TestService({ logLevel }, sp));
-  await sp.registerService(new TestService({ logLevel, name: "t2" }, sp));
-
-  return sp;
-}
 
 test("service provider additional service", async t => {
   const sp = await makeServices();
@@ -206,48 +189,4 @@ test("service provider additional service declare service with type", async t =>
   t.is(s2d.name, "s2");
   t.is(s2d.type, "test");
   t.is(s2d.key, 2);
-});
-
-test("declare services", async t => {
-  const sp = await makeServices();
-
-  const [s2, s3, s4] = await sp.declareServices(
-    {
-      s2: {
-        type: TestService,
-        endpoints: {
-    //      testOut: {}
-        }
-      },
-      s3: {
-        type: TestService,
-        key3: 2,
-        endpoints: {
-          testIn: { receive: "testReceive" }
-        }
-      },
-      s4: {
-        type: TestServiceWithoutAdditionalEndpoints
-      }
-    },
-    true
-  );
-
-  
-  t.is(s3.name, "s3");
-  t.is(s3.type, "test");
-  t.is(s3.key3, 2);
-
-  t.is(s4.name, "s4");
-  t.is(s4.type, "test-without-additional-endpoints");
-
- // t.true(s2.endpoints.testOut.isConnected);
-
-  //t.true(s3.endpoints.testIn.isConnected);
-
-  /*
-  console.log(s2.endpoints.testOut);
-  console.log(s3.endpoints.testIn);
-*/
-
 });

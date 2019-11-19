@@ -1,6 +1,7 @@
 import { createAttributes } from 'model-attributes';
 import Service from "../src/service.mjs";
 import ServiceLogger from "../src/service-logger.mjs";
+import ServiceProviderMixin from "../src/service-provider-mixin.mjs";
 
 export async function wait(msecs=1000) {
   return new Promise((resolve, reject) => setTimeout(() => resolve(), msecs));
@@ -97,4 +98,21 @@ export class TestService extends Service {
   {
 
   }
+}
+
+export class ServiceProvider extends ServiceProviderMixin(Service, TestLogger) {
+  static get name() {
+    return "service-provider";
+  }
+}
+
+export async function makeServices(logLevel = "info") {
+  const sp = new ServiceProvider({ logLevel });
+
+  await sp.start();
+
+  await sp.registerService(new TestService({ logLevel }, sp));
+  await sp.registerService(new TestService({ logLevel, name: "t2" }, sp));
+
+  return sp;
 }
