@@ -5,7 +5,6 @@ import {
   makeServices
 } from "./util.mjs";
 
-
 test("declare services", async t => {
   const sp = await makeServices();
 
@@ -14,7 +13,7 @@ test("declare services", async t => {
       s2: {
         type: TestService,
         endpoints: {
-    //      testOut: {}
+          testOut: { connected: "service(s3).testIn" }
         }
       },
       s3: {
@@ -31,21 +30,18 @@ test("declare services", async t => {
     true
   );
 
-  
   t.is(s3.name, "s3");
   t.is(s3.type, "test");
   t.is(s3.key3, 2);
-
   t.is(s4.name, "s4");
   t.is(s4.type, "test-without-additional-endpoints");
 
- // t.true(s2.endpoints.testOut.isConnected);
+  t.true(s2.endpoints.testOut.isConnected);
+  t.is(s2.endpoints.testOut.otherEnd.name, 'testIn');
 
   //t.true(s3.endpoints.testIn.isConnected);
 
   /*
-  console.log(s2.endpoints.testOut);
   console.log(s3.endpoints.testIn);
 */
-
 });
