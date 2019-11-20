@@ -40,8 +40,4 @@ test("declare services", async t => {
   t.is(s2.endpoints.testOut.otherEnd.name, 'testIn');
 
   //t.true(s3.endpoints.testIn.isConnected);
-
-  /*
-  console.log(s3.endpoints.testIn);
-*/
 });
