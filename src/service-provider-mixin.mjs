@@ -26,9 +26,13 @@ export default function ServiceProviderMixin(
       });
 
       const serviceConfig = {
-     /*   endpoints: {
-          log: { connected: this.endpoints.log }
-        }*/
+        endpoints: {
+         /* log: {
+            out: true,
+            default: true,    
+            connected: this.endpoints.log }
+            */
+        }
       };
 
       const loggerService = new serviceLoggerClass(serviceConfig, this);
