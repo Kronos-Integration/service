@@ -163,8 +163,8 @@ export default class Service extends EndpointsMixin(
       log: {
         out: true,
         default: true,
-          // connected: 'service(logger).log'
-          connected: dummyLogReceiver
+        // connected: 'service(logger).log'
+        connected: dummyLogReceiver
       },
       config: {
         default: true,
@@ -315,11 +315,21 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
+   * mapping of properties used in toString
+   * @return {Object}
+   */
+  get toStringAttributes() {
+    return { state: "state" };
+  }
+
+  /**
    * Returns the string representation of this step
    * @return {string} human readable name
    */
   toString() {
-    return `${this.name}: ${this.state}`;
+    return `${this.name}(${Object.entries(this.toStringAttributes)
+      .map(([name, prop]) => `${name}=${this[prop]}`)
+      .join(",")})`;
   }
 
   toJSON() {

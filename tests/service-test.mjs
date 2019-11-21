@@ -74,7 +74,7 @@ function st(t, factory, options, expected = {}) {
     t.deepEqual(s1.toJSON(), expected.json);
   }
 
-  t.is(s1.toString(), `${s1.name}: stopped`);
+  t.is(s1.toString(), `${s1.name}(state=stopped)`);
 }
 
 st.title = (providedTitle = "", factory, options) =>
