@@ -82,7 +82,6 @@ export default function EndpointsMixin(superclass) {
      * @param {Object|string} definition endpoint attributes or alias expression
      * @param {string} definition.target expression pointing to the connected endpoint
      * @param {Object} interceptorFactory
-     * @param {function} interceptorFactory.createInterceptorInstanceFromConfig
      * @return {Endpoint} newly created endpoint
      */
     createEndpointFromConfig(name, definition, interceptorFactory) {
@@ -95,12 +94,6 @@ export default function EndpointsMixin(superclass) {
         this,
         this.endpointOptions(name, definition)
       );
-
-      if (definition.interceptors !== undefined) {
-        ep.interceptors = definition.interceptors.map(icDef =>
-          interceptorFactory.createInterceptorInstanceFromConfig(icDef, ep)
-        );
-      }
 
       this.connectEndpoint(ep, definition, this.endpoints[name], false);
 
