@@ -255,7 +255,7 @@ export default class Service extends EndpointsMixin(
   stateChanged(oldState, newState) {
     this.owner.emit("serviceStateChanged", this, oldState, newState);
     this.trace({
-      message: `transitioned from ${oldState} to ${newState}`,
+      message: `${this.name} transitioned from ${oldState} to ${newState}`,
       from: oldState,
       state: newState
     });
