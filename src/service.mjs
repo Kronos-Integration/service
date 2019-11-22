@@ -255,7 +255,7 @@ export default class Service extends EndpointsMixin(
   stateChanged(oldState, newState) {
     this.owner.emit("serviceStateChanged", this, oldState, newState);
     this.trace({
-      message: "transitioned",
+      message: `transitioned from ${oldState} to ${newState}`,
       from: oldState,
       state: newState
     });
@@ -424,11 +424,11 @@ export default class Service extends EndpointsMixin(
       this.configurationAttributes,
       config,
       (ca, path, value) => {
-        this.trace({
-          message: "config",
+        this.trace( level => { return {
+          message: `config ${path}: ${value}`,
           attribute: path,
           value: value
-        });
+        }});
         modified.add(ca);
       }
     );
