@@ -427,7 +427,7 @@ export default class Service extends EndpointsMixin(
         this.trace( level => { return {
           message: `config ${path}: ${value}`,
           attribute: path,
-          value: value
+          value: ca.private ? '***' : value
         }});
         modified.add(ca);
       }
