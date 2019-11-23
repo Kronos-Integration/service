@@ -81,6 +81,7 @@ dummyLogReceiver.receive = entry => {
  * @param {string} config.description
  * @param {Object} config.endpoints
  * @param {Service} owner
+ * @param {InitializationContext} ic
  */
 export default class Service extends EndpointsMixin(
   StateTransitionMixin(
@@ -177,7 +178,7 @@ export default class Service extends EndpointsMixin(
     };
   }
 
-  constructor(config, owner) {
+  constructor(config, owner, ic) {
     super();
 
     if (owner !== undefined) {
@@ -210,7 +211,7 @@ export default class Service extends EndpointsMixin(
         : defaultLogLevels.info
     );
 
-    this.createEndpointsFromConfig(config.endpoints, this.owner);
+    this.createEndpointsFromConfig(config.endpoints, ic);
     this._configure(config);
   }
 

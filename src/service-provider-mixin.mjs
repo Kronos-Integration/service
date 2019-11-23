@@ -106,12 +106,12 @@ export default function ServiceProviderMixin(
       delete this.serviceFactories[factory.name];
     }
 
-    createService(config) {
+    createService(config, ic) {
       const Clazz =
         config.type instanceof Function
           ? config.type
           : this.serviceFactories[config.type];
-      return new Clazz(config, this);
+      return new Clazz(config, this, ic);
     }
 
     async registerService(service) {
@@ -144,8 +144,8 @@ export default function ServiceProviderMixin(
       return this.services && this.services[name];
     }
 
-    async insertIntoDeclareByNamePromisesAndDeliver(config, name) {
-      const servicePromise = this.registerService(this.createService(config));
+    async insertIntoDeclareByNamePromisesAndDeliver(config, name, ic) {
+      const servicePromise = this.registerService(this.createService(config, ic));
       this._declareServiceByNamePromises.set(name, servicePromise);
       const service = await servicePromise;
       this._declareServiceByNamePromises.delete(name);
@@ -244,7 +244,7 @@ export default function ServiceProviderMixin(
 
           await this.getServiceFactory(type, waitUntilFactoryPresent);
 
-          services.push(this.insertIntoDeclareByNamePromisesAndDeliver(config, name));
+          services.push(this.insertIntoDeclareByNamePromisesAndDeliver(config, name, ic));
           continue;
         }
 

@@ -81,10 +81,10 @@ export default function EndpointsMixin(superclass) {
      * @param {string} name of the new endpoint
      * @param {Object|string} definition endpoint attributes or alias expression
      * @param {string} definition.target expression pointing to the connected endpoint
-     * @param {Object} interceptorFactory
+     * @param {InitializationContext} ic
      * @return {Endpoint} newly created endpoint
      */
-    createEndpointFromConfig(name, definition, interceptorFactory) {
+    createEndpointFromConfig(name, definition, ic) {
       if (typeof definition === "string") {
         return this.endpointForExpression(definition);
       }
@@ -106,14 +106,14 @@ export default function EndpointsMixin(superclass) {
      * Creates the endpoint objects defined as a combination from
      * implementation and definition
      * @param {Object} definition endpoints definition
-     * @param {Object} interceptorFactory
+     * @param {InitializationContext} ic
      */
-    createEndpointsFromConfig(definition, interceptorFactory) {
+    createEndpointsFromConfig(definition, ic) {
       for (const [name, def] of Object.entries({
         ...this.constructor.endpoints,
         ...definition
       })) {
-        this.createEndpointFromConfig(name, def, interceptorFactory);
+        this.createEndpointFromConfig(name, def, ic);
       }
     }
 
