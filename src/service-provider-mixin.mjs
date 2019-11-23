@@ -213,7 +213,7 @@ export default function ServiceProviderMixin(
      */
     async declareServices(configs, waitUntilFactoryPresent) {
 
-      const ic = new InitializationContext();
+      const ic = new InitializationContext(this);
 
       const services = [];
 
