@@ -216,7 +216,8 @@ test("service create with LOGLEVEL=trace", t => {
 test("service derived configuration", async t => {
   const s1 = new TestService(
     {
-      key7: 1
+      key7: 1,
+      key3: 'secret'
     },
     owner
   );

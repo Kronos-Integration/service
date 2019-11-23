@@ -200,8 +200,8 @@ export default class Service extends EndpointsMixin(
     const logLevel = process.env.LOGLEVEL
       ? process.env.LOGLEVEL
       : process.env.DEBUG
-      ? "debug"
-      : config.logLevel;
+        ? "debug"
+        : config.logLevel;
 
     defineLogLevelProperties(
       this,
@@ -425,11 +425,14 @@ export default class Service extends EndpointsMixin(
       this.configurationAttributes,
       config,
       (ca, path, value) => {
-        this.trace( level => { return {
-          message: `config ${path}: ${value}`,
-          attribute: path,
-          value: ca.private ? '***' : value
-        }});
+        this.trace(level => {
+          if (ca.private) { value = '***'; }
+          return {
+            message: `config ${path}: ${value}`,
+            attribute: path,
+            value: value
+          }
+        });
         modified.add(ca);
       }
     );

@@ -74,7 +74,8 @@ export class TestService extends Service {
     return Object.assign(
       createAttributes({
         key3: {
-          needsRestart: true
+          needsRestart: true,
+          private: true
         },
         key4: {}
       }),
