@@ -50,7 +50,7 @@ export default function EndpointsMixin(superclass) {
       const receive = definition.receive;
 
       if (typeof receive === "string") {
-        definition.receive = request => this[receive](request);
+        definition.receive = (...args) => this[receive](...args);
       }
 
       return definition;
