@@ -1,5 +1,6 @@
 import ServiceLogger from "./service-logger.mjs";
 import ServiceConfig from "./service-config.mjs";
+import { InitializationContext } from "./initialization-context.mjs";
 
 /**
  * Provide services and hold service configuration.
@@ -27,11 +28,11 @@ export default function ServiceProviderMixin(
 
       const serviceConfig = {
         endpoints: {
-         /* log: {
-            out: true,
-            default: true,    
-            connected: this.endpoints.log }
-            */
+          /* log: {
+             out: true,
+             default: true,    
+             connected: this.endpoints.log }
+             */
         }
       };
 
@@ -193,16 +194,10 @@ export default function ServiceProviderMixin(
       return factory;
     }
 
-    async declareServices(config, waitUntilFactoryPresent) {
-      return Promise.all(
-        Object.entries(config).map(([name, config]) => {
-          if (config.name === undefined) {
-            config.name = name;
-          }
-
-          return this.declareService(config, waitUntilFactoryPresent);
-        })
-      );
+    async declareService(config, ...args) {
+      const name = config.name;
+      const services = await this.declareServices({ [name]: config }, ...args);
+      return services[0];
     }
 
     /**
@@ -216,44 +211,55 @@ export default function ServiceProviderMixin(
      * @param {boolean} waitUntilFactoryPresent waits until someone registers a matching service factory
      * @return {Promise} resolving to the declared service
      */
-    async declareService(config, waitUntilFactoryPresent) {
-      const type = config.type;
-      const name = config.name;
-      const service = this.services[name];
+    async declareServices(configs, waitUntilFactoryPresent) {
 
-      if (
-        service === undefined ||
-        (type !== undefined && service.type !== type)
-      ) {
-        const p = this._declareServiceByNamePromises.get(name);
+      const ic = new InitializationContext();
 
-        if (p !== undefined) {
-          return p;
-        }
+      const services = [];
 
-        if (this.services.config) {
-          const pc = this.services.config.preservedConfigs.get(name);
-          if (pc !== undefined) {
-            Object.assign(config, pc);
+      for (const [name, config] of Object.entries(configs)) {
+        config.name = name;
+        const type = config.type;
+        const service = this.services[name];
+
+        if (
+          service === undefined ||
+          (type !== undefined && service.type !== type)
+        ) {
+          const p = this._declareServiceByNamePromises.get(name);
+
+          if (p !== undefined) {
+            services.push(p);
+            continue;
           }
+
+          if (this.services.config) {
+            const pc = this.services.config.preservedConfigs.get(name);
+            if (pc !== undefined) {
+              Object.assign(config, pc);
+            }
+          }
+
+          // service factory not present: wait until one arrives
+
+          await this.getServiceFactory(type, waitUntilFactoryPresent);
+
+          services.push(this.insertIntoDeclareByNamePromisesAndDeliver(config, name));
+          continue;
         }
 
-        // service factory not present: wait until one arrives
+        delete config.type;
 
-        await this.getServiceFactory(type, waitUntilFactoryPresent);
+        const configPromise = service.configure(config);
 
-        return this.insertIntoDeclareByNamePromisesAndDeliver(config, name);
+        //this._declareServiceByNamePromises.set(name, configPromise.then( x => service));
+
+        await configPromise;
+
+        services.push(service);
       }
 
-      delete config.type;
-
-      const configPromise = service.configure(config);
-
-      //this._declareServiceByNamePromises.set(name, configPromise.then( x => service));
-
-      await configPromise;
-
-      return service;
+      return Promise.all(services);
     }
 
     /**

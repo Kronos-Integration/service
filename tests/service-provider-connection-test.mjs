@@ -8,19 +8,19 @@ import {
 test("declare services", async t => {
   const sp = await makeServices();
 
-  const [s2, s3, s4] = await sp.declareServices(
+  const [s3, s2, s4] = await sp.declareServices(
     {
-      s2: {
-        type: TestService,
-        endpoints: {
-          testOut: { connected: "service(s3).testIn" }
-        }
-      },
       s3: {
         type: TestService,
         key3: 2,
         endpoints: {
           testIn: { receive: "testReceive" }
+        }
+      },
+      s2: {
+        type: TestService,
+        endpoints: {
+          testOut: { connected: "service(s3).testIn" }
         }
       },
       s4: {
@@ -30,11 +30,15 @@ test("declare services", async t => {
     true
   );
 
+  t.is(s2.name, "s2");
   t.is(s3.name, "s3");
-  t.is(s3.type, "test");
-  t.is(s3.key3, 2);
   t.is(s4.name, "s4");
+
+  t.is(s2.type, "test");
+  t.is(s3.type, "test");
   t.is(s4.type, "test-without-additional-endpoints");
+
+  t.is(s3.key3, 2);
 
   t.true(s2.endpoints.testOut.isConnected);
   t.is(s2.endpoints.testOut.otherEnd.name, 'testIn');
