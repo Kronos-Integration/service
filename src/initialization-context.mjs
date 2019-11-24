@@ -33,12 +33,12 @@ export class InitializationContext {
   }
 
   trace(...args) {
-    if(this.serviceProvider) {
+    if (this.serviceProvider) {
       this.serviceProvider.trace(...args);
     }
   }
   error(...args) {
-    if(this.serviceProvider) {
+    if (this.serviceProvider) {
       this.serviceProvider.error(...args);
     }
   }
@@ -50,8 +50,6 @@ export class InitializationContext {
    * @param {Endpoint} oldEndpoint
    */
   connectEndpoint(endpoint, connected, oldEndpoint) {
-    this.trace(level => `connect ${endpoint.identifier} ${connected}`);
-
     if (connected !== undefined) {
       endpoint.connected = isEndpoint(connected)
         ? connected
@@ -62,9 +60,17 @@ export class InitializationContext {
       }
     }
 
-    if (connected && endpoint.connected === undefined) {
-      endpoint.connected = dummyReceiver;
-      this.addOutstandingEndpointConnection(endpoint, connected);
+    if (connected) {
+      if (endpoint.connected === undefined) {
+        this.trace(
+          level => `connect ${endpoint.identifier} ${connected} (deffered)`
+        );
+
+        endpoint.connected = dummyReceiver;
+        this.addOutstandingEndpointConnection(endpoint, connected);
+      } else {
+        this.trace(level => `connect ${endpoint.identifier} ${connected}`);
+      }
     }
   }
 
@@ -106,7 +112,9 @@ export class InitializationContext {
         endpoint.connected = c;
         this.outstandingEndpointConnections.delete(endpoint);
       } else {
-        this.error(level => `unable to connect ${endpoint.identifier} ${connected}`);
+        this.error(
+          level => `unable to connect ${endpoint.identifier} ${connected}`
+        );
       }
     }
   }
