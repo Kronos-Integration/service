@@ -19,7 +19,8 @@ test("declare services", async t => {
         endpoints: {
           testIn: { receive: "testReceive" },
           testOut: {
-            /*interceptors:[Interceptor],*/ connected: "service(s2).testIn"
+            interceptors: [Interceptor],
+            connected: "service(s2).testIn"
           }
         }
       },
