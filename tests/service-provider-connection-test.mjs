@@ -1,4 +1,7 @@
 import test from "ava";
+
+import { Interceptor } from "@kronos-integration/interceptor";
+
 import {
   TestService,
   TestServiceWithoutAdditionalEndpoints,
@@ -15,13 +18,15 @@ test("declare services", async t => {
         key3: 2,
         endpoints: {
           testIn: { receive: "testReceive" },
-          testOut: { connected: "service(s2).testIn" }
+          testOut: {
+            /*interceptors:[Interceptor],*/ connected: "service(s2).testIn"
+          }
         }
       },
       s2: {
         type: TestService,
         endpoints: {
-          testOut: { connected: "service(s3).testIn" }
+          testOut: "service(s3).testIn"
         }
       },
       s4: {
@@ -42,8 +47,8 @@ test("declare services", async t => {
   t.is(s3.key3, 2);
 
   t.true(s2.endpoints.testOut.isConnected);
-  t.is(s2.endpoints.testOut.otherEnd.name, 'testIn');
+  t.is(s2.endpoints.testOut.otherEnd.name, "testIn");
 
   t.true(s3.endpoints.testOut.isConnected);
-  t.is(s3.endpoints.testOut.otherEnd.name, 'testIn');
+  t.is(s3.endpoints.testOut.otherEnd.name, "testIn");
 });

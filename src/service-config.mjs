@@ -24,7 +24,7 @@ export default class ServiceConfig extends Service {
 
   /**
    * set config entry 
-   * @param {string} key 
+   * @param {string} key path to the value
    * @param {any} value 
    */
   async configureValue(key, value) {

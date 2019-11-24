@@ -106,6 +106,21 @@ test("endpointFromConfig foreign connected", t => {
   t.is(e.connected.owner.name, "logger");
 });
 
+test("endpointFromConfig foreign connected expression only", t => {
+  const o = new Owner();
+  const ic = new InitializationContext(o);
+
+  const e = o.createEndpointFromConfig(
+    "e",
+    "service(logger).log",
+    ic
+  );
+
+  t.is(e.name, "e");
+  t.is(e.connected.name, "log");
+  t.is(e.connected.owner.name, "logger");
+});
+
 test("endpointFromConfig real connected", t => {
   const dummyLogReceiver = new ReceiveEndpoint("log", {
     endpointIdentifier(ep) {

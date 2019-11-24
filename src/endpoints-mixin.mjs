@@ -47,10 +47,15 @@ export default function EndpointsMixin(superclass) {
      * @return {Object} suitable to pass as options to the endpoint factory
      */
     endpointOptions(name, definition, ic) {
-      const receive = definition.receive;
+      if(typeof definition === 'string') {
+        definition = { connected: definition };
+      }
+      else {
+        const receive = definition.receive;
 
-      if (typeof receive === "string") {
-        definition.receive = (...args) => this[receive](...args);
+        if (typeof receive === "string") {
+          definition.receive = (...args) => this[receive](...args);
+        }
       }
 
       return definition;
@@ -85,14 +90,12 @@ export default function EndpointsMixin(superclass) {
      * @return {Endpoint} newly created endpoint
      */
     createEndpointFromConfig(name, definition, ic) {
-      if (typeof definition === "string") {
-        return this.endpointForExpression(definition);
-      }
+      definition = this.endpointOptions(name, definition, ic);
 
       const ep = new (this.endpointFactoryFromConfig(name, definition, ic))(
         name,
         this,
-        this.endpointOptions(name, definition, ic)
+        definition
       );
 
       ic.connectEndpoint(ep, definition.connected, this.endpoints[name]);

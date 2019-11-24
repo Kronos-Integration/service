@@ -53,7 +53,7 @@ Base service implementation
     -   [endpoints](#endpoints-1)
 -   [ServiceConfig](#serviceconfig)
     -   [Parameters](#parameters-8)
-    -   [setEntry](#setentry)
+    -   [configureValue](#configurevalue)
         -   [Parameters](#parameters-9)
     -   [configure](#configure-1)
         -   [Parameters](#parameters-10)
@@ -322,14 +322,14 @@ or preserves them until a maching service becomes avaliable
 
 -   `args` **...any** 
 
-### setEntry
+### configureValue
 
 set config entry
 
 #### Parameters
 
--   `key`  
--   `value`  
+-   `key` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** path to the value
+-   `value` **any** 
 
 ### configure
 
