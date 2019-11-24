@@ -8,8 +8,8 @@ export async function wait(msecs=1000) {
 }
 
 export class TestLogger extends ServiceLogger {
-  constructor(config, owner) {
-    super(config, owner);
+  constructor(...args) {
+    super(...args);
 
     this.logEntries = [];
     this.endpoints.log.receive = entry => {
