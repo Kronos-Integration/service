@@ -35,6 +35,7 @@ Base service implementation
         -   [Parameters](#parameters-3)
     -   [\_restart](#_restart)
     -   [restartIfRunning](#restartifrunning)
+    -   [toStringAttributes](#tostringattributes)
     -   [toString](#tostring)
     -   [toJSONWithOptions](#tojsonwithoptions)
         -   [Parameters](#parameters-4)
@@ -61,16 +62,22 @@ Base service implementation
         -   [Parameters](#parameters-10)
     -   [autostart](#autostart-2)
     -   [name](#name-2)
--   [defineServiceConsumerProperties](#defineserviceconsumerproperties)
-    -   [Parameters](#parameters-11)
 -   [ServiceProviderMixin](#serviceprovidermixin)
-    -   [Parameters](#parameters-12)
+    -   [Parameters](#parameters-11)
 -   [InterceptorProviderMixin](#interceptorprovidermixin)
-    -   [Parameters](#parameters-13)
+    -   [Parameters](#parameters-12)
 -   [EndpointsMixin](#endpointsmixin)
-    -   [Parameters](#parameters-14)
+    -   [Parameters](#parameters-13)
 -   [endpoints](#endpoints-2)
 -   [StandaloneServiceProvider](#standaloneserviceprovider)
+-   [defineServiceConsumerProperties](#defineserviceconsumerproperties)
+    -   [Parameters](#parameters-14)
+-   [InitializationContext](#initializationcontext)
+    -   [Parameters](#parameters-15)
+    -   [connectEndpoint](#connectendpoint)
+        -   [Parameters](#parameters-16)
+    -   [addOutstandingEndpointConnection](#addoutstandingendpointconnection)
+        -   [Parameters](#parameters-17)
 
 ## DESCRIPTION
 
@@ -136,7 +143,7 @@ All services have at least three endpoints:
     -   `config.logLevel` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
     -   `config.description` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
     -   `config.endpoints` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
--   `owner` **[Service](#service)** 
+-   `ic` **[InitializationContext](#initializationcontext)** 
 
 ### stateChanged
 
@@ -182,6 +189,12 @@ Restarts if in running mode
 Otherwise does nothing
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** resolves when restart is done (or immediate if no restart triggered)
+
+### toStringAttributes
+
+mapping of properties used in toString
+
+Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
 
 ### toString
 
@@ -310,8 +323,7 @@ or preserves them until a maching service becomes avaliable
 
 ### Parameters
 
--   `config`  
--   `owner`  
+-   `args` **...any** 
 
 ### setEntry
 
@@ -337,17 +349,6 @@ Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 ### name
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'config'
-
-## defineServiceConsumerProperties
-
-assign services based on a configuration
-
-### Parameters
-
--   `target` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** object
--   `config` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** service defintion
--   `provider` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** service provider
--   `waitUntilFactoryPresent` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** 
 
 ## ServiceProviderMixin
 
@@ -391,6 +392,40 @@ Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 **Extends ServiceProviderMixin(Service)**
 
 simple service manager (for examples and testing only)
+
+## defineServiceConsumerProperties
+
+assign services based on a configuration
+
+### Parameters
+
+-   `target` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** object
+-   `config` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** service defintion
+-   `provider` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** service provider
+-   `waitUntilFactoryPresent` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** 
+
+## InitializationContext
+
+keeps track of all in flight object creations and loose ends during config initialization
+
+### Parameters
+
+-   `serviceProvider`  
+
+### connectEndpoint
+
+#### Parameters
+
+-   `endpoint` **Endpoint** 
+-   `connected` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+-   `oldEndpoint` **Endpoint** 
+
+### addOutstandingEndpointConnection
+
+#### Parameters
+
+-   `endpoint` **Endpoint** 
+-   `connected` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
 # install
 

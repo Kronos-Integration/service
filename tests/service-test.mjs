@@ -3,6 +3,7 @@ import { TestService, TestServiceWithoutAdditionalEndpoints } from "./util.mjs";
 
 import { SendEndpoint } from "@kronos-integration/endpoint";
 import Service from "../src/service.mjs";
+import { InitializationContext } from "../src/initialization-context.mjs";
 
 const owner = {
   emit(name, arg1, arg2) {}, // dummy event emitter
@@ -15,8 +16,10 @@ const owner = {
     return `name:${e.name}`;
   }
 };
-owner.services.logger = new Service({}, owner);
 
+const ic = new InitializationContext(owner);
+
+owner.services.logger = new Service({}, ic);
 owner.services.logger.endpoints.log.receive = entry => console.log(entry);
 
 function st(t, factory, options, expected = {}) {
@@ -31,7 +34,7 @@ function st(t, factory, options, expected = {}) {
     ...expected
   };
 
-  const s1 = new factory(options, owner);
+  const s1 = new factory(options, ic);
 
   t.is(s1.owner, owner, "owner");
 
@@ -129,10 +132,7 @@ test(
 test(
   st,
   TestService,
-  { name: "service", description: "my description",
-  key3: "value3",
-  key4: 4
-},
+  { name: "service", description: "my description", key3: "value3", key4: 4 },
   {
     description: "my description",
     autostart: true,
@@ -152,7 +152,7 @@ test("service create with logLevel", t => {
       key1: "value1",
       logLevel: "trace"
     },
-    owner
+    ic
   );
 
   t.is(s1.logLevel, "trace");
@@ -167,7 +167,7 @@ test("service create with logLevel", t => {
       key1: "value1",
       logLevel: "na sowas"
     },
-    owner
+    ic
   );
 
   t.is(s2.logLevel, "info");
@@ -180,7 +180,7 @@ test("service create with DEBUG=1", t => {
     {
       key1: "value1"
     },
-    owner
+    ic
   );
 
   t.is(s1.logLevel, "debug");
@@ -190,7 +190,7 @@ test("service create with DEBUG=1", t => {
       key1: "value1",
       logLevel: "warn"
     },
-    owner
+    ic
   );
 
   t.is(s2.logLevel, "debug");
@@ -205,7 +205,7 @@ test("service create with LOGLEVEL=trace", t => {
     {
       key1: "value1"
     },
-    owner
+    ic
   );
 
   t.is(s1.logLevel, "trace");
@@ -217,9 +217,9 @@ test("service derived configuration", async t => {
   const s1 = new TestService(
     {
       key7: 1,
-      key3: 'secret'
+      key3: "secret"
     },
-    owner
+    ic
   );
 
   const se = new SendEndpoint("se", {
@@ -245,7 +245,7 @@ test("service derived configuration change start timeout", async t => {
     {
       key7: 1
     },
-    owner
+    ic
   );
 
   await s1.configure({
@@ -263,7 +263,7 @@ test("service states", async t => {
       key1: "value1",
       key2: 2
     },
-    owner
+    ic
   );
 
   await s1.restartIfRunning();
@@ -282,7 +282,7 @@ test("service states", async t => {
       key1: "value1",
       key2: 2
     },
-    owner
+    ic
   );
 
   t.is(s2.state, "stopped");

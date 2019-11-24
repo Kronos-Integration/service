@@ -14,7 +14,8 @@ test("declare services", async t => {
         type: TestService,
         key3: 2,
         endpoints: {
-          testIn: { receive: "testReceive" }
+          testIn: { receive: "testReceive" },
+          testOut: { connected: "service(s2).testIn" }
         }
       },
       s2: {
@@ -43,5 +44,6 @@ test("declare services", async t => {
   t.true(s2.endpoints.testOut.isConnected);
   t.is(s2.endpoints.testOut.otherEnd.name, 'testIn');
 
-  //t.true(s3.endpoints.testIn.isConnected);
+  t.true(s3.endpoints.testOut.isConnected);
+  t.is(s3.endpoints.testOut.otherEnd.name, 'testIn');
 });

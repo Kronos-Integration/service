@@ -13,8 +13,8 @@ export default class ServiceConfig extends Service {
     return "config";
   }
 
-  constructor(config, owner) {
-    super(config, owner);
+  constructor(...args) {
+    super(...args);
 
     Object.defineProperties(this, {
       preservedConfigs: { value: new Map() }

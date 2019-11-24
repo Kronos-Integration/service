@@ -5,7 +5,6 @@ import {
   makeServices
 } from "./util.mjs";
 
-
 test("service factory", async t => {
   const sp = new ServiceProvider();
 
@@ -115,7 +114,7 @@ test("service provider additional service logging", async t => {
   ]);
   //console.log(sp.services.logger.logEntries);
 
-  t.is(sp.services.logger.logEntries.length, 6 /*+ 2*/);
+  t.is(sp.services.logger.logEntries.length, 10);
 });
 
 test("service provider additional service can be unregistered", async t => {

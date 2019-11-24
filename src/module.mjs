@@ -17,3 +17,4 @@ export {
 };
 
 export { defineServiceConsumerProperties } from './service-consumer-mixin.mjs';
+export { InitializationContext } from './initialization-context.mjs';

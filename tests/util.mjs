@@ -1,9 +1,10 @@
-import { createAttributes } from 'model-attributes';
+import { createAttributes } from "model-attributes";
 import Service from "../src/service.mjs";
 import ServiceLogger from "../src/service-logger.mjs";
 import ServiceProviderMixin from "../src/service-provider-mixin.mjs";
+import { InitializationContext } from "../src/initialization-context.mjs";
 
-export async function wait(msecs=1000) {
+export async function wait(msecs = 1000) {
   return new Promise((resolve, reject) => setTimeout(() => resolve(), msecs));
 }
 
@@ -40,14 +41,13 @@ export class TestServiceWithoutAdditionalEndpoints extends Service {
   }
 }
 
-
 export class TestService extends Service {
   static get name() {
     return "test";
   }
 
   static get description() {
-    return 'my description';
+    return "my description";
   }
 
   /**
@@ -60,12 +60,12 @@ export class TestService extends Service {
       testIn: {
         in: true,
         default: true,
-        receive: 'testReceive'
+        receive: "testReceive"
       },
       testOut: {
         out: true,
-        default: true,
-    //    target: 'service(logger).log'
+        default: true
+        //    target: 'service(logger).log'
       }
     };
   }
@@ -95,10 +95,7 @@ export class TestService extends Service {
     return this.restartIfRunning();
   }
 
-  async testReceive(entry)
-  {
-
-  }
+  async testReceive(entry) {}
 }
 
 export class ServiceProvider extends ServiceProviderMixin(Service, TestLogger) {
@@ -110,10 +107,11 @@ export class ServiceProvider extends ServiceProviderMixin(Service, TestLogger) {
 export async function makeServices(logLevel = "info") {
   const sp = new ServiceProvider({ logLevel });
 
+  const ic = new InitializationContext(sp);
   await sp.start();
 
-  await sp.registerService(new TestService({ logLevel }, sp));
-  await sp.registerService(new TestService({ logLevel, name: "t2" }, sp));
+  await sp.registerService(new TestService({ logLevel }, ic));
+  await sp.registerService(new TestService({ logLevel, name: "t2" }, ic));
 
   return sp;
 }

@@ -4,6 +4,7 @@ import { TestLogger } from "./util.mjs";
 import { SendEndpoint, ReceiveEndpoint } from "@kronos-integration/endpoint";
 import Service from "../src/service.mjs";
 import ServiceProviderMixin from "../src/service-provider-mixin.mjs";
+import { InitializationContext } from "../src/initialization-context.mjs";
 
 class Owner extends ServiceProviderMixin(Service, TestLogger) {
   get name() {
@@ -79,11 +80,12 @@ test("endpointForExpression throwing", t => {
 
 test("endpointFromConfig simple connected", t => {
   const o = new Owner();
+  const ic = new InitializationContext(o);
 
   const r1 = new ReceiveEndpoint("r1");
   o.addEndpoint(r1);
 
-  const e = o.createEndpointFromConfig("e", { connected: "r1" }, o);
+  const e = o.createEndpointFromConfig("e", { connected: "r1" }, ic);
 
   t.is(e.name, "e");
   t.is(e.connected.name, "r1");
@@ -91,11 +93,12 @@ test("endpointFromConfig simple connected", t => {
 
 test("endpointFromConfig foreign connected", t => {
   const o = new Owner();
+  const ic = new InitializationContext(o);
 
   const e = o.createEndpointFromConfig(
     "e",
     { connected: "service(logger).log" },
-    o
+    ic
   );
 
   t.is(e.name, "e");
@@ -115,11 +118,12 @@ test("endpointFromConfig real connected", t => {
   };
   
   const o = new Owner();
+  const ic = new InitializationContext(o);
 
   const e = o.createEndpointFromConfig(
     "e",
     { connected: dummyLogReceiver },
-    o
+    ic
   );
 
   t.is(e.name, "e");

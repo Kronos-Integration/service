@@ -1,7 +1,4 @@
 import events from "events";
-import safeStringify from "fast-safe-stringify";
-
-import { ReceiveEndpoint } from "@kronos-integration/endpoint";
 
 import {
   defaultLogLevels,
@@ -59,16 +56,6 @@ const _ca = createAttributes({
   }
 });
 
-const dummyLogReceiver = new ReceiveEndpoint("logReceiver", {
-  endpointIdentifier(ep) {
-    return undefined; // prevent target;
-  }
-});
-
-dummyLogReceiver.receive = entry => {
-  console.log(safeStringify(entry));
-};
-
 /**
  * Service
  * The initial state is 'stopped'
@@ -80,7 +67,6 @@ dummyLogReceiver.receive = entry => {
  * @param {string} config.logLevel
  * @param {string} config.description
  * @param {Object} config.endpoints
- * @param {Service} owner
  * @param {InitializationContext} ic
  */
 export default class Service extends EndpointsMixin(
@@ -164,8 +150,7 @@ export default class Service extends EndpointsMixin(
       log: {
         out: true,
         default: true,
-        // connected: 'service(logger).log'
-        connected: dummyLogReceiver
+        connected: "service(logger).log"
       },
       config: {
         default: true,
@@ -178,9 +163,10 @@ export default class Service extends EndpointsMixin(
     };
   }
 
-  constructor(config, owner, ic) {
+  constructor(config, ic) {
     super();
 
+    const owner = ic.ownerOfService(this);
     if (owner !== undefined) {
       Object.defineProperty(this, "owner", {
         value: owner
@@ -200,8 +186,8 @@ export default class Service extends EndpointsMixin(
     const logLevel = process.env.LOGLEVEL
       ? process.env.LOGLEVEL
       : process.env.DEBUG
-        ? "debug"
-        : config.logLevel;
+      ? "debug"
+      : config.logLevel;
 
     defineLogLevelProperties(
       this,
@@ -426,12 +412,14 @@ export default class Service extends EndpointsMixin(
       config,
       (ca, path, value) => {
         this.trace(level => {
-          if (ca.private) { value = '***'; }
+          if (ca.private) {
+            value = "***";
+          }
           return {
             message: `config ${path}: ${value}`,
             attribute: path,
             value: value
-          }
+          };
         });
         modified.add(ca);
       }

@@ -17,7 +17,11 @@ export default function ServiceProviderMixin(
 ) {
   return class ServiceProvider extends superclass {
     constructor(config) {
-      super(Array.isArray(config) ? config[0] : config, undefined);
+      const ic = new InitializationContext();
+
+      super(Array.isArray(config) ? config[0] : config, ic);
+
+      ic.serviceProvider = this;
 
       Object.defineProperties(this, {
         serviceFactories: { value: {} },
@@ -36,8 +40,8 @@ export default function ServiceProviderMixin(
         }
       };
 
-      const loggerService = new serviceLoggerClass(serviceConfig, this);
-      const configService = new serviceConfigClass(serviceConfig, this);
+      const loggerService = new serviceLoggerClass(serviceConfig, ic);
+      const configService = new serviceConfigClass(serviceConfig, ic);
 
       // connect logger endpoints
       this.endpoints.log.connected = loggerService.endpoints.log;
@@ -48,6 +52,8 @@ export default function ServiceProviderMixin(
 
       // register config service and let it know about the initial config
       this.registerService(configService);
+
+      ic.resolveOutstandingEndpointConnections();
 
       configService.configure(config);
 
@@ -111,7 +117,7 @@ export default function ServiceProviderMixin(
         config.type instanceof Function
           ? config.type
           : this.serviceFactories[config.type];
-      return new Clazz(config, this, ic);
+      return new Clazz(config, ic);
     }
 
     async registerService(service) {
@@ -258,6 +264,8 @@ export default function ServiceProviderMixin(
 
         services.push(service);
       }
+      
+      ic.resolveOutstandingEndpointConnections();
 
       return Promise.all(services);
     }

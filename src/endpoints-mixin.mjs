@@ -1,5 +1,4 @@
 import {
-  isEndpoint,
   SendEndpoint,
   SendEndpointDefault,
   ReceiveEndpoint,
@@ -44,9 +43,10 @@ export default function EndpointsMixin(superclass) {
      * Deliver the endpoint options for a given endpoint definition.
      * @param {string} name of the endpoint
      * @param {Object} definition endpoints definition
+     * @param {InitializationContext} ic
      * @return {Object} suitable to pass as options to the endpoint factory
      */
-    endpointOptions(name, definition) {
+    endpointOptions(name, definition, ic) {
       const receive = definition.receive;
 
       if (typeof receive === "string") {
@@ -64,11 +64,11 @@ export default function EndpointsMixin(superclass) {
      * @param {boolean} definition.receive true will result in a ReceiveEndpoint
      * @param {boolean} definition.out true will result in a SendEndpoint
      * @param {boolean} definition.default true will result in a (Send|Receive)DefaultEndpoint
+     * @param {InitializationContext} ic
      * @return {Object} endpoint factory
      */
-    endpointFactoryFromConfig(name, definition) {
-
-      if(definition.in || definition.receive) {
+    endpointFactoryFromConfig(name, definition, ic) {
+      if (definition.in || definition.receive) {
         return definition.default ? ReceiveEndpointDefault : ReceiveEndpoint;
       }
 
@@ -89,13 +89,13 @@ export default function EndpointsMixin(superclass) {
         return this.endpointForExpression(definition);
       }
 
-      const ep = new (this.endpointFactoryFromConfig(name, definition))(
+      const ep = new (this.endpointFactoryFromConfig(name, definition, ic))(
         name,
         this,
-        this.endpointOptions(name, definition)
+        this.endpointOptions(name, definition, ic)
       );
 
-      this.connectEndpoint(ep, definition, this.endpoints[name], false);
+      ic.connectEndpoint(ep, definition.connected, this.endpoints[name]);
 
       this.addEndpoint(ep);
 
@@ -118,27 +118,6 @@ export default function EndpointsMixin(superclass) {
     }
 
     /**
-     *
-     * @param {Endpoint} ep
-     * @param {Object|string} definition endpoint attributes or alias expression
-     * @param {Endpoint} old
-     * @param {Boolean} throwOnError raise exception if connection can´t be established
-     */
-    connectEndpoint(ep, definition, old, throwOnError) {
-      const connected = definition.connected;
-
-      if (connected !== undefined) {
-        ep.connected = isEndpoint(connected)
-          ? connected
-          : this.endpointForExpression(connected, false, throwOnError);
-      } else {
-        if (old && old.connected) {
-          ep.connected = old.connected;
-        }
-      }
-    }
-
-    /**
      * Removes a endpoint
      * @param {string} name name of the endpoint to be removed
      * @return {undefined}
@@ -148,6 +127,31 @@ export default function EndpointsMixin(superclass) {
     }
 
     /**
+     * Deliver all _in_ endpoints
+     * @return {Endpoint[]} of all in endpoints
+     */
+    get inEndpoints() {
+      return Object.values(this.endpoints).filter(e => e.isIn);
+    }
+
+    /**
+     * Deliver all _out_ endpoints
+     * @return {Endpoint[]} of all out endpoints
+     */
+    get outEndpoints() {
+      return Object.values(this.endpoints).filter(e => e.isOut);
+    }
+
+    /**
+     * Deliver an identifier suitable as target name.
+     * @param {Endpoint} ep endpoint to be identified
+     * @return {string} endpoint identifier
+     */
+    endpointIdentifier(ep) {
+      return `${this.name}${this.endpointParentSeparator}${ep.name}`;
+    }
+
+       /**
      * Find Endpoint for a given expression
      * Default implementation only supports direct named endpoints
      * @param {string} expression to identify endpoint
@@ -188,31 +192,6 @@ export default function EndpointsMixin(superclass) {
       }
 
       return endpoint;
-    }
-
-    /**
-     * Deliver all _in_ endpoints
-     * @return {Endpoint[]} of all in endpoints
-     */
-    get inEndpoints() {
-      return Object.values(this.endpoints).filter(e => e.isIn);
-    }
-
-    /**
-     * Deliver all _out_ endpoints
-     * @return {Endpoint[]} of all out endpoints
-     */
-    get outEndpoints() {
-      return Object.values(this.endpoints).filter(e => e.isOut);
-    }
-
-    /**
-     * Deliver an identifier suitable as target name.
-     * @param {Endpoint} ep endpoint to be identified
-     * @return {string} endpoint identifier
-     */
-    endpointIdentifier(ep) {
-      return `${this.name}${this.endpointParentSeparator}${ep.name}`;
     }
   };
 }
