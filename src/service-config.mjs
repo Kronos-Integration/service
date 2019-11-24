@@ -1,4 +1,5 @@
 import Service from "./service.mjs";
+import {keyValue2Object} from './util.mjs';
 
 /**
  * Config providing service
@@ -23,29 +24,11 @@ export default class ServiceConfig extends Service {
 
   /**
    * set config entry 
-   * @param key 
-   * @param value 
+   * @param {string} key 
+   * @param {any} value 
    */
-  async setEntry(key, value) {
-    /*
-    const path = key.split(/\./);
-    const name = path.shift();
-    const s = this.owner.services[name];
-    if (s === undefined) {
-
-    }
-
-    let c = config;
-
-    do {
-      let slot = path.shift();
-      if (path.length === 0) {
-        c[slot] = listener.fd;
-        break;
-      }
-      c = c[slot];
-    } while (true);
-    */
+  async configureValue(key, value) {
+    return this.configure(keyValue2Object(key,value));
   }
 
   /**
