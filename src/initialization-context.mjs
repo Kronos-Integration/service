@@ -32,6 +32,17 @@ export class InitializationContext {
     return this.serviceProvider;
   }
 
+  trace(...args) {
+    if(this.serviceProvider) {
+      this.serviceProvider.trace(...args);
+    }
+  }
+  error(...args) {
+    if(this.serviceProvider) {
+      this.serviceProvider.error(...args);
+    }
+  }
+
   /**
    *
    * @param {Endpoint} endpoint
@@ -39,11 +50,12 @@ export class InitializationContext {
    * @param {Endpoint} oldEndpoint
    */
   connectEndpoint(endpoint, connected, oldEndpoint) {
+    this.trace(level => `connect ${endpoint.identifier} ${connected}`);
+
     if (connected !== undefined) {
-      endpoint.connected =
-        isEndpoint(connected) || connected.constructor.name === "SendEndpoint"
-          ? connected
-          : this.endpointForExpression(connected, endpoint);
+      endpoint.connected = isEndpoint(connected)
+        ? connected
+        : this.endpointForExpression(connected, endpoint);
     } else {
       if (oldEndpoint && oldEndpoint.connected) {
         endpoint.connected = oldEndpoint.connected;
@@ -93,6 +105,8 @@ export class InitializationContext {
       if (c) {
         endpoint.connected = c;
         this.outstandingEndpointConnections.delete(endpoint);
+      } else {
+        this.error(level => `unable to connect ${endpoint.identifier} ${connected}`);
       }
     }
   }

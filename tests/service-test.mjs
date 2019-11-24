@@ -9,6 +9,8 @@ const owner = {
   emit(name, arg1, arg2) {}, // dummy event emitter
   services: {},
 
+  trace() {},
+  error() {},
   getService(name) {
     return this.services[name];
   },
