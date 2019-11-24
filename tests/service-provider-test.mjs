@@ -114,7 +114,7 @@ test("service provider additional service logging", async t => {
   ]);
   //console.log(sp.services.logger.logEntries);
 
-  t.is(sp.services.logger.logEntries.length, 12);
+  t.is(sp.services.logger.logEntries.length, 14);
 });
 
 test("service provider additional service can be unregistered", async t => {
