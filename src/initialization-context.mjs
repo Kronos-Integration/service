@@ -111,6 +111,9 @@ export class InitializationContext {
       if (c) {
         endpoint.connected = c;
         this.outstandingEndpointConnections.delete(endpoint);
+        this.trace(
+          level => `connect ${endpoint.identifier} ${connected} (resolved)`
+        );
       } else {
         this.error(
           level => `unable to connect ${endpoint.identifier} ${connected}`
