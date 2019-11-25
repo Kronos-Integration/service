@@ -64,6 +64,7 @@ const _ca = createAttributes({
  * - config _in_: configuration request
  * - command _in_: administrative actions to be executed by the step
  * @param {Object} config
+ * @param {string} config.name
  * @param {string} config.logLevel
  * @param {string} config.description
  * @param {Object} config.endpoints
