@@ -7,8 +7,8 @@ import { InitializationContext } from "./initialization-context.mjs";
  * By default a service provider has two build in services
  * 'logger' and 'config'.
  *
- * @param serviceLoggerClass
- * @param serviceConfigClass
+ * @param {Class} serviceLoggerClass where the logging houtd go
+ * @param {Class} serviceConfigClass where the config comes from
  */
 export default function ServiceProviderMixin(
   superclass,
@@ -30,27 +30,14 @@ export default function ServiceProviderMixin(
         _serviceFactoryPromises: { value: new Map() }
       });
 
-      const serviceConfig = {
-        endpoints: {
-          /* log: {
-             out: true,
-             default: true,    
-             connected: this.endpoints.log }
-             */
-        }
-      };
-
-      const loggerService = new serviceLoggerClass(serviceConfig, ic);
-      const configService = new serviceConfigClass(serviceConfig, ic);
-
-      // connect logger endpoints
-      this.endpoints.log.connected = loggerService.endpoints.log;
-      configService.endpoints.log.connected = loggerService.endpoints.log;
+      const serviceConfig = {};
 
       // let our own logging go into the logger service
+      const loggerService = new serviceLoggerClass(serviceConfig, ic);
       this.registerService(loggerService);
 
       // register config service and let it know about the initial config
+      const configService = new serviceConfigClass(serviceConfig, ic);
       this.registerService(configService);
 
       ic.resolveOutstandingEndpointConnections();
@@ -122,11 +109,6 @@ export default function ServiceProviderMixin(
 
     async registerService(service) {
       this.services[service.name] = service;
-      // connect log endpoint to logger service
-      if (service.endpoints.log.isOut) {
-        const logger = this.services.logger;
-        service.endpoints.log.connected = logger.endpoints.log;
-      }
 
       if (service.autostart) {
         return service.start();
@@ -151,7 +133,9 @@ export default function ServiceProviderMixin(
     }
 
     async insertIntoDeclareByNamePromisesAndDeliver(config, name, ic) {
-      const servicePromise = this.registerService(this.createService(config, ic));
+      const servicePromise = this.registerService(
+        this.createService(config, ic)
+      );
       this._declareServiceByNamePromises.set(name, servicePromise);
       const service = await servicePromise;
       this._declareServiceByNamePromises.delete(name);
@@ -218,7 +202,6 @@ export default function ServiceProviderMixin(
      * @return {Promise} resolving to the declared service
      */
     async declareServices(configs, waitUntilFactoryPresent) {
-
       const ic = new InitializationContext(this);
 
       const services = [];
@@ -250,7 +233,9 @@ export default function ServiceProviderMixin(
 
           await this.getServiceFactory(type, waitUntilFactoryPresent);
 
-          services.push(this.insertIntoDeclareByNamePromisesAndDeliver(config, name, ic));
+          services.push(
+            this.insertIntoDeclareByNamePromisesAndDeliver(config, name, ic)
+          );
           continue;
         }
 
@@ -264,7 +249,7 @@ export default function ServiceProviderMixin(
 
         services.push(service);
       }
-      
+
       ic.resolveOutstandingEndpointConnections();
 
       return Promise.all(services);

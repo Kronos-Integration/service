@@ -67,6 +67,7 @@ Base service implementation
     -   [Parameters](#parameters-13)
 -   [endpoints](#endpoints-2)
 -   [StandaloneServiceProvider](#standaloneserviceprovider)
+    -   [name](#name-3)
 -   [defineServiceConsumerProperties](#defineserviceconsumerproperties)
     -   [Parameters](#parameters-14)
 -   [InitializationContext](#initializationcontext)
@@ -356,8 +357,8 @@ By default a service provider has two build in services
 ### Parameters
 
 -   `superclass`  
--   `serviceLoggerClass`   (optional, default `ServiceLogger`)
--   `serviceConfigClass`   (optional, default `ServiceConfig`)
+-   `serviceLoggerClass` **Class** where the logging houtd go (optional, default `ServiceLogger`)
+-   `serviceConfigClass` **Class** where the config comes from (optional, default `ServiceConfig`)
 
 ## InterceptorProviderMixin
 
@@ -389,6 +390,10 @@ Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 **Extends ServiceProviderMixin(Service)**
 
 simple service manager (for examples and testing only)
+
+### name
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'stantalone-provider'
 
 ## defineServiceConsumerProperties
 

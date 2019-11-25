@@ -10,7 +10,8 @@ const dummyReceiver = new ReceiveEndpoint("dummyReceiver", {
   }
 });
 
-dummyReceiver.receive = (...args) => {};
+dummyReceiver.receive = (...args) => {
+};
 
 /**
  * keeps track of all in flight object creations and loose ends during config initialization
