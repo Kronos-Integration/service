@@ -56,6 +56,20 @@ const _ca = createAttributes({
   }
 });
 
+const rsf5000 = {
+  target: "running",
+  during: "starting",
+  rejected: "failed",
+  timeout: 5000
+};
+
+const ssf5000 = {
+  target: "stopped",
+  during: "stopping",
+  rejected: "failed",
+  timeout: 5000
+};
+
 /**
  * Service
  * The initial state is 'stopped'
@@ -75,20 +89,10 @@ export default class Service extends EndpointsMixin(
     LogLevelMixin(events),
     prepareActions({
       start: {
-        stopped: {
-          target: "running",
-          during: "starting",
-          rejected: "failed",
-          timeout: 5000
-        }
+        stopped: rsf5000
       },
       restart: {
-        stopped: {
-          target: "running",
-          during: "starting",
-          rejected: "failed",
-          timeout: 5000
-        },
+        stopped: rsf5000,
         running: {
           target: "running",
           during: "restarting",
@@ -96,24 +100,9 @@ export default class Service extends EndpointsMixin(
         }
       },
       stop: {
-        running: {
-          target: "stopped",
-          during: "stopping",
-          rejected: "failed",
-          timeout: 5000
-        },
-        starting: {
-          target: "stopped",
-          during: "stopping",
-          rejected: "failed",
-          timeout: 5000
-        },
-        failed: {
-          target: "stopped",
-          during: "stopping",
-          rejected: "failed",
-          timeout: 1000
-        }
+        running: ssf5000,
+        starting: ssf5000,
+        failed: ssf5000
       }
     }),
     "stopped"
