@@ -163,12 +163,12 @@ export default class Service extends EndpointsMixin(
     if (config === undefined) {
       config = {};
     } else {
-      const properties = ['name','autostart'].reduce((all,name) => {
-        if(config[name] !== undefined) {
-          all[name] = { value: config.name };
+      const properties = ["name", "autostart"].reduce((all, name) => {
+        if (config[name] !== undefined) {
+          all[name] = { value: config[name] };
         }
         return all;
-        }, {});
+      }, {});
 
       Object.defineProperties(this, properties);
     }
