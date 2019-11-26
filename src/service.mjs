@@ -138,16 +138,12 @@ export default class Service extends EndpointsMixin(
   static get endpoints() {
     return {
       log: {
-        out: true,
-        default: true,
         connected: "service(logger).log"
       },
       config: {
-        default: true,
         receive: "configure"
       },
       command: {
-        default: true,
         receive: "execute"
       }
     };

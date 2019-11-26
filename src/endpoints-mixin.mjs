@@ -47,7 +47,7 @@ export default function EndpointsMixin(superclass) {
      * @return {Object} suitable to pass as options to the endpoint factory
      */
     endpointOptions(name, definition, ic) {
-      if(typeof definition === 'string') {
+      if (typeof definition === 'string') {
         definition = { connected: definition };
       }
       else {
@@ -66,7 +66,7 @@ export default function EndpointsMixin(superclass) {
      * @param {string} name of the new endpoint
      * @param {Object} definition endpoints definition
      * @param {boolean} definition.in true will result in a ReceiveEndpoint
-     * @param {boolean} definition.receive true will result in a ReceiveEndpoint
+     * @param {any} definition.receive defined will result in a ReceiveEndpoint
      * @param {boolean} definition.out true will result in a SendEndpoint
      * @param {boolean} definition.default true will result in a (Send|Receive)DefaultEndpoint
      * @param {InitializationContext} ic
@@ -108,12 +108,20 @@ export default function EndpointsMixin(superclass) {
     /**
      * Creates the endpoint objects defined as a combination from
      * implementation and definition
+     * All implementation Endpoints are marked as default.
      * @param {Object} definition endpoints definition
      * @param {InitializationContext} ic
      */
     createEndpointsFromConfig(definition, ic) {
+
+      const predefined = Object.entries(this.constructor.endpoints).reduce((all, [name, def]) => {
+        def.default = true;
+        all[name] = def;
+        return all;
+      }, {});
+
       for (const [name, def] of Object.entries({
-        ...this.constructor.endpoints,
+        ...predefined,
         ...definition
       })) {
         this.createEndpointFromConfig(name, def, ic);
@@ -154,7 +162,7 @@ export default function EndpointsMixin(superclass) {
       return `${this.name}${this.endpointParentSeparator}${ep.name}`;
     }
 
-       /**
+    /**
      * Find Endpoint for a given expression
      * Default implementation only supports direct named endpoints
      * @param {string} expression to identify endpoint
