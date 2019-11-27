@@ -327,7 +327,7 @@ export default class Service extends EndpointsMixin(
    * @param {boolean} options.includeConfig  include config attributes
    * @return {Object} json representation
    */
-  toJSONWithOptions(options = {}) {
+  toJSONWithOptions(options) {
     const json = {
       type: this.type
     };
@@ -353,7 +353,7 @@ export default class Service extends EndpointsMixin(
         if (json.endpoints === undefined) {
           json.endpoints = {};
         }
-        json.endpoints[endpointName] = ep.toJSON();
+        json.endpoints[endpointName] = ep.toJSONWithOptions(options);
       }
 
       if (ep.isDefault) {
