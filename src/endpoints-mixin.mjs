@@ -43,6 +43,7 @@ export default function EndpointsMixin(superclass) {
      * Deliver the endpoint options for a given endpoint definition.
      * @param {string} name of the endpoint
      * @param {Object} definition endpoints definition
+     * @param {string|Function} definition.receive name of method or property
      * @param {InitializationContext} ic
      * @return {Object} suitable to pass as options to the endpoint factory
      */
@@ -54,7 +55,13 @@ export default function EndpointsMixin(superclass) {
         const receive = definition.receive;
 
         if (typeof receive === "string") {
-          definition.receive = (...args) => this[receive](...args);
+          const r = this[receive];
+          if(typeof r === 'function') {
+            definition.receive = (...args) => r(...args);
+          }
+          else {
+            definition.receive = () => this[receive];
+          }
         }
       }
 
