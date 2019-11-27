@@ -40,11 +40,11 @@ function st(t, factory, options, expected = {}) {
 
   t.is(s1.owner, owner, "owner");
 
-  t.is(s1.type, factory.name, "name", "type");
+  t.is(s1.type, factory.name, "name");
 
-  t.is(s1.state, "stopped");
-  t.is(s1.autostart, expected.autostart);
-  t.is(s1.logLevel, "info");
+  t.is(s1.state, "stopped", "state");
+  t.is(s1.autostart, expected.autostart, "autostart");
+  t.is(s1.logLevel, "info", "logLevel");
   t.is(s1.timeout.start, expected.timeout.start);
 
   for (const [name, e] of Object.entries(expected.endpoints)) {
@@ -99,9 +99,10 @@ test(
   "given name",
   st,
   Service,
-  { name: "myName", description: "my description" },
+  { name: "myName", description: "my description", autostart: true },
   {
     description: "my description",
+    autostart: true,
     json: {
       name: "myName",
       type: "service"

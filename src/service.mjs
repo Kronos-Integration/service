@@ -80,8 +80,9 @@ const ssf5000 = {
  * @param {Object} config
  * @param {string} config.name
  * @param {string} config.logLevel
+ * @param {boolean} config.autostart defaults to false
  * @param {string} config.description
- * @param {Object} config.endpoints
+ * @param {Object} config.endpoints will be merged with the build in ones
  * @param {InitializationContext} ic
  */
 export default class Service extends EndpointsMixin(
@@ -162,11 +163,14 @@ export default class Service extends EndpointsMixin(
     if (config === undefined) {
       config = {};
     } else {
-      if (config.name !== undefined) {
-        Object.defineProperty(this, "name", {
-          value: config.name
-        });
-      }
+      const properties = ["name", "autostart"].reduce((all, name) => {
+        if (config[name] !== undefined) {
+          all[name] = { value: config[name] };
+        }
+        return all;
+      }, {});
+
+      Object.defineProperties(this, properties);
     }
 
     const logLevel = process.env.LOGLEVEL
