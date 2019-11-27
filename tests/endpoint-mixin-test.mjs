@@ -10,6 +10,14 @@ class Owner extends ServiceProviderMixin(Service, TestLogger) {
   get name() {
     return "owner";
   }
+
+  get myProperty() {
+    return 77;
+  }
+
+  async myMethod() {
+    return 78;
+  }
 }
 
 test("outEndpoints", t => {
@@ -22,7 +30,10 @@ test("outEndpoints", t => {
 
 test("inEndpoints", t => {
   const o = new Owner();
-  t.deepEqual(o.inEndpoints.map(e => e.name), ["config", "command"]);
+  t.deepEqual(
+    o.inEndpoints.map(e => e.name),
+    ["config", "command"]
+  );
 });
 
 test("endpointForExpression simple", t => {
@@ -110,11 +121,7 @@ test("endpointFromConfig foreign connected expression only", t => {
   const o = new Owner();
   const ic = new InitializationContext(o);
 
-  const e = o.createEndpointFromConfig(
-    "e",
-    "service(logger).log",
-    ic
-  );
+  const e = o.createEndpointFromConfig("e", "service(logger).log", ic);
 
   t.is(e.name, "e");
   t.is(e.connected.name, "log");
@@ -127,11 +134,11 @@ test("endpointFromConfig real connected", t => {
       return undefined; // prevent target;
     }
   });
-  
+
   dummyLogReceiver.receive = entry => {
     console.log(safeStringify(entry));
   };
-  
+
   const o = new Owner();
   const ic = new InitializationContext(o);
 
@@ -143,4 +150,21 @@ test("endpointFromConfig real connected", t => {
 
   t.is(e.name, "e");
   t.is(e.connected.name, "log");
+});
+
+test("endpointFromConfig receive property", async t => {
+  const o = new Owner();
+  const ic = new InitializationContext(o);
+
+  const e = o.createEndpointFromConfig("e", { receive: "myProperty" }, ic);
+
+  t.is(await e.receive(), 77);
+});
+
+test("endpointFromConfig receive method", async t => {
+  const o = new Owner();
+  const ic = new InitializationContext(o);
+  const e = o.createEndpointFromConfig("e", { receive: "myMethod" }, ic);
+
+  t.is(await e.receive(), 78);
 });

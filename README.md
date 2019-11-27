@@ -85,20 +85,10 @@ key of the service description
 
 **Extends EndpointsMixin(StateTransitionMixin(LogLevelMixin(events), prepareActions({
   start: {
-    stopped: {
-      target: "running",
-      during: "starting",
-      rejected: "failed",
-      timeout: 5000
-    }
+    stopped: rsf5000
   },
   restart: {
-    stopped: {
-      target: "running",
-      during: "starting",
-      rejected: "failed",
-      timeout: 5000
-    },
+    stopped: rsf5000,
     running: {
       target: "running",
       during: "restarting",
@@ -106,24 +96,9 @@ key of the service description
     }
   },
   stop: {
-    running: {
-      target: "stopped",
-      during: "stopping",
-      rejected: "failed",
-      timeout: 5000
-    },
-    starting: {
-      target: "stopped",
-      during: "stopping",
-      rejected: "failed",
-      timeout: 5000
-    },
-    failed: {
-      target: "stopped",
-      during: "stopping",
-      rejected: "failed",
-      timeout: 1000
-    }
+    running: ssf5000,
+    starting: ssf5000,
+    failed: ssf5000
   }
 }), "stopped"))**
 
@@ -138,9 +113,11 @@ All services have at least three endpoints:
 ### Parameters
 
 -   `config` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+    -   `config.name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
     -   `config.logLevel` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+    -   `config.autostart` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** defaults to false
     -   `config.description` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-    -   `config.endpoints` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+    -   `config.endpoints` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** will be merged with the build in ones
 -   `ic` **[InitializationContext](#initializationcontext)** 
 
 ### stateChanged

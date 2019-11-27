@@ -55,11 +55,13 @@ export default function EndpointsMixin(superclass) {
         const receive = definition.receive;
 
         if (typeof receive === "string") {
-          const r = this[receive];
-          if(typeof r === 'function') {
-            definition.receive = (...args) => r(...args);
+          if(typeof this[receive] === 'function') {
+            definition.receive = (...args) => this[receive](...args);
           }
           else {
+            if(this[receive] === undefined) {
+              throw new Error(`No sucht method or property ${this.name}.${receive}`);
+            }
             definition.receive = () => this[receive];
           }
         }
