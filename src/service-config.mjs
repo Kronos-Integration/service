@@ -1,10 +1,11 @@
 import Service from "./service.mjs";
-import {keyValue2Object} from './util.mjs';
+import { keyValue2Object } from "./util.mjs";
 
 /**
  * Config providing service
  * Dispatches config requests to services
  * or preserves them until a maching service becomes avaliable
+ * @propery {Map<string,Object>} preservedConfigs values for services not alredy established
  */
 export default class ServiceConfig extends Service {
   /**
@@ -23,12 +24,12 @@ export default class ServiceConfig extends Service {
   }
 
   /**
-   * set config entry 
+   * set config entry
    * @param {string} key path to the value
-   * @param {any} value 
+   * @param {any} value
    */
   async configureValue(key, value) {
-    return this.configure(keyValue2Object(key,value));
+    return this.configure(keyValue2Object(key, value));
   }
 
   /**

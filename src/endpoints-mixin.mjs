@@ -48,19 +48,19 @@ export default function EndpointsMixin(superclass) {
      * @return {Object} suitable to pass as options to the endpoint factory
      */
     endpointOptions(name, definition, ic) {
-      if (typeof definition === 'string') {
+      if (typeof definition === "string") {
         definition = { connected: definition };
-      }
-      else {
+      } else {
         const receive = definition.receive;
 
         if (typeof receive === "string") {
-          if(typeof this[receive] === 'function') {
+          if (typeof this[receive] === "function") {
             definition.receive = (...args) => this[receive](...args);
-          }
-          else {
-            if(this[receive] === undefined) {
-              throw new Error(`No sucht method or property ${this.name}.${receive}`);
+          } else {
+            if (this[receive] === undefined) {
+              throw new Error(
+                `No sucht method or property ${this.name}.${receive}`
+              );
             }
             definition.receive = () => this[receive];
           }
@@ -122,12 +122,12 @@ export default function EndpointsMixin(superclass) {
      * @param {InitializationContext} ic
      */
     createEndpointsFromConfig(definition, ic) {
-
-      const predefined = Object.entries(this.constructor.endpoints).reduce((all, [name, def]) => {
-        def.default = true;
-        all[name] = def;
-        return all;
-      }, {});
+      const predefined = Object.fromEntries(
+        Object.entries(this.constructor.endpoints).map(([name, def]) => [
+          name,
+          { default: true, ...def }
+        ])
+      );
 
       for (const [name, def] of Object.entries({
         ...predefined,
