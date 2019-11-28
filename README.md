@@ -53,6 +53,7 @@ Base service implementation
     -   [endpoints](#endpoints-1)
 -   [ServiceConfig](#serviceconfig)
     -   [Parameters](#parameters-8)
+    -   [Properties](#properties)
     -   [configureValue](#configurevalue)
         -   [Parameters](#parameters-9)
     -   [configure](#configure-1)
@@ -183,7 +184,7 @@ Deliver json representation
 
 #### Parameters
 
--   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `{}`)
+-   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
     -   `options.includeRuntimeInfo` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** include runtime informtion like state
     -   `options.includeDefaults` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** include default endpoints
     -   `options.includeName` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** include name of the service
@@ -299,6 +300,10 @@ or preserves them until a maching service becomes avaliable
 ### Parameters
 
 -   `args` **...any** 
+
+### Properties
+
+-   `preservedConfigs` **[Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** values for services not alredy established
 
 ### configureValue
 
