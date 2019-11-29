@@ -1,4 +1,3 @@
-import safeStringify from 'fast-safe-stringify';
 import Service from './service.mjs';
 
 /**
@@ -29,9 +28,9 @@ export default class ServiceLogger extends Service {
   async logEntry(entry)
   {
     if (entry.severity === 'error') {
-      console.error(safeStringify(entry));
+      console.error(entry);
     } else {
-      console.log(safeStringify(entry));
+      console.log(entry);
     }
   }
 
