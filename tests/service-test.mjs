@@ -21,8 +21,10 @@ const owner = {
 
 const ic = new InitializationContext(owner);
 
-owner.services.logger = new Service({}, ic);
-owner.services.logger.endpoints.log.receive = entry => console.log(entry);
+owner.services.logger = new Service(
+  { endpoints: { log: { receive: entry => console.log(entry) } } },
+  ic
+);
 
 function st(t, factory, options, expected = {}) {
   expected = {
