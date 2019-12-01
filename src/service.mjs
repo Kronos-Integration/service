@@ -254,7 +254,7 @@ export default class Service extends EndpointsMixin(
    * @throws always
    */
   async rejectWrongState(action) {
-    throw new Error(`Can't ${action} ${this} in ${this.state} state`);
+    throw new Error(`Can't ${action} ${this}`);
   }
 
   /**
