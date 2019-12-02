@@ -48,8 +48,8 @@ test("declare services", async t => {
   t.is(s3.key3, 2);
 
   t.true(s2.endpoints.testOut.isConnected);
-  t.is(s2.endpoints.testOut.otherEnd.name, "testIn");
+  t.is(s2.endpoints.testOut.connected.name, "testIn");
 
   t.true(s3.endpoints.testOut.isConnected);
-  t.is(s3.endpoints.testOut.otherEnd.name, "testIn");
+  t.is(s3.endpoints.testOut.connected.name, "testIn");
 });

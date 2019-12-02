@@ -75,6 +75,7 @@ test('service provider command endpoint get', async t => {
         in: true
       },
       log: {
+        connected: 'a:log',
         in: true
       }
     },
