@@ -23,7 +23,7 @@ class Owner extends ServiceProviderMixin(Service, TestLogger) {
 test("outEndpoints", t => {
   const o = new Owner();
 
-  t.truthy(o.endpoints.log.receive);
+  t.truthy(o.endpoints.log.send);
 
   t.deepEqual(o.outEndpoints, [o.endpoints.log]);
 });
@@ -64,7 +64,7 @@ test("endpointForExpression service throwing", t => {
 
   t.is(
     error.message,
-    "Service 'something' not found in owner (logger,config,owner)"
+    "Service 'something' not found in owner (config,logger,owner)"
   );
 });
 

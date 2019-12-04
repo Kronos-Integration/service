@@ -31,7 +31,7 @@ async function makeServiceProvider() {
 test('service provider command endpoint', async t => {
   const { sp, testEndpoint } = await makeServiceProvider();
 
-  const response = await testEndpoint.receive({
+  const response = await testEndpoint.send({
     action: 'list'
   });
 
@@ -54,7 +54,7 @@ test('service provider command endpoint', async t => {
 test('service provider command endpoint get', async t => {
   const { sp, testEndpoint } = await makeServiceProvider();
 
-  const response = await testEndpoint.receive({
+  const response = await testEndpoint.send({
     action: 'get',
     service: 'logger',
     options: {
@@ -75,7 +75,7 @@ test('service provider command endpoint get', async t => {
         in: true
       },
       log: {
-        connected: 'a:log',
+        connected: 'service(a).log',
         in: true
       }
     },
@@ -92,21 +92,21 @@ test('service provider command endpoint get', async t => {
 test('service provider command endpoint start / stop', async t => {
   const { sp, testEndpoint } = await makeServiceProvider();
 
-  let response = await testEndpoint.receive({
+  let response = await testEndpoint.send({
     action: 'start',
     service: 'logger'
   });
 
   t.is(response.state, 'running');
 
-  response = await testEndpoint.receive({
+  response = await testEndpoint.send({
     action: 'stop',
     service: 'logger'
   });
 
   t.is(response.state, 'stopped');
 
-  response = await testEndpoint.receive({
+  response = await testEndpoint.send({
     action: 'restart',
     service: 'logger'
   });
@@ -117,7 +117,7 @@ test('service provider command endpoint start / stop', async t => {
 test('service provider command endpoint several restarts', async t => {
   const { sp, testEndpoint } = await makeServiceProvider();
 
-  const response = await testEndpoint.receive([
+  const response = await testEndpoint.send([
     {
       action: 'restart',
       service: 'logger'
@@ -136,7 +136,7 @@ test('service provider command endpoint restart unknown service', async t => {
   const { sp, testEndpoint } = await makeServiceProvider();
 
   try {
-    const response = await testEndpoint.receive({
+    const response = await testEndpoint.send({
       action: 'restart',
       service: 'invalid'
     });
@@ -150,7 +150,7 @@ test('service provider command endpoint restart unknown command', async t => {
   const { sp, testEndpoint } = await makeServiceProvider();
 
   try {
-    const response = await testEndpoint.receive({
+    const response = await testEndpoint.send({
       action: 'unknown',
       service: 'logger'
     });

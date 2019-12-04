@@ -129,10 +129,9 @@ export default function EndpointsMixin(superclass) {
         ])
       );
 
-      for (const [name, def] of Object.entries({
-        ...predefined,
-        ...definition
-      })) {
+      for (const [name, def] of Object.entries(
+        Object.assign(predefined, definition)
+      )) {
         this.createEndpointFromConfig(name, def, ic);
       }
     }

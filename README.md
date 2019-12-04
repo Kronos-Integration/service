@@ -44,7 +44,6 @@ Base service implementation
         -   [Parameters](#parameters-6)
     -   [log](#log)
         -   [Parameters](#parameters-7)
-    -   [endpointParentSeparator](#endpointparentseparator)
     -   [configurationAttributes](#configurationattributes)
     -   [endpoints](#endpoints)
 -   [ServiceLogger](#servicelogger)
@@ -62,21 +61,14 @@ Base service implementation
     -   [name](#name-2)
 -   [ServiceProviderMixin](#serviceprovidermixin)
     -   [Parameters](#parameters-11)
--   [InterceptorProviderMixin](#interceptorprovidermixin)
-    -   [Parameters](#parameters-12)
 -   [EndpointsMixin](#endpointsmixin)
-    -   [Parameters](#parameters-13)
+    -   [Parameters](#parameters-12)
 -   [endpoints](#endpoints-2)
 -   [StandaloneServiceProvider](#standaloneserviceprovider)
     -   [name](#name-3)
 -   [defineServiceConsumerProperties](#defineserviceconsumerproperties)
-    -   [Parameters](#parameters-14)
+    -   [Parameters](#parameters-13)
 -   [InitializationContext](#initializationcontext)
-    -   [Parameters](#parameters-15)
-    -   [connectEndpoint](#connectendpoint)
-        -   [Parameters](#parameters-16)
-    -   [addOutstandingEndpointConnection](#addoutstandingendpointconnection)
-        -   [Parameters](#parameters-17)
 
 ## DESCRIPTION
 
@@ -241,11 +233,6 @@ Adds service name to the log event
 -   `level` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** the log level
 -   `arg` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** log content
 
-### endpointParentSeparator
-
-Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** separator between service name and endpoint name
-\*
-
 ### configurationAttributes
 
 Meta information for the config attributes.
@@ -342,14 +329,6 @@ By default a service provider has two build in services
 -   `serviceLoggerClass` **Class** where the logging houtd go (optional, default `ServiceLogger`)
 -   `serviceConfigClass` **Class** where the config comes from (optional, default `ServiceConfig`)
 
-## InterceptorProviderMixin
-
-Register & provide Interceptors.
-
-### Parameters
-
--   `superclass`  
-
 ## EndpointsMixin
 
 Endpoint accessor mixin
@@ -391,25 +370,6 @@ assign services based on a configuration
 ## InitializationContext
 
 keeps track of all in flight object creations and loose ends during config initialization
-
-### Parameters
-
--   `serviceProvider`  
-
-### connectEndpoint
-
-#### Parameters
-
--   `endpoint` **Endpoint** 
--   `connected` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
--   `oldEndpoint` **Endpoint** 
-
-### addOutstandingEndpointConnection
-
-#### Parameters
-
--   `endpoint` **Endpoint** 
--   `connected` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
 # install
 

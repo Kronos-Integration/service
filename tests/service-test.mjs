@@ -234,7 +234,7 @@ test("service derived configuration", async t => {
   });
   se.connected = s1.endpoints.config;
 
-  await se.receive({
+  await se.send({
     logLevel: "trace",
     key2: 77
   });

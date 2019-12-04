@@ -17,10 +17,11 @@ export default function ServiceProviderMixin(
 ) {
   return class ServiceProvider extends superclass {
     constructor(config) {
-      const ic = new InitializationContext();
+      const ic = new InitializationContext(undefined, "info");
 
       super(Array.isArray(config) ? config[0] : config, ic);
 
+      //ic.logLevel = this.logLevel;
       ic.serviceProvider = this;
 
       Object.defineProperties(this, {
@@ -30,21 +31,19 @@ export default function ServiceProviderMixin(
         _serviceFactoryPromises: { value: new Map() }
       });
 
-      const serviceConfig = {};
-
       // let our own logging go into the logger service
-      const loggerService = new serviceLoggerClass(serviceConfig, ic);
+      const loggerService = new serviceLoggerClass(undefined, ic);
       this.registerService(loggerService);
-
+      
       // register config service and let it know about the initial config
-      const configService = new serviceConfigClass(serviceConfig, ic);
+      const configService = new serviceConfigClass(undefined, ic);
       this.registerService(configService);
+
+      this.registerService(this);
 
       ic.resolveOutstandingEndpointConnections();
 
       configService.configure(config);
-
-      this.registerService(this);
     }
 
     async execute(command) {
@@ -125,7 +124,7 @@ export default function ServiceProviderMixin(
     }
 
     get serviceNames() {
-      return this.services === undefined ? [] : Object.keys(this.services);
+      return this.services === undefined ? [] : Object.keys(this.services).sort();
     }
 
     getService(name) {

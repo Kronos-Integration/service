@@ -441,17 +441,10 @@ export default class Service extends EndpointsMixin(
    * @param {Object} arg log content
    */
   log(level, arg) {
-    this.endpoints.log.receive(
+    this.endpoints.log.send(
       makeLogEvent(level, arg, {
         service: this.name
       })
     );
-  }
-
-  /**
-   * @return {string} separator between service name and endpoint name
-   **/
-  get endpointParentSeparator() {
-    return ":";
   }
 }

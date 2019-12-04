@@ -28,7 +28,7 @@
     "test": "ava"
   },
   "dependencies": {
-    "@kronos-integration/endpoint": "^5.1.0",
+    "@kronos-integration/endpoint": "^6.0.0",
     "loglevel-mixin": "^5.0.0",
     "model-attributes": "^4.1.3",
     "statetransition-mixin": "^6.0.4"

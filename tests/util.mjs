@@ -106,12 +106,25 @@ export class ServiceProvider extends ServiceProviderMixin(Service, TestLogger) {
 
 export async function makeServices(logLevel = "info") {
   const sp = new ServiceProvider({ logLevel });
-
   const ic = new InitializationContext(sp);
-  await sp.start();
 
-  await sp.registerService(new TestService({ logLevel }, ic));
-  await sp.registerService(new TestService({ logLevel, name: "t2" }, ic));
+  // await sp.registerService(new TestService({ logLevel }, ic));
+  await sp.registerService(
+    new TestService(
+      {
+        logLevel,
+        name: "t2",
+        endpoints: { testOut: { connected: "service(logger).log" } }
+      },
+      ic
+    )
+  );
+
+  ic.resolveOutstandingEndpointConnections();
+
+ // console.log(JSON.stringify(sp.services.t2.endpoints));
+
+  await sp.start();
 
   return sp;
 }
