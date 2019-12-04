@@ -1,10 +1,11 @@
 {
   "name": "@kronos-integration/service",
   "version": "0.0.0-semantic-release",
-  "type": "module",
   "publishConfig": {
     "access": "public"
   },
+  "sideEffects": false,
+  "type": "module",
   "main": "src/module.mjs",
   "module": "src/module.mjs",
   "description": "Base service implementation",
@@ -69,6 +70,5 @@
     "repository": {
       "url": "https://github.com/arlac77/npm-package-template-esm-only.git"
     }
-  },
-  "sideEffects": false
+  }
 }
