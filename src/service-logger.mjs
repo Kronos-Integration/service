@@ -18,6 +18,7 @@ export default class ServiceLogger extends Service {
    */
   static get endpoints() {
     const e = {...super.endpoints};
+    e.log.connected = 'self';
     e.log.receive = 'logEntry';
     return e;
   }

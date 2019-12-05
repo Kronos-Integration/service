@@ -82,7 +82,7 @@ export default function EndpointsMixin(superclass) {
      * @return {Object} endpoint factory
      */
     endpointFactoryFromConfig(name, definition, ic) {
-      if (definition.in /*|| definition.receive*/) {
+      if (definition.in) {
         return definition.default ? ReceiveEndpointDefault : ReceiveEndpoint;
       }
 

@@ -83,6 +83,11 @@ export const InitializationContext = LogLevelMixin(
       }
     }
 
+    /**
+     * 
+     * @param {string} expression 
+     * @param {Endpoint} from 
+     */
     endpointForExpression(expression, from) {
       if (this.serviceProvider) {
         const m = expression.match(/^service\(([^\)]+)\).(.*)/);
@@ -97,7 +102,11 @@ export const InitializationContext = LogLevelMixin(
         }
       }
 
-      if (from) {
+      if (from !== undefined) {
+        if(expression === 'self') {
+          return from;
+        }
+
         return from.owner.endpoints[expression];
       }
     }

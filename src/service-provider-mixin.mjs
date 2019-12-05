@@ -23,7 +23,7 @@ export default function ServiceProviderMixin(
 
       /*
       console.log("ENDPOINTS   1", Object.values(this.endpoints).map(e => `${e}`));
-      console.log("OUTSTANDING 1", [...ic.outstandingEndpointConnections.keys()].map(e=> e.identifier));
+      console.log("OUTSTANDING 1", [...ic.outstandingEndpointConnections.entries()].map(([e,c])=> `${e.identifier} <> ${c}`));
       */
 
       ic.logLevel = this.logLevel;
@@ -39,19 +39,28 @@ export default function ServiceProviderMixin(
       // let our own logging go into the logger service
       const loggerService = new serviceLoggerClass(undefined, ic);
       this.registerService(loggerService);
-      
+
       /*
       console.log("ENDPOINTS   2", Object.values(loggerService.endpoints).map(e => `${e}`));
-      console.log("OUTSTANDING 2", [...ic.outstandingEndpointConnections.keys()].map(e=> e.identifier));
+      console.log("OUTSTANDING 2", [...ic.outstandingEndpointConnections.entries()].map(([e,c])=> `${e.identifier} <> ${c}`));
       */
 
       // register config service and let it know about the initial config
       const configService = new serviceConfigClass(undefined, ic);
+
       this.registerService(configService);
 
       /*
-      console.log("ENDPOINTS   3", Object.values(configService.endpoints).map(e => `${e}`));
-      console.log("OUTSTANDING 3", [...ic.outstandingEndpointConnections.keys()].map(e=> e.identifier));
+      console.log(
+        "ENDPOINTS   3",
+        Object.values(configService.endpoints).map(e => `${e}`)
+      );
+      console.log(
+        "OUTSTANDING 3",
+        [...ic.outstandingEndpointConnections.entries()].map(
+          ([e, c]) => `${e.identifier} <> ${c}`
+        )
+      );
       */
 
       this.registerService(this);
@@ -139,7 +148,9 @@ export default function ServiceProviderMixin(
     }
 
     get serviceNames() {
-      return this.services === undefined ? [] : Object.keys(this.services).sort();
+      return this.services === undefined
+        ? []
+        : Object.keys(this.services).sort();
     }
 
     getService(name) {
