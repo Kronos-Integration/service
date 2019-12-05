@@ -1,6 +1,6 @@
 import Service from './service.mjs';
 import ServiceLogger from './service-logger.mjs';
-import ServiceConfig from './service-config';
+import ServiceConfig from './service-config.mjs';
 import ServiceProviderMixin from './service-provider-mixin.mjs';
 import EndpointsMixin from './endpoints-mixin.mjs';
 import StandaloneServiceProvider from './standalone-service-provider.mjs';
