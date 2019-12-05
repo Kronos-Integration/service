@@ -17,11 +17,16 @@ export default function ServiceProviderMixin(
 ) {
   return class ServiceProvider extends superclass {
     constructor(config) {
-      const ic = new InitializationContext(undefined, "info");
+      const ic = new InitializationContext();
 
       super(Array.isArray(config) ? config[0] : config, ic);
 
-      //ic.logLevel = this.logLevel;
+      /*
+      console.log("ENDPOINTS   1", Object.values(this.endpoints).map(e => `${e}`));
+      console.log("OUTSTANDING 1", [...ic.outstandingEndpointConnections.keys()].map(e=> e.identifier));
+      */
+
+      ic.logLevel = this.logLevel;
       ic.serviceProvider = this;
 
       Object.defineProperties(this, {
@@ -35,9 +40,19 @@ export default function ServiceProviderMixin(
       const loggerService = new serviceLoggerClass(undefined, ic);
       this.registerService(loggerService);
       
+      /*
+      console.log("ENDPOINTS   2", Object.values(loggerService.endpoints).map(e => `${e}`));
+      console.log("OUTSTANDING 2", [...ic.outstandingEndpointConnections.keys()].map(e=> e.identifier));
+      */
+
       // register config service and let it know about the initial config
       const configService = new serviceConfigClass(undefined, ic);
       this.registerService(configService);
+
+      /*
+      console.log("ENDPOINTS   3", Object.values(configService.endpoints).map(e => `${e}`));
+      console.log("OUTSTANDING 3", [...ic.outstandingEndpointConnections.keys()].map(e=> e.identifier));
+      */
 
       this.registerService(this);
 

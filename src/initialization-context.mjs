@@ -69,7 +69,7 @@ export const InitializationContext = LogLevelMixin(
             level => `${endpoint} ${connected} (connect deffered)`
           );
 
-          const r = new ReceiveEndpoint(`dummy-${endpoint.name}`,endpoint.owner);
+          const r = new ReceiveEndpoint(`tmp-${endpoint.name}`,endpoint.owner);
           r.receive = async () => undefined;
           endpoint.connected = r;
 
