@@ -15,7 +15,7 @@ import {
  */
 export const InitializationContext = LogLevelMixin(
   class InitializationContext {
-    constructor(serviceProvider, logLevel = "info") {
+    constructor(serviceProvider, logLevel) {
       Object.defineProperties(this, {
         serviceProvider: {
           get: () => serviceProvider,
@@ -69,7 +69,7 @@ export const InitializationContext = LogLevelMixin(
             level => `${endpoint} ${connected} (connect deffered)`
           );
 
-          const r = new ReceiveEndpoint(endpoint.owner);
+          const r = new ReceiveEndpoint(`dummy-${endpoint.name}`,endpoint.owner);
           r.receive = async () => undefined;
           endpoint.connected = r;
 
