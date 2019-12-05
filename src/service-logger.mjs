@@ -17,12 +17,9 @@ export default class ServiceLogger extends Service {
    * @return {Object} predefined endpoints
    */
   static get endpoints() {
-    return {
-      ...super.endpoints,
-      log: {
-        receive: 'logEntry'
-      }
-    };
+    const e = {...super.endpoints};
+    e.log.receive = 'logEntry';
+    return e;
   }
 
   async logEntry(entry)

@@ -142,9 +142,11 @@ export default class Service extends EndpointsMixin(
         connected: "service(logger).log"
       },
       config: {
+        in: true,
         receive: "configure"
       },
       command: {
+        in: true,
         receive: "execute"
       }
     };
