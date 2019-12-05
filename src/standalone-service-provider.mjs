@@ -6,9 +6,9 @@ import ServiceProviderMixin from './service-provider-mixin.mjs';
  */
 export default class StandaloneServiceProvider extends ServiceProviderMixin(Service) {
   /**
-   * @return {string} 'stantalone-provider'
+   * @return {string} 'standalone-provider'
    */
   static get name() {
-    return 'stantalone-provider';
+    return 'standalone-provider';
   }
 }
