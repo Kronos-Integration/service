@@ -162,15 +162,6 @@ export default function EndpointsMixin(superclass) {
     }
 
     /**
-     * Deliver an identifier suitable as target name.
-     * @param {Endpoint} ep endpoint to be identified
-     * @return {string} endpoint identifier
-     */
-    endpointIdentifier(ep) {
-      return `${this.name}${this.endpointParentSeparator}${ep.name}`;
-    }
-
-    /**
      * Find Endpoint for a given expression
      * Default implementation only supports direct named endpoints
      * @param {string} expression to identify endpoint

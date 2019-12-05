@@ -13,9 +13,6 @@ const owner = {
   error() {},
   getService(name) {
     return this.services[name];
-  },
-  endpointIdentifier(e) {
-    return `name:${e.name}`;
   }
 };
 

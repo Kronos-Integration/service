@@ -130,9 +130,6 @@ test("endpointFromConfig foreign connected expression only", t => {
 
 test("endpointFromConfig real connected", t => {
   const dummyLogReceiver = new ReceiveEndpoint("log", {
-    endpointIdentifier(ep) {
-      return undefined; // prevent target;
-    }
   });
 
   dummyLogReceiver.receive = entry => {

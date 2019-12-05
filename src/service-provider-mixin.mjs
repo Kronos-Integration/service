@@ -47,10 +47,9 @@ export default function ServiceProviderMixin(
 
       // register config service and let it know about the initial config
       const configService = new serviceConfigClass(undefined, ic);
-
       this.registerService(configService);
 
-      /*
+  /*    
       console.log(
         "ENDPOINTS   3",
         Object.values(configService.endpoints).map(e => `${e}`)
@@ -61,7 +60,7 @@ export default function ServiceProviderMixin(
           ([e, c]) => `${e.identifier} <> ${c}`
         )
       );
-      */
+    */  
 
       this.registerService(this);
 
