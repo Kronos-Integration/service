@@ -215,51 +215,45 @@ export default function ServiceProviderMixin(
     async declareServices(configs, waitUntilFactoryPresent) {
       const ic = new InitializationContext(this);
 
-      const services = [];
+      const services = Promise.all(
+        Object.entries(configs).map(async ([name, config]) => {
+          const service = this.services[name];
 
-      for (const [name, config] of Object.entries(configs)) {
-        config.name = name;
-        const type = config.type;
-        const service = this.services[name];
-
-        if (
-          service === undefined ||
-          (type !== undefined && service.type !== type)
-        ) {
-          const p = ic.outstandingServices.get(name);
-
-          if (p !== undefined) {
-            services.push(p);
-            continue;
+          if(service) {
+            await service.configure(config);
           }
+          else {
+            const p = ic.outstandingServices.get(name);
 
-          if (this.services.config) {
-            const pc = this.services.config.preservedConfigs.get(name);
-            if (pc !== undefined) {
-              Object.assign(config, pc);
+            if (p !== undefined) {
+              return p;
             }
+
+            config.name = name;
+
+            if (this.services.config) {
+              const pc = this.services.config.preservedConfigs.get(name);
+              if (pc !== undefined) {
+                Object.assign(config, pc);
+              }
+            }
+
+            // service factory not present: wait until one arrives
+            const type = config.type || config.name;
+
+            await this.getServiceFactory(type, waitUntilFactoryPresent);
+
+            return ic.declareService(config, name);
           }
 
-          // service factory not present: wait until one arrives
-
-          await this.getServiceFactory(type, waitUntilFactoryPresent);
-
-          services.push(ic.declareService(config, name));
-          continue;
-        }
-
-        delete config.type;
-
-        const configPromise = service.configure(config);
-
-        await configPromise;
-
-        services.push(service);
-      }
+          return service;
+        })
+      );
 
       ic.resolveOutstandingEndpointConnections();
+      ic.validateEndpoints();
 
-      return Promise.all(services);
+      return services;
     }
 
     /**

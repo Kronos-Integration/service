@@ -46,9 +46,8 @@ export const InitializationContext = LogLevelMixin(
      *
      * @param {Endpoint} endpoint
      * @param {string} connected
-     * @param {Endpoint} oldEndpoint
      */
-    connectEndpoint(endpoint, connected, oldEndpoint) {
+    connectEndpoint(endpoint, connected) {
       if (connected !== undefined) {
         endpoint.addConnection(isEndpoint(connected)
           ? connected
@@ -62,7 +61,7 @@ export const InitializationContext = LogLevelMixin(
           );
 
           const r = new ReceiveEndpoint(`tmp-${endpoint.name}`,endpoint.owner);
-          r.receive = async () => undefined;
+          r.receive = async (...args) => console.log(...args);
           endpoint.addConnection(r);
 
           this.addOutstandingEndpointConnection(endpoint, connected);
@@ -131,8 +130,6 @@ export const InitializationContext = LogLevelMixin(
           );
         }
       }
-
-      this.validateEndpoints();
     }
 
     validateEndpoints() {
@@ -151,7 +148,8 @@ export const InitializationContext = LogLevelMixin(
      * - if the is already an outstanding declaration ongoing wait until it is done configure it done
      * - otherewise declare this action as a new outstanding service declaration
      * @param {Object} config 
-     * @param {string} name 
+     * @param {string} name
+     * @return {Service}
      */
     async declareService(config, name) {
       const sp = this.serviceProvider;
@@ -173,6 +171,8 @@ export const InitializationContext = LogLevelMixin(
       this.outstandingServices.set(name, servicePromise);
       service = await servicePromise;
       this.outstandingServices.delete(name);
+
+      this.resolveOutstandingEndpointConnections();
       return service;
     }
   }

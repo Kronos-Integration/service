@@ -90,6 +90,7 @@ export class TestService extends Service {
   async configure(config) {
     delete config.name;
     delete config.endpoints;
+    delete config.type;
     Object.assign(this, config);
     wait(1000);
 
