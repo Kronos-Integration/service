@@ -61,7 +61,7 @@ export const InitializationContext = LogLevelMixin(
           );
 
           const r = new ReceiveEndpoint(`tmp-${endpoint.name}`,endpoint.owner);
-          r.receive = async (...args) => console.log(...args);
+          r.receive = async () => {};
           endpoint.addConnection(r);
 
           this.addOutstandingEndpointConnection(endpoint, connected);
