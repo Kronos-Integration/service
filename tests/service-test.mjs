@@ -28,7 +28,7 @@ function st(t, factory, options, expected = {}) {
     timeout: { start: 5 },
     autostart: false,
     endpoints: {
-      log: { isConnected: true },
+      log: { hasConnections: true },
       ...expected.entpoints
     },
     configuration: {},
@@ -49,10 +49,10 @@ function st(t, factory, options, expected = {}) {
   for (const [name, e] of Object.entries(expected.endpoints)) {
     t.truthy(s1.endpoints[name], `${name} endpoint`);
     t.is(s1.endpoints[name].name, name, `${name} endpoint`);
-    if (e.isConnected !== undefined) {
+    if (e.hasConnections !== undefined) {
       t.is(
-        s1.endpoints[name].isConnected,
-        e.isConnected,
+        s1.endpoints[name].hasConnections,
+        e.hasConnections,
         `${name} endpoint connected`
       );
     }
@@ -229,7 +229,7 @@ test("service derived configuration", async t => {
       return "a";
     }
   });
-  se.connected = s1.endpoints.config;
+  se.addConnection(s1.endpoints.config);
 
   await se.send({
     logLevel: "trace",

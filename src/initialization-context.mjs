@@ -15,17 +15,13 @@ import {
  */
 export const InitializationContext = LogLevelMixin(
   class InitializationContext {
-    constructor(serviceProvider, logLevel) {
-      Object.defineProperties(this, {
-        serviceProvider: {
-          get: () => serviceProvider,
-          set: v => (serviceProvider = v)
-        },
-        declareServiceByNamePromises: { value: new Map() },
-        serviceFactoryPromises: { value: new Map() },
-        outstandingEndpointConnections: { value: new Map() }
-      });
+    declareServiceByNamePromises = new Map();
+    serviceFactoryPromises = new Map();
+    outstandingEndpointConnections = new Map();
+    serviceProvider;
 
+    constructor(serviceProvider, logLevel) {
+      this.serviceProvider = serviceProvider;
       defineLogLevelProperties(this, defaultLogLevels, defaultLogLevels[logLevel]);
     }
 
@@ -54,24 +50,20 @@ export const InitializationContext = LogLevelMixin(
      */
     connectEndpoint(endpoint, connected, oldEndpoint) {
       if (connected !== undefined) {
-        endpoint.connected = isEndpoint(connected)
+        endpoint.addConnection(isEndpoint(connected)
           ? connected
-          : this.endpointForExpression(connected, endpoint);
-      } else {
-        if (oldEndpoint && oldEndpoint.connected) {
-          endpoint.connected = oldEndpoint.connected;
-        }
+          : this.endpointForExpression(connected, endpoint));
       }
 
       if (connected) {
-        if (endpoint.connected === undefined) {
+        if (!endpoint.hasConnections) {
           this.trace(
             level => `${endpoint} ${connected} (connect deffered)`
           );
 
           const r = new ReceiveEndpoint(`tmp-${endpoint.name}`,endpoint.owner);
           r.receive = async () => undefined;
-          endpoint.connected = r;
+          endpoint.addConnection(r);
 
           this.addOutstandingEndpointConnection(endpoint, connected);
         } else {
@@ -127,7 +119,7 @@ export const InitializationContext = LogLevelMixin(
       ] of this.outstandingEndpointConnections.entries()) {
         const c = this.endpointForExpression(connected, endpoint);
         if (c) {
-          endpoint.connected = c;
+          endpoint.addConnection(c);
 
           this.outstandingEndpointConnections.delete(endpoint);
           this.trace(
@@ -146,7 +138,7 @@ export const InitializationContext = LogLevelMixin(
     validateEndpoints() {
       Object.values(this.serviceProvider.services).forEach(s => {
         for (const o of s.outEndpoints) {
-          if (!o.isConnected) {
+          if (!o.hasConnections) {
             this.error(`${o.identifier} is not connected`);
           }
         }

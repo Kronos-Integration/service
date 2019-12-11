@@ -47,9 +47,9 @@ test("declare services", async t => {
 
   t.is(s3.key3, 2);
 
-  t.true(s2.endpoints.testOut.isConnected);
-  t.is(s2.endpoints.testOut.connected.name, "testIn");
+  t.true(s2.endpoints.testOut.hasConnections);
+  t.true(s2.endpoints.testOut.isConnected(s3.endpoints.testIn));
 
-  t.true(s3.endpoints.testOut.isConnected);
-  t.is(s3.endpoints.testOut.connected.name, "testIn");
+  t.true(s3.endpoints.testOut.hasConnections);
+  t.true(s3.endpoints.testOut.isConnected(s2.endpoints.testIn));
 });

@@ -21,7 +21,7 @@ async function makeServiceProvider() {
   ]);
 
   const testEndpoint = new SendEndpoint('test');
-  testEndpoint.connected = sp.endpoints.command;
+  testEndpoint.addConnection(sp.endpoints.command);
 
   await sp.start();
 

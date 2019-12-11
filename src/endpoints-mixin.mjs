@@ -21,13 +21,7 @@ export default function EndpointsMixin(superclass) {
       return {};
     }
 
-    constructor(...args) {
-      super(...args);
-
-      Object.defineProperty(this, "endpoints", {
-        value: {}
-      });
-    }
+    endpoints = {};
 
     /**
      * Add a endpoint

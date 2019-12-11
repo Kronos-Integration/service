@@ -9,7 +9,7 @@ test("service factory", async t => {
   t.is(await sp.getServiceFactory(TestService), TestService);
 });
 
-test.only("service provider config service", async t => {
+test("service provider config service", async t => {
   const sp = new ServiceProvider([
     {
       name: "a" // provider itself
@@ -69,9 +69,8 @@ test("service provider additional service", async t => {
 
   sp.services.test1.info("hello");
 
-  t.is(
-    sp.services.test1.endpoints.log.connected,
-    sp.services.logger.endpoints.log
+  t.true(
+    sp.services.test1.endpoints.log.isConnected(sp.services.logger.endpoints.log)
   );
 });
 
@@ -117,7 +116,7 @@ test("service provider additional service send change request over config servic
   t.is(sp.services.t2.key1, 4711);
 });
 
-test("service provider additional service logging", async t => {
+test.skip("service provider additional service logging", async t => {
   const logLevel = "trace";
 
   const sp = new ServiceProvider({ logLevel });
@@ -131,6 +130,10 @@ test("service provider additional service logging", async t => {
   );
 
   ic.resolveOutstandingEndpointConnections();
+
+  t.is(sp.services.t2.endpoints.testOut.name,'testOut');
+
+  t.true(sp.services.t2.endpoints.testOut.isConnected(sp.services.logger.log));
 
   /*
   await sp.services.config.endpoints.config.receive([

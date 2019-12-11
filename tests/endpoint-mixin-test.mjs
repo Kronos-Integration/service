@@ -99,7 +99,7 @@ test("endpointFromConfig simple connected", t => {
   const e = o.createEndpointFromConfig("e", { connected: "r1" }, ic);
 
   t.is(e.name, "e");
-  t.is(e.connected.name, "r1");
+  t.true(e.isConnected(r1));
 });
 
 test("endpointFromConfig foreign connected", t => {
@@ -113,8 +113,7 @@ test("endpointFromConfig foreign connected", t => {
   );
 
   t.is(e.name, "e");
-  t.is(e.connected.name, "log");
-  t.is(e.connected.owner.name, "logger");
+  t.true(e.isConnected(o.services.logger.endpoints.log));
 });
 
 test("endpointFromConfig foreign connected expression only", t => {
@@ -123,9 +122,10 @@ test("endpointFromConfig foreign connected expression only", t => {
 
   const e = o.createEndpointFromConfig("e", "service(logger).log", ic);
 
+  t.true(e.isConnected(o.services.logger.endpoints.log));
+
   t.is(e.name, "e");
-  t.is(e.connected.name, "log");
-  t.is(e.connected.owner.name, "logger");
+  t.true(e.isConnected(o.services.logger.endpoints.log));
 });
 
 test("endpointFromConfig real connected", t => {
@@ -146,7 +146,7 @@ test("endpointFromConfig real connected", t => {
   );
 
   t.is(e.name, "e");
-  t.is(e.connected.name, "log");
+  t.true(e.isConnected(dummyLogReceiver));
 });
 
 test("endpointFromConfig receive property", async t => {
