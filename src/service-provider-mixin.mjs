@@ -16,6 +16,10 @@ export default function ServiceProviderMixin(
   serviceConfigClass = ServiceConfig
 ) {
   return class ServiceProvider extends superclass {
+    serviceFactories = {};
+    services = {};
+    _serviceFactoryPromises = new Map();
+
     constructor(config) {
       const ic = new InitializationContext();
 
@@ -28,13 +32,6 @@ export default function ServiceProviderMixin(
 
       ic.logLevel = this.logLevel;
       ic.serviceProvider = this;
-
-      Object.defineProperties(this, {
-        serviceFactories: { value: {} },
-        services: { value: {} },
-        _declareServiceByNamePromises: { value: new Map() },
-        _serviceFactoryPromises: { value: new Map() }
-      });
 
       // let our own logging go into the logger service
       const loggerService = new serviceLoggerClass(undefined, ic);
@@ -49,7 +46,7 @@ export default function ServiceProviderMixin(
       const configService = new serviceConfigClass(undefined, ic);
       this.registerService(configService);
 
-  /*    
+      /*    
       console.log(
         "ENDPOINTS   3",
         Object.values(configService.endpoints).map(e => `${e}`)
@@ -60,7 +57,7 @@ export default function ServiceProviderMixin(
           ([e, c]) => `${e.identifier} <> ${c}`
         )
       );
-    */  
+    */
 
       this.registerService(this);
 
@@ -156,16 +153,6 @@ export default function ServiceProviderMixin(
       return this.services && this.services[name];
     }
 
-    async insertIntoDeclareByNamePromisesAndDeliver(config, name, ic) {
-      const servicePromise = this.registerService(
-        this.createService(config, ic)
-      );
-      this._declareServiceByNamePromises.set(name, servicePromise);
-      const service = await servicePromise;
-      this._declareServiceByNamePromises.delete(name);
-      return service;
-    }
-
     /**
      *
      * @param {string|class} type name if type
@@ -239,7 +226,7 @@ export default function ServiceProviderMixin(
           service === undefined ||
           (type !== undefined && service.type !== type)
         ) {
-          const p = this._declareServiceByNamePromises.get(name);
+          const p = ic.outstandingServices.get(name);
 
           if (p !== undefined) {
             services.push(p);
@@ -257,17 +244,13 @@ export default function ServiceProviderMixin(
 
           await this.getServiceFactory(type, waitUntilFactoryPresent);
 
-          services.push(
-            this.insertIntoDeclareByNamePromisesAndDeliver(config, name, ic)
-          );
+          services.push(ic.declareService(config, name));
           continue;
         }
 
         delete config.type;
 
         const configPromise = service.configure(config);
-
-        //this._declareServiceByNamePromises.set(name, configPromise.then( x => service));
 
         await configPromise;
 

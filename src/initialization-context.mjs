@@ -15,7 +15,7 @@ import {
  */
 export const InitializationContext = LogLevelMixin(
   class InitializationContext {
-    declareServiceByNamePromises = new Map();
+    outstandingServices = new Map();
     serviceFactoryPromises = new Map();
     outstandingEndpointConnections = new Map();
     serviceProvider;
@@ -143,6 +143,37 @@ export const InitializationContext = LogLevelMixin(
           }
         }
       });
+    }
+
+
+    /**
+     * - if there is already a service for the given name configure it and we are done
+     * - if the is already an outstanding declaration ongoing wait until it is done configure it done
+     * - otherewise declare this action as a new outstanding service declaration
+     * @param {Object} config 
+     * @param {string} name 
+     */
+    async declareService(config, name) {
+      const sp = this.serviceProvider;
+      let service = sp.getService(name);
+
+      if(service !== undefined) {
+        await service.configure(config);
+        return service;
+      }
+
+      let servicePromise = this.outstandingServices.get(name);
+      if(servicePromise) {
+        service = await servicePromise;
+        await service.configure(config);
+        return service;
+      }
+
+      servicePromise = sp.registerService(sp.createService(config, this));
+      this.outstandingServices.set(name, servicePromise);
+      service = await servicePromise;
+      this.outstandingServices.delete(name);
+      return service;
     }
   }
 );
