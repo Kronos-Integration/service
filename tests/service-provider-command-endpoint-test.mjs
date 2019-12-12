@@ -69,15 +69,18 @@ test('service provider command endpoint get', async t => {
     description: 'This service is the base class for service implementations',
     endpoints: {
       command: {
-        in: true
+        in: true,
+        open: true
       },
       config: {
-        in: true
+        in: true,
+        open: true
       },
       log: {
         connected: 'service(a).log',
         in: true,
-        out: true
+        out: true,
+        open: true
       }
     },
     timeout: {
