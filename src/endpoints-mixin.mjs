@@ -2,7 +2,8 @@ import {
   SendEndpoint,
   SendEndpointDefault,
   ReceiveEndpoint,
-  ReceiveEndpointDefault
+  ReceiveEndpointDefault,
+  ReceiveEndpointSelfConnectedDefault
 } from "@kronos-integration/endpoint";
 
 /**
@@ -61,6 +62,10 @@ export default function EndpointsMixin(superclass) {
         }
       }
 
+      if (definition.connected === "self") {
+        delete definition.connected;
+      }
+
       return definition;
     }
 
@@ -76,6 +81,10 @@ export default function EndpointsMixin(superclass) {
      * @return {Object} endpoint factory
      */
     endpointFactoryFromConfig(name, definition, ic) {
+      if (definition.connected === "self") {
+        return ReceiveEndpointSelfConnectedDefault;
+      }
+
       if (definition.in) {
         return definition.default ? ReceiveEndpointDefault : ReceiveEndpoint;
       }
@@ -159,10 +168,11 @@ export default function EndpointsMixin(superclass) {
      * Find Endpoint for a given expression
      * Default implementation only supports direct named endpoints
      * @param {string} expression to identify endpoint
+     * @param {Endpoint} from to identify endpoint
      * @return {Endpoint} for a given expression
      * @throws if no Endpoint can be found and throwOnError is true
      */
-    endpointForExpression(expression) {
+    endpointForExpression(expression, from) {
       const endpoint = this.endpoints[expression];
       if (endpoint === undefined) {
         const m = expression.match(/^service\(([^\)]+)\).(.*)/);
@@ -175,6 +185,12 @@ export default function EndpointsMixin(superclass) {
           return service
             ? service.endpointForExpression(suffixExpression)
             : undefined;
+        }
+
+        if (from !== undefined) {
+          if (expression === "self") {
+            return from;
+          }
         }
       }
 

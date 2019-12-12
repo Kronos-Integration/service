@@ -94,17 +94,13 @@ export const InitializationContext = LogLevelMixin(
      */
     endpointForExpression(expression, from) {
       if (this.serviceProvider) {
-        const endpoint = this.serviceProvider.endpointForExpression(expression);
+        const endpoint = this.serviceProvider.endpointForExpression(expression, from);
         if(endpoint) {
           return endpoint;
         }
       }
 
       if (from !== undefined) {
-        if (expression === "self") {
-          return from;
-        }
-
         return from.owner.endpointForExpression(expression);
       }
     }
