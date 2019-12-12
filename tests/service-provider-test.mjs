@@ -2,13 +2,6 @@ import test from "ava";
 import { ServiceProvider, TestService, makeServices } from "./util.mjs";
 import { InitializationContext } from "../src/initialization-context.mjs";
 
-test("service factory", async t => {
-  const sp = new ServiceProvider();
-
-  t.is(await sp.getServiceFactory("test"), undefined);
-  t.is(await sp.getServiceFactory(TestService), TestService);
-});
-
 test("service provider config service", async t => {
   const sp = new ServiceProvider([
     {

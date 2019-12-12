@@ -51,24 +51,25 @@ Base service implementation
     -   [name](#name-1)
     -   [endpoints](#endpoints-1)
 -   [ServiceConfig](#serviceconfig)
-    -   [Parameters](#parameters-8)
     -   [Properties](#properties)
     -   [configureValue](#configurevalue)
-        -   [Parameters](#parameters-9)
+        -   [Parameters](#parameters-8)
     -   [configure](#configure-1)
-        -   [Parameters](#parameters-10)
+        -   [Parameters](#parameters-9)
     -   [autostart](#autostart-2)
     -   [name](#name-2)
 -   [ServiceProviderMixin](#serviceprovidermixin)
-    -   [Parameters](#parameters-11)
+    -   [Parameters](#parameters-10)
 -   [EndpointsMixin](#endpointsmixin)
-    -   [Parameters](#parameters-12)
+    -   [Parameters](#parameters-11)
 -   [endpoints](#endpoints-2)
 -   [StandaloneServiceProvider](#standaloneserviceprovider)
     -   [name](#name-3)
 -   [defineServiceConsumerProperties](#defineserviceconsumerproperties)
-    -   [Parameters](#parameters-13)
+    -   [Parameters](#parameters-12)
 -   [InitializationContext](#initializationcontext)
+-   [InitializationContext](#initializationcontext-1)
+    -   [Parameters](#parameters-13)
 
 ## DESCRIPTION
 
@@ -284,10 +285,6 @@ Config providing service
 Dispatches config requests to services
 or preserves them until a maching service becomes avaliable
 
-### Parameters
-
--   `args` **...any** 
-
 ### Properties
 
 -   `preservedConfigs` **[Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** values for services not alredy established
@@ -354,7 +351,7 @@ simple service manager (for examples and testing only)
 
 ### name
 
-Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'stantalone-provider'
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'standalone-provider'
 
 ## defineServiceConsumerProperties
 
@@ -370,6 +367,14 @@ assign services based on a configuration
 ## InitializationContext
 
 keeps track of all in flight object creations and loose ends during config initialization
+
+## InitializationContext
+
+### Parameters
+
+-   `serviceProvider` **ServiceProvider** 
+-   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+    -   `options.waitForFactories` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** wait until factory apears in registry
 
 # install
 

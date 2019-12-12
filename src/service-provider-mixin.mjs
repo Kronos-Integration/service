@@ -18,7 +18,6 @@ export default function ServiceProviderMixin(
   return class ServiceProvider extends superclass {
     serviceFactories = {};
     services = {};
-    _serviceFactoryPromises = new Map();
 
     constructor(config) {
       const ic = new InitializationContext();
@@ -103,7 +102,7 @@ export default function ServiceProviderMixin(
       }
     }
 
-    /** be default be our own owner */
+    /** by default be our own owner */
     get owner() {
       return this;
     }
@@ -116,14 +115,6 @@ export default function ServiceProviderMixin(
 
     async unregisterServiceFactory(factory) {
       delete this.serviceFactories[factory.name];
-    }
-
-    createService(config, ic) {
-      const Clazz =
-        config.type instanceof Function
-          ? config.type
-          : this.serviceFactories[config.type];
-      return new Clazz(config, ic);
     }
 
     async registerService(service) {
@@ -153,48 +144,6 @@ export default function ServiceProviderMixin(
       return this.services && this.services[name];
     }
 
-    /**
-     *
-     * @param {string|class} type name if type
-     * @param {boolean} wait until factory apears in registry
-     */
-    async getServiceFactory(type, wait) {
-      if (type instanceof Function) {
-        const factory = this.serviceFactories[type.name];
-        if (factory !== undefined) {
-          return factory;
-        }
-        return this.registerServiceFactory(type);
-      }
-
-      const factory = this.serviceFactories[type];
-
-      if (!factory && wait) {
-        const p = this._serviceFactoryPromises.get(type);
-        if (p !== undefined) {
-          return p;
-        }
-
-        const typePromise = new Promise((resolve, reject) => {
-          const listener = factory => {
-            if (factory.name === type) {
-              this._serviceFactoryPromises.delete(type);
-              this.removeListener("serviceFactoryRegistered", listener);
-              resolve(factory);
-            }
-          };
-
-          this.addListener("serviceFactoryRegistered", listener);
-        });
-
-        this._serviceFactoryPromises.set(type, typePromise);
-
-        await typePromise;
-      }
-
-      return factory;
-    }
-
     async declareService(config, ...args) {
       const name = config.name;
       const services = await this.declareServices({ [name]: config }, ...args);
@@ -209,45 +158,15 @@ export default function ServiceProviderMixin(
      * @param {object} config with
      *     name - the service name
      *     type - the service factory name - defaults to config.name
-     * @param {boolean} waitUntilFactoryPresent waits until someone registers a matching service factory
      * @return {Promise} resolving to the declared service
      */
-    async declareServices(configs, waitUntilFactoryPresent) {
+    async declareServices(configs) {
       const ic = new InitializationContext(this);
 
       const services = Promise.all(
-        Object.entries(configs).map(async ([name, config]) => {
-          const service = this.services[name];
-
-          if(service) {
-            await service.configure(config);
-          }
-          else {
-            const p = ic.outstandingServices.get(name);
-
-            if (p !== undefined) {
-              return p;
-            }
-
-            config.name = name;
-
-            if (this.services.config) {
-              const pc = this.services.config.preservedConfigs.get(name);
-              if (pc !== undefined) {
-                Object.assign(config, pc);
-              }
-            }
-
-            // service factory not present: wait until one arrives
-            const type = config.type || config.name;
-
-            await this.getServiceFactory(type, waitUntilFactoryPresent);
-
-            return ic.declareService(config, name);
-          }
-
-          return service;
-        })
+        Object.entries(configs).map(([name, config]) =>
+          ic.declareService(config, name)
+        )
       );
 
       ic.resolveOutstandingEndpointConnections();

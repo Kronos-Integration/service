@@ -14,15 +14,31 @@ import {
  * keeps track of all in flight object creations and loose ends during config initialization
  */
 export const InitializationContext = LogLevelMixin(
+  /**
+   * @param {ServiceProvider} serviceProvider
+   * @param {Object} options
+   * @param {boolean} options.waitForFactories wait until factory apears in registry
+   */
   class InitializationContext {
+
+    /**
+     * services requested but not ready missing factories...
+     */
     outstandingServices = new Map();
-    serviceFactoryPromises = new Map();
+    outstandingFactories = new Map();
     outstandingEndpointConnections = new Map();
     serviceProvider;
 
-    constructor(serviceProvider, logLevel) {
+    constructor(serviceProvider, options) {
       this.serviceProvider = serviceProvider;
-      defineLogLevelProperties(this, defaultLogLevels, defaultLogLevels[logLevel]);
+
+      options = { waitForFactories: true, logLevel: "info", ...options };
+      this.waitForFactories = options.waitForFactories;
+      defineLogLevelProperties(
+        this,
+        defaultLogLevels,
+        defaultLogLevels[options.logLevel]
+      );
     }
 
     /**
@@ -49,35 +65,32 @@ export const InitializationContext = LogLevelMixin(
      */
     connectEndpoint(endpoint, connected) {
       if (connected !== undefined) {
-        endpoint.addConnection(isEndpoint(connected)
-          ? connected
-          : this.endpointForExpression(connected, endpoint));
+        endpoint.addConnection(
+          isEndpoint(connected)
+            ? connected
+            : this.endpointForExpression(connected, endpoint)
+        );
       }
 
       if (connected) {
         if (!endpoint.hasConnections) {
-          this.trace(
-            level => `${endpoint} ${connected} (connect deffered)`
-          );
+          this.trace(level => `${endpoint} ${connected} (connect deffered)`);
 
-          const r = new ReceiveEndpoint(`tmp-${endpoint.name}`,endpoint.owner);
+          const r = new ReceiveEndpoint(`tmp-${endpoint.name}`, endpoint.owner);
           r.receive = async () => {};
           endpoint.addConnection(r);
 
           this.addOutstandingEndpointConnection(endpoint, connected);
         } else {
-          this.trace(
-            level =>
-              `${endpoint} (connected)`
-          );
+          this.trace(level => `${endpoint} (connected)`);
         }
       }
     }
 
     /**
-     * 
-     * @param {string} expression 
-     * @param {Endpoint} from 
+     *
+     * @param {string} expression
+     * @param {Endpoint} from
      */
     endpointForExpression(expression, from) {
       if (this.serviceProvider) {
@@ -94,7 +107,7 @@ export const InitializationContext = LogLevelMixin(
       }
 
       if (from !== undefined) {
-        if(expression === 'self') {
+        if (expression === "self") {
           return from;
         }
 
@@ -121,13 +134,9 @@ export const InitializationContext = LogLevelMixin(
           endpoint.addConnection(c);
 
           this.outstandingEndpointConnections.delete(endpoint);
-          this.trace(
-            level => `${endpoint} (connection resolved)`
-          );
+          this.trace(level => `${endpoint} (connection resolved)`);
         } else {
-          this.error(
-            level => `unable to connect ${endpoint} ${connected}`
-          );
+          this.error(level => `unable to connect ${endpoint} ${connected}`);
         }
       }
     }
@@ -142,12 +151,57 @@ export const InitializationContext = LogLevelMixin(
       });
     }
 
+    /**
+     *
+     * @param {string|class} type name if type
+     */
+    async getServiceFactory(type) {
+      const sp = this.serviceProvider;
+
+      if (type instanceof Function) {
+        const factory = sp.serviceFactories[type.name];
+        if (factory !== undefined) {
+          return factory;
+        }
+        return sp.registerServiceFactory(type);
+      }
+
+      const factory = sp.serviceFactories[type];
+      if (factory) {
+        return factory;
+      }
+
+      let typePromise = this.outstandingFactories.get(type);
+      if (typePromise !== undefined) {
+        return typePromise;
+      }
+
+      if (!this.waitForFactories) {
+        return undefined;
+      }
+
+      typePromise = new Promise((resolve, reject) => {
+        const listener = factory => {
+          if (factory.name === type) {
+            this.outstandingFactories.delete(type);
+            sp.removeListener("serviceFactoryRegistered", listener);
+            resolve(factory);
+          }
+        };
+
+        sp.addListener("serviceFactoryRegistered", listener);
+      });
+
+      this.outstandingFactories.set(type, typePromise);
+
+      return typePromise;
+    }
 
     /**
      * - if there is already a service for the given name configure it and we are done
      * - if the is already an outstanding declaration ongoing wait until it is done configure it done
      * - otherewise declare this action as a new outstanding service declaration
-     * @param {Object} config 
+     * @param {Object} config
      * @param {string} name
      * @return {Service}
      */
@@ -155,19 +209,35 @@ export const InitializationContext = LogLevelMixin(
       const sp = this.serviceProvider;
       let service = sp.getService(name);
 
-      if(service !== undefined) {
+      if (service !== undefined) {
         await service.configure(config);
         return service;
       }
 
       let servicePromise = this.outstandingServices.get(name);
-      if(servicePromise) {
+      if (servicePromise) {
         service = await servicePromise;
         await service.configure(config);
         return service;
       }
 
-      servicePromise = sp.registerService(sp.createService(config, this));
+      config.name = name;
+
+      // service factory not present? wait until one arrives
+      const type = config.type || config.name;
+      const clazz = await this.getServiceFactory(type);
+      if (clazz === undefined) {
+        throw new Error(`no factory for ${type}`);
+      }
+
+      if (sp.services.config) {
+        const pc = sp.services.config.preservedConfigs.get(name);
+        if (pc !== undefined) {
+          Object.assign(config, pc);
+        }
+      }
+
+      servicePromise = sp.registerService(new clazz(config, this));
       this.outstandingServices.set(name, servicePromise);
       service = await servicePromise;
       this.outstandingServices.delete(name);
