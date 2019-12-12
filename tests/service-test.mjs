@@ -13,7 +13,8 @@ const owner = {
   error() {},
   getService(name) {
     return this.services[name];
-  }
+  },
+  endpointForExpression(expression) {}
 };
 
 const ic = new InitializationContext(owner);

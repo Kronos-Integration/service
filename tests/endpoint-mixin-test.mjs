@@ -55,38 +55,18 @@ test("endpointForExpression service", t => {
   t.is(o.endpointForExpression("service(logger).log").name, "log");
 });
 
-test("endpointForExpression service throwing", t => {
+test("endpointForExpression service undefined", t => {
   const o = new Owner();
-
-  const error = t.throws(() => {
-    o.endpointForExpression("service(something).something");
-  }, Error);
-
-  t.is(
-    error.message,
-    "Service 'something' not found in owner (config,logger,owner)"
-  );
+  t.is(o.endpointForExpression("service(something).something"), undefined);
 });
 
-test("endpointForExpression service ignore throwing", t => {
-  const o = new Owner();
-  t.is(
-    o.endpointForExpression("service(something).something", false, false),
-    undefined
-  );
-});
-
-test("endpointForExpression throwing", t => {
+test("endpointForExpression undefined", t => {
   const o = new Owner();
   const r1 = new ReceiveEndpoint("r1");
 
   o.addEndpoint(r1);
 
-  const error = t.throws(() => {
-    o.endpointForExpression("r2");
-  }, Error);
-
-  t.is(error.message, "Endpoint 'r2' not found in owner");
+  t.is(o.endpointForExpression("r2"), undefined);
 });
 
 test("endpointFromConfig simple connected", t => {
@@ -129,8 +109,7 @@ test("endpointFromConfig foreign connected expression only", t => {
 });
 
 test("endpointFromConfig real connected", t => {
-  const dummyLogReceiver = new ReceiveEndpoint("log", {
-  });
+  const dummyLogReceiver = new ReceiveEndpoint("log", {});
 
   dummyLogReceiver.receive = entry => {
     console.log(safeStringify(entry));

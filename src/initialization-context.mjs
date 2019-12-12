@@ -94,15 +94,9 @@ export const InitializationContext = LogLevelMixin(
      */
     endpointForExpression(expression, from) {
       if (this.serviceProvider) {
-        const m = expression.match(/^service\(([^\)]+)\).(.*)/);
-        if (m) {
-          const serviceName = m[1];
-          const suffixExpression = m[2];
-          const service = this.serviceProvider.getService(serviceName);
-
-          if (service) {
-            return service.endpoints[suffixExpression];
-          }
+        const endpoint = this.serviceProvider.endpointForExpression(expression);
+        if(endpoint) {
+          return endpoint;
         }
       }
 
@@ -111,7 +105,7 @@ export const InitializationContext = LogLevelMixin(
           return from;
         }
 
-        return from.owner.endpoints[expression];
+        return from.owner.endpointForExpression(expression);
       }
     }
 
