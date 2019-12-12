@@ -81,7 +81,7 @@ const ssf5000 = {
  * @param {string} config.name
  * @param {string} config.logLevel
  * @param {boolean} config.autostart defaults to false
- * @param {string} config.description
+ * @param {string} config.description human readable description
  * @param {Object} config.endpoints will be merged with the build in ones
  * @param {InitializationContext} ic
  */
