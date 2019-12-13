@@ -408,7 +408,7 @@ export default class Service extends EndpointsMixin(
             value = "***";
           }
           return {
-            message: `config ${path}: ${value}`,
+            message: `config ${path}: ${JSON.stringify(value)}`,
             attribute: path,
             value: value
           };
