@@ -24,11 +24,6 @@ export default function ServiceProviderMixin(
 
       super(Array.isArray(config) ? config[0] : config, ic);
 
-      /*
-      console.log("ENDPOINTS   1", Object.values(this.endpoints).map(e => `${e}`));
-      console.log("OUTSTANDING 1", [...ic.outstandingEndpointConnections.entries()].map(([e,c])=> `${e.identifier} <> ${c}`));
-      */
-
       ic.logLevel = this.logLevel;
       ic.serviceProvider = this;
 
@@ -36,27 +31,9 @@ export default function ServiceProviderMixin(
       const loggerService = new serviceLoggerClass(undefined, ic);
       this.registerService(loggerService);
 
-      /*
-      console.log("ENDPOINTS   2", Object.values(loggerService.endpoints).map(e => `${e}`));
-      console.log("OUTSTANDING 2", [...ic.outstandingEndpointConnections.entries()].map(([e,c])=> `${e.identifier} <> ${c}`));
-      */
-
       // register config service and let it know about the initial config
       const configService = new serviceConfigClass(undefined, ic);
       this.registerService(configService);
-
-      /*    
-      console.log(
-        "ENDPOINTS   3",
-        Object.values(configService.endpoints).map(e => `${e}`)
-      );
-      console.log(
-        "OUTSTANDING 3",
-        [...ic.outstandingEndpointConnections.entries()].map(
-          ([e, c]) => `${e.identifier} <> ${c}`
-        )
-      );
-    */
 
       this.registerService(this);
 

@@ -41,16 +41,17 @@ export const InitializationContext = LogLevelMixin(
     }
 
     /**
-     * Adds service name to the log event
+     * forward to the serviceProvider
      * @param {string} level the log level
      * @param {Object} arg log content
      */
     log(level, ...args) {
-      console.log(...args);
-      /*if (this.serviceProvider) {
-      this.serviceProvider.log(level, ...args);
-    }
-    */
+      if (this.serviceProvider) {
+        this.serviceProvider.log(level, ...args);
+      }
+      else {
+        console.log(...args);
+      }
     }
 
     ownerOfService(service) {
