@@ -208,6 +208,16 @@ export default class Service extends EndpointsMixin(
   set description(desc) {
     this[DESCRIPTION] = desc;
   }
+  
+  /**
+   * use in human readable state messages.
+   * Besides the actual service name it may contain additional short hints
+   * @return {string}
+   */
+  get extendetName()
+  {
+    return this.name;
+  }
 
   async execute(command) {
     // TODO admin query language ?
@@ -234,7 +244,7 @@ export default class Service extends EndpointsMixin(
   stateChanged(oldState, newState) {
     this.owner.emit("serviceStateChanged", this, oldState, newState);
     this.trace({
-      message: `${this.name} transitioned from ${oldState} to ${newState}`,
+      message: `${this.extendetName}: transitioned from ${oldState} to ${newState}`,
       from: oldState,
       state: newState
     });
@@ -243,7 +253,7 @@ export default class Service extends EndpointsMixin(
   stateTransitionRejection(rejected, newState) {
     const p = super.stateTransitionRejection(rejected, newState);
     this.error({
-      message: `${this.name}: transition abordet`,
+      message: `${this.extendetName}: transition abordet`,
       rejected,
       newState
     });
@@ -302,7 +312,7 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-   * Returns the string representation of this step
+   * Returns the string representation of this service
    * @return {string} human readable name
    */
   toString() {

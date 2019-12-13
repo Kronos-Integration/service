@@ -24,6 +24,7 @@ Base service implementation
 -   [DESCRIPTION](#description)
 -   [Service](#service)
     -   [Parameters](#parameters)
+    -   [extendetName](#extendetname)
     -   [stateChanged](#statechanged)
         -   [Parameters](#parameters-1)
     -   [rejectWrongState](#rejectwrongstate)
@@ -114,6 +115,13 @@ All services have at least three endpoints:
     -   `config.endpoints` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** will be merged with the build in ones
 -   `ic` **[InitializationContext](#initializationcontext)** 
 
+### extendetName
+
+use in human readable state messages.
+Besides the actual service name it may contain additional short hints
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
 ### stateChanged
 
 Called when the service state changes.
@@ -167,7 +175,7 @@ Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ### toString
 
-Returns the string representation of this step
+Returns the string representation of this service
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** human readable name
 
