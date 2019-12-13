@@ -62,10 +62,6 @@ export default function EndpointsMixin(superclass) {
         }
       }
 
-      if (definition.connected === "self") {
-        delete definition.connected;
-      }
-
       return definition;
     }
 
@@ -103,6 +99,14 @@ export default function EndpointsMixin(superclass) {
      */
     createEndpointFromConfig(name, definition, ic) {
       definition = this.endpointOptions(name, definition, ic);
+
+    /*  console.log(
+        "EP",
+        this.name,
+        name,
+        this.endpointFactoryFromConfig(name, definition, ic),
+        definition
+      );*/
 
       const ep = new (this.endpointFactoryFromConfig(name, definition, ic))(
         name,

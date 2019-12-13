@@ -1,4 +1,5 @@
 import test from "ava";
+
 import { ServiceProvider, TestService, makeServices } from "./util.mjs";
 import { InitializationContext } from "../src/initialization-context.mjs";
 
@@ -20,9 +21,7 @@ test("service provider config service", async t => {
 
   t.deepEqual(
     sp.services.config.preservedConfigs,
-    new Map([
-      ["test", { key3: 3 }]
-    ])
+    new Map([["test", { key3: 3 }]])
   );
 
   t.is(sp.services.logger.name, "logger");
@@ -39,8 +38,6 @@ test("service provider without initial config", async t => {
   await sp.start();
 
   t.is(sp.services.config.name, "config");
-
-  sp.info(`logging`);
 });
 
 test("service provider additional service", async t => {
@@ -63,7 +60,9 @@ test("service provider additional service", async t => {
   sp.services.test1.info("hello");
 
   t.true(
-    sp.services.test1.endpoints.log.isConnected(sp.services.logger.endpoints.log)
+    sp.services.test1.endpoints.log.isConnected(
+      sp.services.logger.endpoints.log
+    )
   );
 });
 
@@ -71,7 +70,15 @@ test("service provider additional service configure service", async t => {
   const sp = new ServiceProvider();
   const ic = new InitializationContext(sp);
   await sp.start();
-  await sp.registerService(new TestService({ name: "test1",endpoints: { testOut: { connected: "service(logger).log" } } }, ic));
+  await sp.registerService(
+    new TestService(
+      {
+        name: "test1",
+        endpoints: { testOut: { connected: "service(logger).log" } }
+      },
+      ic
+    )
+  );
 
   await sp.services.test1.configure({
     key: "new value"
@@ -109,26 +116,45 @@ test("service provider additional service send change request over config servic
   t.is(sp.services.t2.key1, 4711);
 });
 
-test.skip("service provider additional service logging", async t => {
+test("service provider logging", async t => {
   const logLevel = "trace";
 
   const sp = new ServiceProvider({ logLevel });
+
+  t.true(sp.endpoints.log.isConnected(sp.services.logger.endpoints.log));
+  t.true(
+    sp.services.config.endpoints.log.isConnected(
+      sp.services.logger.endpoints.log
+    )
+  );
+  t.true(
+    sp.services.logger.endpoints.log.isConnected(
+      sp.services.logger.endpoints.log
+    )
+  );
+
   const ic = new InitializationContext(sp);
 
   await sp.registerService(
     new TestService(
-      { name: "t2", endpoints: { testOut: { connected: "service(logger).log" } } },
+      {
+        name: "t2",
+        endpoints: { testOut: { connected: "service(logger).log" } }
+      },
       ic
     )
   );
 
   ic.resolveOutstandingEndpointConnections();
 
-  t.is(sp.services.t2.endpoints.testOut.name,'testOut');
+  t.is(sp.services.t2.endpoints.testOut.name, "testOut");
 
-  t.true(sp.services.t2.endpoints.testOut.isConnected(sp.services.logger.log));
+  t.true(
+    sp.services.t2.endpoints.testOut.isConnected(
+      sp.services.logger.endpoints.log
+    )
+  );
 
-  /*
   await sp.services.config.endpoints.config.receive([
     {
       name: "config"
@@ -142,10 +168,9 @@ test.skip("service provider additional service logging", async t => {
       key2: "2"
     }
   ]);
-  */
-  //console.log(sp.services.logger.logEntries);
 
-  t.is(sp.services.logger.logEntries.length, 7);
+  //console.log(sp.services.logger.logEntries);
+  //t.is(sp.services.logger.logEntries.length, 7);
 });
 
 test("service provider additional service can be unregistered", async t => {

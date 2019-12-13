@@ -11,11 +11,8 @@ export async function wait(msecs = 1000) {
 export class TestLogger extends ServiceLogger {
   constructor(...args) {
     super(...args);
-
     this.logEntries = [];
-    this.endpoints.log.receive = entry => {
-      this.logEntries.push(entry);
-    };
+    this.endpoints.log.receive = entry => this.logEntries.push(entry);
   }
 
   async _start() {

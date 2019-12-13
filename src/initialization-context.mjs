@@ -20,7 +20,6 @@ export const InitializationContext = LogLevelMixin(
    * @param {boolean} options.waitForFactories wait until factory apears in registry
    */
   class InitializationContext {
-
     /**
      * services requested but not ready missing factories...
      */
@@ -64,26 +63,26 @@ export const InitializationContext = LogLevelMixin(
      * @param {string} connected
      */
     connectEndpoint(endpoint, connected) {
-      if (connected !== undefined) {
-        endpoint.addConnection(
-          isEndpoint(connected)
-            ? connected
-            : this.endpointForExpression(connected, endpoint)
-        );
+      if (connected == undefined) {
+        return;
       }
 
-      if (connected) {
-        if (!endpoint.hasConnections) {
-          this.trace(level => `${endpoint} ${connected} (connect deffered)`);
+      let other = connected;
+      if (!isEndpoint(connected)) {
+        other = this.endpointForExpression(connected, endpoint);
+      }
 
-          const r = new ReceiveEndpoint(`tmp-${endpoint.name}`, endpoint.owner);
-          r.receive = async () => {};
-          endpoint.addConnection(r);
+      if (other) {
+        endpoint.addConnection(other);
+        this.trace(level => `${endpoint} ${connected} (connected)`);
+      } else {
+        this.trace(level => `${endpoint} ${connected} (connect deffered)`);
 
-          this.addOutstandingEndpointConnection(endpoint, connected);
-        } else {
-          this.trace(level => `${endpoint} (connected)`);
-        }
+        const r = new ReceiveEndpoint(`tmp-${endpoint.name}`, endpoint.owner);
+        r.receive = async () => {};
+        endpoint.addConnection(r);
+
+        this.addOutstandingEndpointConnection(endpoint, connected);
       }
     }
 
@@ -94,8 +93,11 @@ export const InitializationContext = LogLevelMixin(
      */
     endpointForExpression(expression, from) {
       if (this.serviceProvider) {
-        const endpoint = this.serviceProvider.endpointForExpression(expression, from);
-        if(endpoint) {
+        const endpoint = this.serviceProvider.endpointForExpression(
+          expression,
+          from
+        );
+        if (endpoint) {
           return endpoint;
         }
       }
