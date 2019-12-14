@@ -332,8 +332,8 @@ export default class Service extends EndpointsMixin(
 
   toJSON() {
     return this.toJSONWithOptions({
-      includeRuntimeInfo: false,
-      includeDefaults: false,
+      includeRuntimeInfo: true,
+      includeDefaults: true,
       includeName: true,
       includeConfig: false
     });
