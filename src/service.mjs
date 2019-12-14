@@ -265,7 +265,7 @@ export default class Service extends EndpointsMixin(
   stateTransitionRejection(rejected, newState) {
     const p = super.stateTransitionRejection(rejected, newState);
     this.error({
-      message: `${this.extendetName}: transition abordet`,
+      message: `${this.extendetName}: transition aborted`,
       rejected,
       newState
     });
