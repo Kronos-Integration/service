@@ -27,7 +27,7 @@ owner.services.logger = new Service(
 
 function st(t, factory, options, expected = {}) {
   expected = {
-    timeout: { start: 5 },
+    timeout: { start: 10 },
     autostart: false,
     endpoints: {
       log: { hasConnections: true },

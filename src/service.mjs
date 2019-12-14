@@ -50,24 +50,36 @@ const _ca = createAttributes({
       start: {
         description: "service start timeout",
         type: "duration",
-        default: 5
-      }
+        default: 10
+      },
+      stop: {
+        description: "service stop timeout",
+        type: "duration",
+        default: 10
+      },
+      restart: {
+        description: "service restart timeout",
+        type: "duration",
+        default: 10
+      },
     }
   }
 });
 
-const rsf5000 = {
+const timeout = 10000;
+
+const rsfDefault = {
   target: "running",
   during: "starting",
   rejected: "failed",
-  timeout: 5000
+  timeout
 };
 
-const ssf5000 = {
+const ssfDefault = {
   target: "stopped",
   during: "stopping",
   rejected: "failed",
-  timeout: 5000
+  timeout
 };
 
 /**
@@ -90,20 +102,20 @@ export default class Service extends EndpointsMixin(
     LogLevelMixin(events),
     prepareActions({
       start: {
-        stopped: rsf5000
+        stopped: rsfDefault
       },
       restart: {
-        stopped: rsf5000,
+        stopped: rsfDefault,
         running: {
           target: "running",
           during: "restarting",
-          timeout: 5000
+          timeout
         }
       },
       stop: {
-        running: ssf5000,
-        starting: ssf5000,
-        failed: ssf5000
+        running: ssfDefault,
+        starting: ssfDefault,
+        failed: ssfDefault
       }
     }),
     "stopped"
@@ -122,7 +134,7 @@ export default class Service extends EndpointsMixin(
    * - default optional default value of the attribute
    * - needsRestart optional modification requires a service restart
    * - setter(newValue,attrribute) optional function to be used if simple value assignment is not enough
-   * The Service class only defines the logLevel, ans start timeout attribute
+   * The Service class only defines the logLevel, and start/stop/restart timeout attribute
    * @return {Object}
    */
   static get configurationAttributes() {
@@ -272,14 +284,11 @@ export default class Service extends EndpointsMixin(
   /**
    * Deliver transtion timeout
    * @param {Object} transition
-   * @return {number} milliseconds before throwing for a logn running transition
+   * @return {number} milliseconds before throwing for a long running transition
    */
   timeoutForTransition(transition) {
-    if (transition.name.startsWith("start")) {
-      return this.timeout.start * 1000;
-    }
-
-    return super.timeoutForTransition(transition);
+    const timeout = this.timeout[transition.name];
+    return timeout === undefined ? super.timeoutForTransition(transition) : timeout;
   }
 
   /**
