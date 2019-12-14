@@ -77,7 +77,12 @@ function st(t, factory, options, expected = {}) {
   }
 
   if (expected.json !== undefined) {
-    t.deepEqual(s1.toJSON(), expected.json);
+    t.deepEqual(s1.toJSONWithOptions({
+      includeRuntimeInfo: false,
+      includeDefaults: false,
+      includeName: true,
+      includeConfig: false
+    }), expected.json);
   }
 
   t.is(s1.toString(), `${s1.name}(state=stopped)`);

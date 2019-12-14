@@ -62,7 +62,6 @@ export class TestService extends Service {
       testOut: {
         out: true,
         default: true
-        //    target: 'service(logger).log'
       }
     };
   }
@@ -107,7 +106,6 @@ export async function makeServices(logLevel = "info") {
   const sp = new ServiceProvider({ logLevel });
   const ic = new InitializationContext(sp);
 
-  // await sp.registerService(new TestService({ logLevel }, ic));
   await sp.registerService(
     new TestService(
       {
@@ -120,8 +118,6 @@ export async function makeServices(logLevel = "info") {
   );
 
   ic.resolveOutstandingEndpointConnections();
-
- // console.log(JSON.stringify(sp.services.t2.endpoints));
 
   await sp.start();
 

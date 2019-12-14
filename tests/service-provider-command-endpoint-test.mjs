@@ -1,16 +1,10 @@
 import test from "ava";
 import { SendEndpoint } from "@kronos-integration/endpoint";
-import Service from "../src/service.mjs";
-import ServiceProviderMixin from "../src/service-provider-mixin.mjs";
+import { StandaloneServiceProvider } from "../src/module.mjs";
 
-class ServiceProvider extends ServiceProviderMixin(Service) {
-  static get name() {
-    return "service-provider";
-  }
-}
 
 async function makeServiceProvider() {
-  const sp = new ServiceProvider([
+  const sp = new StandaloneServiceProvider([
     {
       name: "a"
     },
@@ -32,7 +26,13 @@ test("service provider command endpoint", async t => {
   const { sp, testEndpoint } = await makeServiceProvider();
 
   const response = await testEndpoint.send({
-    action: "list"
+    action: "list",
+    options: {
+      includeRuntimeInfo: false,
+      includeDefaults: false,
+      includeName: true,
+      includeConfig: false
+    }
   });
 
   t.deepEqual(
@@ -40,7 +40,7 @@ test("service provider command endpoint", async t => {
     [
       {
         name: "a",
-        type: "service-provider"
+        type: "standalone-provider"
       },
       {
         name: "config",
