@@ -54,7 +54,8 @@ test("service provider additional service", async t => {
 
   t.deepEqual(sp.services.test1.endpoints.log.toJSON(), {
     connected: "service(logger).log",
-    out: true
+    out: true,
+    open: true
   });
 
   sp.services.test1.info("hello");

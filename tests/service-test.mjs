@@ -9,6 +9,7 @@ const owner = {
   emit(name, arg1, arg2) {}, // dummy event emitter
   services: {},
 
+  warn(...args) { /*console.log(...args);*/ },
   trace() {},
   error() {},
   getService(name) {
@@ -157,7 +158,6 @@ test("service create with logLevel", t => {
     },
     ic
   );
-
   t.is(s1.logLevel, "trace");
 
   s1.error("some error");
