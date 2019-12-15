@@ -80,20 +80,20 @@ key of the service description
 
 **Extends EndpointsMixin(StateTransitionMixin(LogLevelMixin(events), prepareActions({
   start: {
-    stopped: rsf5000
+    stopped: rsfDefault
   },
   restart: {
-    stopped: rsf5000,
+    stopped: rsfDefault,
     running: {
       target: "running",
       during: "restarting",
-      timeout: 5000
+      timeout
     }
   },
   stop: {
-    running: ssf5000,
-    starting: ssf5000,
-    failed: ssf5000
+    running: ssfDefault,
+    starting: ssfDefault,
+    failed: ssfDefault
   }
 }), "stopped"))**
 
@@ -151,7 +151,7 @@ Deliver transtion timeout
 
 -   `transition` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
 
-Returns **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** milliseconds before throwing for a logn running transition
+Returns **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** milliseconds before throwing for a long running transition
 
 ### \_restart
 
@@ -249,7 +249,7 @@ Meta information for the config attributes.
 -   default optional default value of the attribute
 -   needsRestart optional modification requires a service restart
 -   setter(newValue,attrribute) optional function to be used if simple value assignment is not enough
-    The Service class only defines the logLevel, ans start timeout attribute
+    The Service class only defines the logLevel, and start/stop/restart timeout attribute
 
 Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
 
