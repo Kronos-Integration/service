@@ -224,16 +224,17 @@ export const InitializationContext = LogLevelMixin(
       }
 
       if (sp.services.config) {
-        const pc = sp.services.config.preservedConfigs.get(name);
-        if (pc !== undefined) {
-          Object.assign(config, pc);
-        }
+        config = sp.services.config.configFor(name,config);
       }
 
       servicePromise = sp.registerService(new clazz(config, this));
       this.outstandingServices.set(name, servicePromise);
       service = await servicePromise;
       this.outstandingServices.delete(name);
+
+      if (sp.services.config) {
+        sp.services.config.clear(name);
+      }
 
       this.resolveOutstandingEndpointConnections();
       return service;

@@ -17,6 +17,22 @@ export default class ServiceConfig extends Service {
 
   preservedConfigs = new Map();
 
+  configFor(name, config) {
+    const pc = this.preservedConfigs.get(name);
+    if (pc !== undefined) {
+      config = Object.assign(config, pc);
+    }
+    this.preservedConfigs.set(name, config);
+
+    this.trace(`configFor ${name}`);
+
+    return config;
+  }
+
+  clear(name) {
+    this.preservedConfigs.delete(name);
+  }
+
   /**
    * set config entry
    * @param {string} key path to the value
