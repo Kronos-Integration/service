@@ -20,7 +20,7 @@ export default class ServiceConfig extends Service {
   configFor(name, config) {
     const pc = this.preservedConfigs.get(name);
     if (pc !== undefined) {
-      config = Object.assign(config, pc);
+      config = config ? Object.assign(config, pc) : pc;
     }
     this.preservedConfigs.set(name, config);
 
