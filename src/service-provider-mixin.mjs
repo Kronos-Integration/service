@@ -159,6 +159,7 @@ export default function ServiceProviderMixin(
      */
     async _start() {
       await super._start();
+      await this.services.config.start();
 
       return Promise.all(
         Object.values(this.services)
