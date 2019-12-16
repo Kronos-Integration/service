@@ -1,5 +1,5 @@
 import test from "ava";
-import { ServiceConfig, StandaloneServiceProvider } from "../src/module.mjs";
+import { StandaloneServiceProvider } from "../src/module.mjs";
 
 test("configFor", async t => {
   const sp = new StandaloneServiceProvider();
@@ -21,5 +21,4 @@ test("configFor", async t => {
   sc.clear("s1");
 
   t.is(sc.configFor("s1"), undefined);
-
 });
