@@ -121,10 +121,10 @@ export default function ServiceProviderMixin(
       return this.services && this.services[name];
     }
 
-    async declareService(config, ...args) {
+    async declareService(config) {
       const name = config.name;
-      const services = await this.declareServices({ [name]: config }, ...args);
-      return services[0];
+      const services = await this.declareServices({ [name]: config });
+      return services[name];
     }
 
     /**
@@ -135,7 +135,7 @@ export default function ServiceProviderMixin(
      * @param {object} config with
      *     name - the service name
      *     type - the service factory name - defaults to config.name
-     * @return {Promise} resolving to the declared service
+     * @return {Promise<Object>} resolving to the declared services
      */
     async declareServices(configs) {
       const ic = new InitializationContext(this);
@@ -149,11 +149,13 @@ export default function ServiceProviderMixin(
       ic.resolveOutstandingEndpointConnections();
       ic.validateEndpoints();
 
-      return services;
+      return Object.fromEntries(
+        (await services).map(service => [service.name, service])
+      );
     }
 
     /**
-     * start all registered services which hangin autostart set
+     * start all registered services which hanving autostart set
      */
     async _start() {
       await super._start();

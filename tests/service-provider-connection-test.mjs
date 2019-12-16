@@ -11,7 +11,7 @@ import {
 test("declare services", async t => {
   const sp = await makeServices();
 
-  const [s3, s2, s4] = await sp.declareServices(
+  const {s2, s3, s4} = await sp.declareServices(
     {
       s3: {
         type: TestService,
