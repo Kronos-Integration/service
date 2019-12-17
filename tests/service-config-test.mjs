@@ -36,10 +36,10 @@ test("service provider config service", async t => {
     key3: 3
   });
 
-  t.deepEqual(
-    [...sp.services.config.preservedConfigs.keys()].sort(),
-    ["service1", "test"]
-  );
+  t.deepEqual([...sp.services.config.preservedConfigs.keys()].sort(), [
+    "service1",
+    "test"
+  ]);
 
   t.deepEqual(sc.preservedConfigs.get("service1"), { key1: 1 });
   t.deepEqual(sc.preservedConfigs.get("test"), { key3: 3 });
@@ -61,12 +61,22 @@ test("configFor", async t => {
 
   await sc.configure({
     s1: {
-      key1: "value1"
+      key1: "value1",
+      a: { b: { c: 7 } }
+    }
+  });
+
+  await sc.configure({
+    s1: {
+      key2: "value2",
+      a: { key3: 3 }
     }
   });
 
   t.deepEqual(await sc.configFor("s1"), {
-    key1: "value1"
+    a: { b: { c: 7 }, key3: 3 },
+    key1: "value1",
+    key2: "value2"
   });
 
   sc.clear("s1");

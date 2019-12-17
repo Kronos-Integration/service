@@ -21,13 +21,13 @@ export default class ServiceConfig extends Service {
     this.trace(`configFor ${name}`);
 
     await this.start();
-        
+
     const pc = this.preservedConfigs.get(name);
     if (pc !== undefined) {
-      config = config === undefined ? pc : Object.assign(config, pc);
+      config = config === undefined ? pc : merge(config, pc);
       this.trace(`using preserved config ${name}`);
     }
-    
+
     this.preservedConfigs.set(name, config);
 
     return config;
@@ -60,7 +60,10 @@ export default class ServiceConfig extends Service {
       if (s === undefined) {
         delete c.name;
         this.trace(`preserve config for ${name}`);
-        this.preservedConfigs.set(name, c);
+        this.preservedConfigs.set(
+          name,
+          merge(this.preservedConfigs.get(name), c)
+        );
       } else {
         return s.configure(c);
       }
@@ -84,4 +87,47 @@ export default class ServiceConfig extends Service {
   get name() {
     return "config";
   }
+}
+
+/**
+ * merge from b into a
+ * When a and b are arrays of values only the none duplaces are appendend to a
+ * @param {any} a
+ * @param {any} b
+ * @return {any} merged b into a
+ */
+export function merge(a, b) {
+  if (b === undefined || b === null) {
+    return a;
+  }
+
+  if (Array.isArray(a)) {
+    if (Array.isArray(b)) {
+      return [...a, ...b.filter(x => !a.find(e => equal(e, x)))];
+    }
+    return [...a, b];
+  }
+
+  if (Array.isArray(b)) {
+    return b;
+  }
+
+  if(b instanceof Buffer) {
+    return b;
+  }
+
+  switch (typeof b) {
+    case "function":
+    case "string":
+    case "number":
+    case "boolean":
+      return b;
+    case "object":
+      if (a === undefined || a === null) {
+        a = {};
+      }
+      Object.keys(b).forEach(k => (a[k] = merge(a[k], b[k])));
+  }
+
+  return a;
 }
