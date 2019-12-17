@@ -52,9 +52,18 @@ test("service provider config service", async t => {
   t.is(sp.services.a.name, "a");
 });
 
-test("configFor", async t => {
+test("configureValue", async t => {
   const sp = new StandaloneServiceProvider();
+  const sc = sp.services.config;
+  await sc.configureValue("s1.a.b.c2", { key4: "value4" });
 
+  t.deepEqual(await sc.configFor("s1"), {
+    a: { b: { c2: { key4: "value4" } } },
+  });
+});
+
+test("configFor & configureValue", async t => {
+  const sp = new StandaloneServiceProvider();
   const sc = sp.services.config;
 
   t.is(await sc.configFor("not-present"), undefined);
@@ -73,8 +82,10 @@ test("configFor", async t => {
     }
   });
 
+  await sc.configureValue("s1.a.b.c2", { key4: "value4" });
+
   t.deepEqual(await sc.configFor("s1"), {
-    a: { b: { c: 7 }, key3: 3 },
+    a: { b: { c: 7, c2: { key4: "value4" } }, key3: 3 },
     key1: "value1",
     key2: "value2"
   });
