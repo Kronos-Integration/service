@@ -96,11 +96,6 @@ export default function ServiceProviderMixin(
 
     async registerService(service) {
       this.services[service.name] = service;
-
-      if (service.autostart) {
-        return service.start();
-      }
-
       return service;
     }
 

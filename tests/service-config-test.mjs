@@ -37,7 +37,7 @@ test("service provider config service", async t => {
   });
 
   t.deepEqual(
-    [...sp.services.config.preservedConfigs.keys()],
+    [...sp.services.config.preservedConfigs.keys()].sort(),
     ["service1", "test"]
   );
 
