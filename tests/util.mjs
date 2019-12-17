@@ -1,6 +1,7 @@
 import { createAttributes } from "model-attributes";
 import Service from "../src/service.mjs";
 import ServiceLogger from "../src/service-logger.mjs";
+import ServiceConfig from "../src/service-config.mjs";
 import ServiceProviderMixin from "../src/service-provider-mixin.mjs";
 import { InitializationContext } from "../src/initialization-context.mjs";
 
@@ -17,6 +18,19 @@ export class TestLogger extends ServiceLogger {
 
   async _start() {
     return wait(1000);
+  }
+}
+
+export class TestConfig extends ServiceConfig {
+
+  async _start() {
+    wait(1000);
+
+    super.configure({
+      "service1" : {
+        key1: 1
+      }
+    });
   }
 }
 
@@ -96,7 +110,7 @@ export class TestService extends Service {
   async testReceive(entry) {}
 }
 
-export class ServiceProvider extends ServiceProviderMixin(Service, TestLogger) {
+export class ServiceProvider extends ServiceProviderMixin(Service, TestLogger, TestConfig) {
   static get name() {
     return "service-provider";
   }

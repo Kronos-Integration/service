@@ -3,43 +3,6 @@ import test from "ava";
 import { ServiceProvider, TestService, makeServices } from "./util.mjs";
 import { InitializationContext } from "../src/initialization-context.mjs";
 
-test("service provider config service", async t => {
-  const sp = new ServiceProvider([
-    {
-      name: "a" // provider itself
-    },
-    {
-      name: "test",
-      key3: 3
-    }
-  ]);
-
-  await sp.start();
-
-  t.is(sp.services.config.name, "config");
-  t.is(sp.services.config.state, "running");
-
-  t.deepEqual(
-    sp.services.config.preservedConfigs,
-    new Map([["test", { key3: 3 }]])
-  );
-
-  t.is(sp.services.logger.name, "logger");
-  t.is(sp.services.logger.state, "running");
-
-  t.is(sp.state, "running");
-
-  t.is(sp.services.a.name, "a");
-});
-
-test("service provider without initial config", async t => {
-  const sp = new ServiceProvider();
-
-  await sp.start();
-
-  t.is(sp.services.config.name, "config");
-});
-
 test("service provider additional service", async t => {
   const sp = new ServiceProvider();
   const ic = new InitializationContext(sp);
