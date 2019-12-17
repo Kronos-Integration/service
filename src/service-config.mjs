@@ -47,19 +47,20 @@ export default class ServiceConfig extends Service {
    * @param {Array|Object} config
    */
   async configure(config) {
+    if (config === undefined) {
+      return;
+    }
+
     const update = async (name, c) => {
       const s = this.owner.services[name];
       if (s === undefined) {
         delete c.name;
+        this.trace(`preserve config for ${name}`);
         this.preservedConfigs.set(name, c);
       } else {
         return s.configure(c);
       }
     };
-
-    if (config === undefined) {
-      return;
-    }
 
     await Promise.all(
       Array.isArray(config)
