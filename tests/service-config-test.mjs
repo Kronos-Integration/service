@@ -57,7 +57,7 @@ test("configFor", async t => {
 
   const sc = sp.services.config;
 
-  t.is(sc.configFor("not-present"), undefined);
+  t.is(await sc.configFor("not-present"), undefined);
 
   await sc.configure({
     s1: {
@@ -65,11 +65,11 @@ test("configFor", async t => {
     }
   });
 
-  t.deepEqual(sc.configFor("s1"), {
+  t.deepEqual(await sc.configFor("s1"), {
     key1: "value1"
   });
 
   sc.clear("s1");
 
-  t.is(sc.configFor("s1"), undefined);
+  t.is(await sc.configFor("s1"), undefined);
 });

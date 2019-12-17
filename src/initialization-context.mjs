@@ -224,7 +224,7 @@ export const InitializationContext = LogLevelMixin(
       }
 
       if (sp.services.config) {
-        config = sp.services.config.configFor(name,config);
+        config = await sp.services.config.configFor(name,config);
       }
 
       servicePromise = sp.registerService(new clazz(config, this));

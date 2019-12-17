@@ -17,9 +17,11 @@ export default class ServiceConfig extends Service {
 
   preservedConfigs = new Map();
 
-  configFor(name, config) {
+  async configFor(name, config) {
     this.trace(`configFor ${name}`);
-    
+
+    await this.start();
+        
     const pc = this.preservedConfigs.get(name);
     if (pc !== undefined) {
       config = config === undefined ? pc : Object.assign(config, pc);
