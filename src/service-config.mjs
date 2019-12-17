@@ -59,10 +59,12 @@ export default class ServiceConfig extends Service {
       const s = this.owner.services[name];
       if (s === undefined) {
         delete c.name;
-        this.trace(`preserve config for ${name}`);
+
+        const merged = merge(this.preservedConfigs.get(name), c);
+        this.trace(`preserve config for ${name} ${JSON.stringify(merged)}`);
         this.preservedConfigs.set(
           name,
-          merge(this.preservedConfigs.get(name), c)
+          merged
         );
       } else {
         return s.configure(c);
