@@ -28,11 +28,11 @@ test("service provider config service", async t => {
 
   const sc = sp.services.config;
 
-  t.deepEqual(sc.configFor("service1"), {
+  t.deepEqual(await sc.configFor("service1"), {
     key1: 1
   });
 
-  t.deepEqual(sc.configFor("test"), {
+  t.deepEqual(await sc.configFor("test"), {
     key3: 3
   });
 
