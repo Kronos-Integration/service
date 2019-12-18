@@ -55,11 +55,17 @@ test("service provider config service", async t => {
 test("configureValue", async t => {
   const sp = new StandaloneServiceProvider();
   const sc = sp.services.config;
-  await sc.configureValue("s1.a.b.c2", { key4: "value4" });
+  await sc.configureValue("s1.listener", { fd: 4 });
+  t.deepEqual(await sc.configFor("s1"), { listener: { fd: 4 } });
+});
 
-  t.deepEqual(await sc.configFor("s1"), {
-    a: { b: { c2: { key4: "value4" } } },
-  });
+test("configureValue last wins", async t => {
+  const sp = new StandaloneServiceProvider();
+  const sc = sp.services.config;
+
+  await sc.configure({ s1: { listener: "/run/socket" } });
+  await sc.configureValue("s1.listener", { fd: 4 });
+  t.deepEqual(await sc.configFor("s1"), { listener: { fd: 4 } });
 });
 
 test("configFor & configureValue", async t => {

@@ -125,7 +125,7 @@ export function merge(a, b) {
     case "boolean":
       return b;
     case "object":
-      if (a === undefined || a === null) {
+      if (a === undefined || a === null || typeof a !== 'object') {
         a = {};
       }
       Object.keys(b).forEach(k => (a[k] = merge(a[k], b[k])));
