@@ -1,7 +1,7 @@
 [![Build Status](https://secure.travis-ci.org/Kronos-Integration/service.png)](http://travis-ci.org/Kronos-Integration/service)
 [![codecov.io](http://codecov.io/github/Kronos-Integration/service/coverage.svg?branch=master)](http://codecov.io/github/Kronos-Integration/service?branch=master)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
-[![downloads](http://img.shields.io/npm/dm/service.svg?style=flat-square)](https://npmjs.org/package/service)
+[![downloads](http://img.shields.io/npm/dm/@kronos-integration/service.svg?style=flat-square)](https://npmjs.org/package/@kronos-integration/service)
 [![GitHub Issues](https://img.shields.io/github/issues/Kronos-Integration/service.svg?style=flat-square)](https://github.com/Kronos-Integration/service/issues)
 [![Greenkeeper](https://badges.greenkeeper.io/Kronos-Integration/service.svg)](https://greenkeeper.io/)
 [![Known Vulnerabilities](https://snyk.io/test/github/Kronos-Integration/service/badge.svg)](https://snyk.io/test/github/Kronos-Integration/service)
