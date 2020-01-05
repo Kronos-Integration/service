@@ -9,7 +9,6 @@
   "main": "src/module.mjs",
   "module": "src/module.mjs",
   "description": "Base service implementation",
-  "keywords": [],
   "contributors": [
     {
       "name": "Torsten Link",
