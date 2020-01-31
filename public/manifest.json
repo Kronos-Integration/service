@@ -1,0 +1,10 @@
+{
+  "name": "@kronos-integration/service",
+  "description": "Base service implementation",
+  "icons": [
+    {
+      "src": "facicon.ico",
+      "sizes": "16x16"
+    }
+  ]
+}
