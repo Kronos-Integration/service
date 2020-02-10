@@ -1,14 +1,13 @@
-import test from 'ava';
-import { TestService } from './util.mjs';
+import test from "ava";
+import { TestService } from "./helpers/util.mjs";
 
-import Service from '../src/service.mjs';
-import ServiceProviderMixin from '../src/service-provider-mixin.mjs';
-import { defineServiceConsumerProperties } from '../src/service-consumer-mixin.mjs';
+import Service from "../src/service.mjs";
+import ServiceProviderMixin from "../src/service-provider-mixin.mjs";
+import { defineServiceConsumerProperties } from "../src/service-consumer-mixin.mjs";
 
 class ServiceProvider extends ServiceProviderMixin(Service) {}
 
-
-test('service consumer define with name and type', async t => {
+test("service consumer define with name and type", async t => {
   const sp = new ServiceProvider({});
   const object = {};
 
@@ -18,16 +17,16 @@ test('service consumer define with name and type', async t => {
     object,
     {
       myTest: {
-        type: 'test',
-        name: 'n1'
+        type: "test",
+        name: "n1"
       }
     },
     sp
   );
-  t.is(object.myTest.name, 'n1');
+  t.is(object.myTest.name, "n1");
 });
 
-test('service consumer define with type', async t => {
+test("service consumer define with type", async t => {
   const sp = new ServiceProvider({});
   const object = {};
 
@@ -37,16 +36,16 @@ test('service consumer define with type', async t => {
     object,
     {
       myTest2: {
-        type: 'test'
+        type: "test"
       }
     },
     sp
   );
 
-  t.is(object.myTest2.name, 'myTest2');
+  t.is(object.myTest2.name, "myTest2");
 });
 
-test('service consumer define with type simple', async t => {
+test("service consumer define with type simple", async t => {
   const sp = new ServiceProvider({});
   const object = {};
 
@@ -55,15 +54,15 @@ test('service consumer define with type simple', async t => {
   await defineServiceConsumerProperties(
     object,
     {
-      myTest3: 'test'
+      myTest3: "test"
     },
     sp
   );
 
-  t.is(object.myTest3.name, 'myTest3');
+  t.is(object.myTest3.name, "myTest3");
 });
 
-test('service consumer with wait', async t => {
+test("service consumer with wait", async t => {
   const sp = new ServiceProvider({});
   const object = {};
 
@@ -73,12 +72,12 @@ test('service consumer with wait', async t => {
     object,
     {
       myTest: {
-        type: 'test'
+        type: "test"
       }
     },
     sp,
     true
   );
 
-  t.is(object.myTest.name, 'myTest');
+  t.is(object.myTest.name, "myTest");
 });

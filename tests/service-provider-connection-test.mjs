@@ -6,7 +6,7 @@ import {
   TestService,
   TestServiceWithoutAdditionalEndpoints,
   makeServices
-} from "./util.mjs";
+} from "./helpers/util.mjs";
 
 test("declare services", async t => {
   const sp = await makeServices();

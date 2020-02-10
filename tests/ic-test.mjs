@@ -1,5 +1,5 @@
 import test from "ava";
-import { TestService } from "./util.mjs";
+import { TestService } from "./helpers/util.mjs";
 
 import { InitializationContext } from "../src/initialization-context.mjs";
 import StandaloneServiceProvider from "../src/standalone-service-provider.mjs";

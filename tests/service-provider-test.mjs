@@ -1,6 +1,6 @@
 import test from "ava";
 
-import { ServiceProvider, TestService, makeServices } from "./util.mjs";
+import { ServiceProvider, TestService, makeServices } from "./helpers/util.mjs";
 import { InitializationContext } from "../src/initialization-context.mjs";
 
 test("service provider additional service", async t => {

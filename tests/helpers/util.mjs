@@ -1,9 +1,9 @@
 import { createAttributes } from "model-attributes";
-import Service from "../src/service.mjs";
-import ServiceLogger from "../src/service-logger.mjs";
-import ServiceConfig from "../src/service-config.mjs";
-import ServiceProviderMixin from "../src/service-provider-mixin.mjs";
-import { InitializationContext } from "../src/initialization-context.mjs";
+import Service from "../../src/service.mjs";
+import ServiceLogger from "../../src/service-logger.mjs";
+import ServiceConfig from "../../src/service-config.mjs";
+import ServiceProviderMixin from "../../src/service-provider-mixin.mjs";
+import { InitializationContext } from "../../src/initialization-context.mjs";
 
 export async function wait(msecs = 1000) {
   return new Promise((resolve, reject) => setTimeout(() => resolve(), msecs));

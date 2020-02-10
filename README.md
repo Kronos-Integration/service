@@ -60,18 +60,20 @@ Base service implementation
         -   [Parameters](#parameters-9)
     -   [autostart](#autostart-2)
     -   [name](#name-2)
--   [ServiceProviderMixin](#serviceprovidermixin)
+-   [merge](#merge)
     -   [Parameters](#parameters-10)
--   [EndpointsMixin](#endpointsmixin)
+-   [ServiceProviderMixin](#serviceprovidermixin)
     -   [Parameters](#parameters-11)
+-   [EndpointsMixin](#endpointsmixin)
+    -   [Parameters](#parameters-12)
 -   [endpoints](#endpoints-2)
 -   [StandaloneServiceProvider](#standaloneserviceprovider)
     -   [name](#name-3)
 -   [defineServiceConsumerProperties](#defineserviceconsumerproperties)
-    -   [Parameters](#parameters-12)
+    -   [Parameters](#parameters-13)
 -   [InitializationContext](#initializationcontext)
 -   [InitializationContext](#initializationcontext-1)
-    -   [Parameters](#parameters-13)
+    -   [Parameters](#parameters-14)
 
 ## DESCRIPTION
 
@@ -322,6 +324,18 @@ Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 ### name
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'config'
+
+## merge
+
+merge from b into a
+When a and b are arrays of values only the none duplaces are appendend to a
+
+### Parameters
+
+-   `a` **any** 
+-   `b` **any** 
+
+Returns **any** merged b into a
 
 ## ServiceProviderMixin
 

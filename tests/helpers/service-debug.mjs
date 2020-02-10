@@ -1,5 +1,5 @@
 
-import StandaloneServiceProvider from "../src/standalone-service-provider.mjs";
+import StandaloneServiceProvider from "../../src/standalone-service-provider.mjs";
 
 
 const sp = new StandaloneServiceProvider();

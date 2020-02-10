@@ -1,5 +1,5 @@
 import test from "ava";
-import { TestService, TestServiceWithoutAdditionalEndpoints } from "./util.mjs";
+import { TestService, TestServiceWithoutAdditionalEndpoints } from "./helpers/util.mjs";
 
 import { SendEndpoint } from "@kronos-integration/endpoint";
 import Service from "../src/service.mjs";

@@ -1,6 +1,6 @@
 import test from "ava";
 import { StandaloneServiceProvider } from "../src/module.mjs";
-import { ServiceProvider } from "./util.mjs";
+import { ServiceProvider } from "./helpers/util.mjs";
 
 test("service provider without initial config", async t => {
   const sp = new ServiceProvider();
