@@ -50,8 +50,6 @@
   },
   "homepage": "https://github.com/Kronos-Integration/service#readme",
   "template": {
-    "repository": {
-      "url": "https://github.com/arlac77/npm-package-template-kronos-module.git"
-    }
+    "inheritFrom": "arlac77/template-kronos-module"
   }
 }
