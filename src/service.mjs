@@ -2,7 +2,6 @@ import events from "events";
 
 import {
   defaultLogLevels,
-  defineLogLevelProperties,
   LogLevelMixin,
   makeLogEvent
 } from "loglevel-mixin";
@@ -33,11 +32,8 @@ const _ca = createAttributes({
     type: "string",
     setter(newValue) {
       if (newValue !== undefined) {
-        const l = defaultLogLevels[newValue];
-        if (l !== undefined) {
-          this.logLevel = l;
-          return true;
-        }
+        this.logLevel = newValue;
+        return true;
       }
       return false;
     },
@@ -187,19 +183,12 @@ export default class Service extends EndpointsMixin(
       Object.defineProperties(this, properties);
     }
 
-    const logLevel = process.env.LOGLEVEL
-      ? process.env.LOGLEVEL
-      : process.env.DEBUG
-      ? "debug"
-      : config.logLevel;
-
-    defineLogLevelProperties(
-      this,
-      defaultLogLevels,
-      logLevel !== undefined
-        ? defaultLogLevels[logLevel] || defaultLogLevels.info
-        : defaultLogLevels.info
-    );
+    if(process.env.LOGLEVEL) {
+      this.logLevel = config.logLevel = process.env.LOGLEVEL;
+    }
+    else if(process.env.DEBUG) {
+      this.logLevel = config.logLevel = 'debug';
+    }
 
     this.createEndpointsFromConfig(config.endpoints, ic);
     this._configure(config);
