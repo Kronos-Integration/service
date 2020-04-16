@@ -27,10 +27,10 @@
     "lint": "documentation lint src/module.mjs"
   },
   "dependencies": {
-    "@kronos-integration/endpoint": "^7.5.9",
-    "loglevel-mixin": "^5.0.5",
-    "model-attributes": "^4.1.5",
-    "statetransition-mixin": "^6.0.6"
+    "@kronos-integration/endpoint": "^7.5.10",
+    "loglevel-mixin": "^5.0.6",
+    "model-attributes": "^4.1.6",
+    "statetransition-mixin": "^6.0.7"
   },
   "devDependencies": {
     "ava": "^3.7.0",
