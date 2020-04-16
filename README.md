@@ -11,7 +11,7 @@
 [![codecov.io](http://codecov.io/github/Kronos-Integration/service/coverage.svg?branch=master)](http://codecov.io/github/Kronos-Integration/service?branch=master)
 [![Coverage Status](https://coveralls.io/repos/Kronos-Integration/service/badge.svg)](https://coveralls.io/r/Kronos-Integration/service)
 
-# kronos-service
+# @kronos-integration/service
 
 Base service implementation
 
@@ -403,7 +403,7 @@ keeps track of all in flight object creations and loose ends during config initi
 With [npm](http://npmjs.org) do:
 
 ```shell
-npm install kronos-service
+npm install @kronos-integration/service
 ```
 
 # license
