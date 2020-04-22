@@ -27,7 +27,7 @@
     "lint": "documentation lint src/module.mjs"
   },
   "dependencies": {
-    "@kronos-integration/endpoint": "^7.5.10",
+    "@kronos-integration/endpoint": "^7.5.11",
     "loglevel-mixin": "^5.0.6",
     "model-attributes": "^4.1.6",
     "statetransition-mixin": "^6.0.7"
