@@ -46,23 +46,23 @@ const _ca = createAttributes({
       start: {
         description: "service start timeout",
         type: "duration",
-        default: 10
+        default: 20
       },
       stop: {
         description: "service stop timeout",
         type: "duration",
-        default: 10
+        default: 20
       },
       restart: {
         description: "service restart timeout",
         type: "duration",
-        default: 10
+        default: 20
       },
     }
   }
 });
 
-const timeout = 10000;
+const timeout = 20000;
 
 const rsfDefault = {
   target: "running",
