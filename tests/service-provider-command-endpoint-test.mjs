@@ -91,9 +91,9 @@ test("service provider command endpoint get", async t => {
       }
     },
     timeout: {
-      start: 10,
-      restart: 10,
-      stop: 10
+      start: 20,
+      restart: 20,
+      stop: 20
     },
     logLevel: "info",
     state: "running",
