@@ -14,5 +14,5 @@ export {
   StandaloneServiceProvider
 };
 
-export { defineServiceConsumerProperties } from './service-consumer-mixin.mjs';
-export { InitializationContext } from './initialization-context.mjs';
+export { * } from './service-consumer-mixin.mjs';
+export { * } from './initialization-context.mjs';
