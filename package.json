@@ -6,9 +6,9 @@
   },
   "sideEffects": false,
   "type": "module",
-  "main": "src/module.mjs",
+  "main": "./src/module.mjs",
   "exports": {
-    ".": "src/module.mjs",
+    ".": "./src/module.mjs",
     "./": "./"
   },
   "description": "Base service implementation",
@@ -26,11 +26,11 @@
   "scripts": {
     "test": "ava --timeout 2m",
     "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava --timeout 2m && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
-    "docs": "documentation readme src/module.mjs --section=API",
-    "lint": "documentation lint src/module.mjs"
+    "docs": "documentation readme ./src/module.mjs --section=API",
+    "lint": "documentation lint ./src/module.mjs"
   },
   "dependencies": {
-    "@kronos-integration/endpoint": "^8.0.0",
+    "@kronos-integration/endpoint": "^8.0.1",
     "loglevel-mixin": "^5.0.6",
     "model-attributes": "^4.1.6",
     "statetransition-mixin": "^6.0.7"
