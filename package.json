@@ -8,7 +8,8 @@
   "type": "module",
   "main": "src/module.mjs",
   "exports": {
-    ".": "./src/module.mjs"
+    ".": "./src/module.mjs",
+    "./": "./"
   },
   "description": "Base service implementation",
   "contributors": [
