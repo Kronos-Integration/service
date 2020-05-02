@@ -1,8 +1,7 @@
 import test from "ava";
 import { TestService } from "./helpers/util.mjs";
 
-import { InitializationContext } from "../src/initialization-context.mjs";
-import StandaloneServiceProvider from "../src/standalone-service-provider.mjs";
+import { StandaloneServiceProvider, InitializationContext } from "@kronos-integration/service";
 
 function icet(t, sp, expression, ep, result) {
   const ic = new InitializationContext(sp);

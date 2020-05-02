@@ -2,9 +2,11 @@ import test from "ava";
 import { TestLogger } from "./helpers/util.mjs";
 
 import { SendEndpoint, ReceiveEndpoint } from "@kronos-integration/endpoint";
-import Service from "../src/service.mjs";
-import ServiceProviderMixin from "../src/service-provider-mixin.mjs";
-import { InitializationContext } from "../src/initialization-context.mjs";
+import {
+  Service,
+  ServiceProviderMixin,
+  InitializationContext
+} from "@kronos-integration/service";
 
 class Owner extends ServiceProviderMixin(Service, TestLogger) {
   get name() {

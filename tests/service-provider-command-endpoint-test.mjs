@@ -1,6 +1,6 @@
 import test from "ava";
 import { SendEndpoint } from "@kronos-integration/endpoint";
-import { StandaloneServiceProvider } from "../src/module.mjs";
+import { StandaloneServiceProvider } from "@kronos-integration/service";
 
 
 async function makeServiceProvider() {

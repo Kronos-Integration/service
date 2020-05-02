@@ -1,5 +1,5 @@
 import test from "ava";
-import { StandaloneServiceProvider } from "../src/module.mjs";
+import { StandaloneServiceProvider } from "@kronos-integration/service";
 import { ServiceProvider } from "./helpers/util.mjs";
 
 test("service provider without initial config", async t => {

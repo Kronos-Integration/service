@@ -1,7 +1,7 @@
 import test from "ava";
 
 import { ServiceProvider, TestService, makeServices } from "./helpers/util.mjs";
-import { InitializationContext } from "../src/initialization-context.mjs";
+import { InitializationContext } from "@kronos-integration/service";
 
 test("service provider additional service", async t => {
   const sp = new ServiceProvider();

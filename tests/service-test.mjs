@@ -2,8 +2,7 @@ import test from "ava";
 import { TestService, TestServiceWithoutAdditionalEndpoints } from "./helpers/util.mjs";
 
 import { SendEndpoint } from "@kronos-integration/endpoint";
-import Service from "../src/service.mjs";
-import { InitializationContext } from "../src/initialization-context.mjs";
+import { Service, InitializationContext } from "@kronos-integration/service";
 
 const owner = {
   emit(name, arg1, arg2) {}, // dummy event emitter

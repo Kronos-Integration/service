@@ -1,6 +1,6 @@
 import test from "ava";
 import { TestService } from "./helpers/util.mjs";
-import { StandaloneServiceProvider } from "../src/module.mjs";
+import { StandaloneServiceProvider } from "@kronos-integration/service";
 
 test("declareService", async t => {
   const ssm = new StandaloneServiceProvider();

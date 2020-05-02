@@ -1,9 +1,11 @@
 import test from "ava";
 import { TestService } from "./helpers/util.mjs";
 
-import Service from "../src/service.mjs";
-import ServiceProviderMixin from "../src/service-provider-mixin.mjs";
-import { defineServiceConsumerProperties } from "../src/service-consumer-mixin.mjs";
+import {
+  Service,
+  ServiceProviderMixin,
+  defineServiceConsumerProperties
+} from "@kronos-integration/service";
 
 class ServiceProvider extends ServiceProviderMixin(Service) {}
 

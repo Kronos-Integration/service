@@ -1,5 +1,5 @@
 
-import StandaloneServiceProvider from "../../src/standalone-service-provider.mjs";
+import StandaloneServiceProvider from "@kronos-integration/service";
 
 
 const sp = new StandaloneServiceProvider();

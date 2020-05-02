@@ -1,9 +1,11 @@
 import { createAttributes } from "model-attributes";
-import Service from "../../src/service.mjs";
-import ServiceLogger from "../../src/service-logger.mjs";
-import ServiceConfig from "../../src/service-config.mjs";
-import ServiceProviderMixin from "../../src/service-provider-mixin.mjs";
-import { InitializationContext } from "../../src/initialization-context.mjs";
+import {
+  Service,
+  ServiceLogger,
+  ServiceConfig,
+  ServiceProviderMixin,
+  InitializationContext
+} from "@kronos-integration/service";
 
 export async function wait(msecs = 1000) {
   return new Promise((resolve, reject) => setTimeout(() => resolve(), msecs));
@@ -22,12 +24,11 @@ export class TestLogger extends ServiceLogger {
 }
 
 export class TestConfig extends ServiceConfig {
-
   async _start() {
     wait(1000);
 
     super.configure({
-      "service1" : {
+      service1: {
         key1: 1
       }
     });
@@ -110,7 +111,11 @@ export class TestService extends Service {
   async testReceive(entry) {}
 }
 
-export class ServiceProvider extends ServiceProviderMixin(Service, TestLogger, TestConfig) {
+export class ServiceProvider extends ServiceProviderMixin(
+  Service,
+  TestLogger,
+  TestConfig
+) {
   static get name() {
     return "service-provider";
   }
