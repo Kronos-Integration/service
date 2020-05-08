@@ -23,9 +23,13 @@ jobs:
 
     - name: Install Dependencies
       run: npm install
+      with:
+        node_version: 14.2
 
     - name: Test
       run: npm run cover
+      with:
+        node_version: 14.2
 
     - name: Release
       run: npx semantic-release
