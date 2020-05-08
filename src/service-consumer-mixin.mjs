@@ -1,5 +1,5 @@
 /**
- * assign services based on a configuration
+ * Assign services based on a configuration
  * @param {Object} target object
  * @param {Object} config service defintion
  * @param {Object} provider service provider
@@ -12,9 +12,7 @@ export function defineServiceConsumerProperties(
   waitUntilFactoryPresent
 ) {
   return Promise.all(
-    Object.keys(config).map(async name => {
-      let entry = config[name];
-
+    Object.entries(config).map(async ([name,entry]) => {
       if (typeof entry === 'string') {
         entry = {
           name,

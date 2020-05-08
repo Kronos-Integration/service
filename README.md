@@ -377,7 +377,7 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ## defineServiceConsumerProperties
 
-assign services based on a configuration
+Assign services based on a configuration
 
 ### Parameters
 
