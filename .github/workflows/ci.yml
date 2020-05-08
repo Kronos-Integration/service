@@ -21,6 +21,7 @@ jobs:
       - run: npm run cover
         env:
           CI: 'true'
+      - run: npm run cover
   Release:
     runs-on: '${{ matrix.os }}'
     strategy:
@@ -38,5 +39,5 @@ jobs:
       - run: npx semantic-release
         env:
           CI: 'true'
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: '${{ secrets.NPM_TOKEN }}'
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
