@@ -36,3 +36,4 @@ jobs:
       - run: npx semantic-release
         env:
           CI: 'true'
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
