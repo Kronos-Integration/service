@@ -35,6 +35,6 @@ jobs:
 
     - name: Release
       uses: actions/setup-node@v1
-      run: npx semantic-release
+    - run: npx semantic-release
       env:
         CI: true
