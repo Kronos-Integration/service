@@ -30,7 +30,7 @@
     "lint": "documentation lint ./src/module.mjs"
   },
   "dependencies": {
-    "@kronos-integration/endpoint": "^8.1.0",
+    "@kronos-integration/endpoint": "^8.1.1",
     "loglevel-mixin": "^5.0.6",
     "model-attributes": "^4.1.6",
     "statetransition-mixin": "^6.0.7"
@@ -55,8 +55,7 @@
   "template": {
     "inheritFrom": [
       "arlac77/template-github-action",
-      "arlac77/template-kronos-module",
-      "arlac77/template-github"
+      "arlac77/template-kronos-module"
     ]
   }
 }
