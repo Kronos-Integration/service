@@ -86,7 +86,7 @@ export default function EndpointsMixin(superclass) {
         return definition.default ? ReceiveEndpointDefault : ReceiveEndpoint;
       }
 
-      if(Array.isArray(definition.connected)) {
+      if(definition.multi === true || Array.isArray(definition.connected)) {
         return MultiSendEndpoint;
       }
 

@@ -100,6 +100,28 @@ test("endpointFromConfig multiple connected", t => {
   t.true(e.isConnected(r2));
 });
 
+test("endpointFromConfig request multi", t => {
+  const o = new Owner();
+  const ic = new InitializationContext(o);
+
+  const r1 = new ReceiveEndpoint("r1");
+  o.addEndpoint(r1);
+  const r2 = new ReceiveEndpoint("r2");
+  o.addEndpoint(r2);
+
+  // request multi
+  const e = o.createEndpointFromConfig("e", { multi: true }, ic);
+
+  t.is(e.name, "e");
+  
+  // connect later
+  e.addConnection(r1);
+  e.addConnection(r2);
+  
+  t.true(e.isConnected(r1));
+  t.true(e.isConnected(r2));
+});
+
 test("endpointFromConfig foreign connected", t => {
   const o = new Owner();
   const ic = new InitializationContext(o);
