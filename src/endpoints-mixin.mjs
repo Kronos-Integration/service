@@ -1,6 +1,7 @@
 import {
   SendEndpoint,
   SendEndpointDefault,
+  MultiSendEndpoint,
   ReceiveEndpoint,
   ReceiveEndpointDefault,
   ReceiveEndpointSelfConnectedDefault
@@ -83,6 +84,10 @@ export default function EndpointsMixin(superclass) {
 
       if (definition.in) {
         return definition.default ? ReceiveEndpointDefault : ReceiveEndpoint;
+      }
+
+      if(Array.isArray(definition.connected)) {
+        return MultiSendEndpoint;
       }
 
       return definition.default ? SendEndpointDefault : SendEndpoint;

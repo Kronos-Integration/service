@@ -64,7 +64,14 @@ export const InitializationContext = LogLevelMixin(
      * @param {string} connected
      */
     connectEndpoint(endpoint, connected) {
-      if (connected == undefined) {
+      if (connected === undefined) {
+        return;
+      }
+
+      if(Array.isArray(connected)) {
+        for(const c of connected) {
+          this.connectEndpoint(endpoint, c);
+        }
         return;
       }
 

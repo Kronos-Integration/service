@@ -84,6 +84,22 @@ test("endpointFromConfig simple connected", t => {
   t.true(e.isConnected(r1));
 });
 
+test("endpointFromConfig multiple connected", t => {
+  const o = new Owner();
+  const ic = new InitializationContext(o);
+
+  const r1 = new ReceiveEndpoint("r1");
+  o.addEndpoint(r1);
+  const r2 = new ReceiveEndpoint("r2");
+  o.addEndpoint(r2);
+
+  const e = o.createEndpointFromConfig("e", { connected: ["r1","r2"] }, ic);
+
+  t.is(e.name, "e");
+  t.true(e.isConnected(r1));
+  t.true(e.isConnected(r2));
+});
+
 test("endpointFromConfig foreign connected", t => {
   const o = new Owner();
   const ic = new InitializationContext(o);
