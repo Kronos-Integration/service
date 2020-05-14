@@ -7,7 +7,8 @@ import {
 import {
   isEndpoint,
   Endpoint,
-  ReceiveEndpoint
+  ReceiveEndpoint,
+  DummyReceiveEndpoint
 } from "@kronos-integration/endpoint";
 
 /**
@@ -86,9 +87,7 @@ export const InitializationContext = LogLevelMixin(
       } else {
         this.trace(level => `${endpoint} ${connected} (connect deffered)`);
 
-        const r = new ReceiveEndpoint(`tmp-${endpoint.name}`, endpoint.owner);
-        r.receive = async () => {};
-        endpoint.addConnection(r);
+        endpoint.addConnection(new DummyReceiveEndpoint(endpoint.name, endpoint.owner));
 
         this.addOutstandingEndpointConnection(endpoint, connected);
       }
@@ -131,12 +130,17 @@ export const InitializationContext = LogLevelMixin(
       ] of this.outstandingEndpointConnections.entries()) {
         const c = this.endpointForExpression(connected, endpoint);
         if (c) {
+          for(const pc of endpoint.connections()) {
+            if(pc.isDummy)
+             endpoint.removeConnection(pc);
+          }
+
           endpoint.addConnection(c);
 
           this.outstandingEndpointConnections.delete(endpoint);
           this.trace(level => `${endpoint} (connection resolved)`);
         } else {
-          this.error(level => `unable to connect ${endpoint} ${connected}`);
+          this.error(level => `Unable to connect ${endpoint} ${connected}`);
         }
       }
     }
