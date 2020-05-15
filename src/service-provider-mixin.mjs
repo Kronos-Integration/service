@@ -167,13 +167,13 @@ export default function ServiceProviderMixin(
      * @return {Promise} that resolves when all services are stopped
      */
     async _stop() {
-      await super._stop();
-
-      return Promise.all(
+      await Promise.all(
         Object.values(this.services)
           .filter(service => service !== this)
           .map(s => s.stop())
       );
+
+      return super._stop();
     }
   };
 }
