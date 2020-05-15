@@ -12,7 +12,7 @@ import {
 } from "@kronos-integration/endpoint";
 
 /**
- * keeps track of all in flight object creations and loose ends during config initialization
+ * Keeps track of all in flight object creations and loose ends during config initialization
  */
 export const InitializationContext = LogLevelMixin(
   /**
@@ -60,7 +60,9 @@ export const InitializationContext = LogLevelMixin(
     }
 
     /**
-     *
+     * Connects an endpoint
+     * If the other side is currently not present a dummy endpoint will be created
+     * and listed ad outstanding endpoint connection.
      * @param {Endpoint} endpoint
      * @param {string} connected
      */
@@ -145,6 +147,9 @@ export const InitializationContext = LogLevelMixin(
       }
     }
 
+    /**
+     * checks the service providers endpoint for beeing not connected
+     */
     validateEndpoints() {
       Object.values(this.serviceProvider.services).forEach(s => {
         for (const o of s.outEndpoints) {
@@ -203,7 +208,7 @@ export const InitializationContext = LogLevelMixin(
 
     /**
      * - if there is already a service for the given name configure it and we are done
-     * - if the is already an outstanding declaration ongoing wait until it is done configure it done
+     * - if there is already an outstanding declaration ongoing wait until it is done configure it done
      * - otherewise declare this action as a new outstanding service declaration
      * @param {Object} config
      * @param {string} name
@@ -231,7 +236,7 @@ export const InitializationContext = LogLevelMixin(
       const type = config.type || config.name;
       const clazz = await this.getServiceFactory(type);
       if (clazz === undefined) {
-        throw new Error(`no factory for ${type}`);
+        throw new Error(`No factory for ${type}`);
       }
 
       if (sp.services.config) {

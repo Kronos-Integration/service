@@ -249,7 +249,7 @@ Meta information for the config attributes.
 
 -   default optional default value of the attribute
 -   needsRestart optional modification requires a service restart
--   setter(newValue,attrribute) optional function to be used if simple value assignment is not enough
+-   setter(newValue,attribute) optional function to be used if simple value assignment is not enough
     The Service class only defines the logLevel, and start/stop/restart timeout attribute
 
 Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
@@ -387,7 +387,7 @@ Assign services based on a configuration
 
 ## InitializationContext
 
-keeps track of all in flight object creations and loose ends during config initialization
+Keeps track of all in flight object creations and loose ends during config initialization
 
 ## InitializationContext
 
