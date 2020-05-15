@@ -129,7 +129,7 @@ export default class Service extends EndpointsMixin(
    * Meta information for the config attributes.
    * - default optional default value of the attribute
    * - needsRestart optional modification requires a service restart
-   * - setter(newValue,attrribute) optional function to be used if simple value assignment is not enough
+   * - setter(newValue,attribute) optional function to be used if simple value assignment is not enough
    * The Service class only defines the logLevel, and start/stop/restart timeout attribute
    * @return {Object}
    */
