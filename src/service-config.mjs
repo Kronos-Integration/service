@@ -15,6 +15,10 @@ export default class ServiceConfig extends Service {
     return "config";
   }
 
+  static get description() {
+    return "Config providing service";
+  }
+
   preservedConfigs = new Map();
 
   async configFor(name, config) {

@@ -12,6 +12,10 @@ export default class ServiceLogger extends Service {
     return 'logger';
   }
 
+  static get description() {
+    return "Log consuming service";
+  }
+
   /**
    * Adds a log input endpoint to the set of Service endpoints
    * @return {Object} predefined endpoints
