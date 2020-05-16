@@ -61,7 +61,7 @@ export default function ServiceProviderMixin(
         throw new Error(`Unknown service: ${command.service}`);
       }
 
-      console.log("CONNECTIONS",[...service.endpoints.log.connections()].map(c=>c.identifier));
+      //console.log("CONNECTIONS",[...service.endpoints.log.connections()].map(c=>c.identifier));
 
       switch (command.action) {
         case "get":

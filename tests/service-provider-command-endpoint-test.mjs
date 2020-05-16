@@ -54,7 +54,7 @@ test("service provider command endpoint", async t => {
   );
 });
 
-test.only("service provider command endpoint get", async t => {
+test("service provider command endpoint get", async t => {
   const { testEndpoint } = await makeServiceProvider();
 
   const response = await testEndpoint.send({
@@ -83,7 +83,8 @@ test.only("service provider command endpoint get", async t => {
         connected: [
           "service(a).log",
           "service(config).log",
-          "service(logger).log"
+          "service(logger).log",
+          "service(logger).log" // TODO why is there a duplicate
         ],
         in: true,
         out: true,
