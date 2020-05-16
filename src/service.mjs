@@ -1,10 +1,6 @@
 import events from "events";
 
-import {
-  defaultLogLevels,
-  LogLevelMixin,
-  makeLogEvent
-} from "loglevel-mixin";
+import { defaultLogLevels, LogLevelMixin, makeLogEvent } from "loglevel-mixin";
 
 import { prepareActions, StateTransitionMixin } from "statetransition-mixin";
 
@@ -57,7 +53,7 @@ const _ca = createAttributes({
         description: "service restart timeout",
         type: "duration",
         default: 20
-      },
+      }
     }
   }
 });
@@ -183,11 +179,10 @@ export default class Service extends EndpointsMixin(
       Object.defineProperties(this, properties);
     }
 
-    if(process.env.LOGLEVEL) {
+    if (process.env.LOGLEVEL) {
       this.logLevel = config.logLevel = process.env.LOGLEVEL;
-    }
-    else if(process.env.DEBUG) {
-      this.logLevel = config.logLevel = 'debug';
+    } else if (process.env.DEBUG) {
+      this.logLevel = config.logLevel = "debug";
     }
 
     this.createEndpointsFromConfig(config.endpoints, ic);
@@ -209,14 +204,13 @@ export default class Service extends EndpointsMixin(
   set description(desc) {
     this[DESCRIPTION] = desc;
   }
-  
+
   /**
    * use in human readable state messages.
    * Besides the actual service name it may contain additional short hints
    * @return {string}
    */
-  get extendetName()
-  {
+  get extendetName() {
     return this.name;
   }
 
@@ -277,7 +271,21 @@ export default class Service extends EndpointsMixin(
    */
   timeoutForTransition(transition) {
     const timeout = this.timeout[transition.name];
-    return timeout === undefined ? super.timeoutForTransition(transition) : timeout;
+    return timeout === undefined
+      ? super.timeoutForTransition(transition)
+      : timeout;
+  }
+
+  async _start() {
+    for (const e of Object.values(this.endpoints)) {
+      e.openConnections();
+    }
+  }
+
+  async _stop() {
+    for (const e of Object.values(this.endpoints)) {
+      e.closeConnections();
+    }
   }
 
   /**

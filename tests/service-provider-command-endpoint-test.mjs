@@ -23,7 +23,7 @@ async function makeServiceProvider() {
 }
 
 test("service provider command endpoint", async t => {
-  const { sp, testEndpoint } = await makeServiceProvider();
+  const { testEndpoint } = await makeServiceProvider();
 
   const response = await testEndpoint.send({
     action: "list",
@@ -54,8 +54,8 @@ test("service provider command endpoint", async t => {
   );
 });
 
-test("service provider command endpoint get", async t => {
-  const { sp, testEndpoint } = await makeServiceProvider();
+test.only("service provider command endpoint get", async t => {
+  const { testEndpoint } = await makeServiceProvider();
 
   const response = await testEndpoint.send({
     action: "get",
@@ -69,7 +69,7 @@ test("service provider command endpoint get", async t => {
   });
 
   t.deepEqual(response, {
-    description: "This service is the base class for service implementations",
+    description: "Log consuming service",
     endpoints: {
       command: {
         in: true,

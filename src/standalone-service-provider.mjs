@@ -11,4 +11,8 @@ export default class StandaloneServiceProvider extends ServiceProviderMixin(Serv
   static get name() {
     return 'standalone-provider';
   }
+
+  static get description() {
+    return "This service to control services";
+  }
 }
