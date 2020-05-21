@@ -206,7 +206,7 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-   * use in human readable state messages.
+   * Used in human readable state messages.
    * Besides the actual service name it may contain additional short hints
    * @return {string}
    */
@@ -276,12 +276,18 @@ export default class Service extends EndpointsMixin(
       : timeout;
   }
 
+  /**
+   * Opens all endpoint connections
+   */
   async _start() {
     for (const e of Object.values(this.endpoints)) {
       e.openConnections();
     }
   }
 
+  /**
+   * Closes all endpoint connections
+   */
   async _stop() {
     for (const e of Object.values(this.endpoints)) {
       e.closeConnections();
@@ -310,7 +316,7 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-   * mapping of properties used in toString
+   * Mapping of properties used in toString
    * @return {Object}
    */
   get toStringAttributes() {
@@ -340,9 +346,9 @@ export default class Service extends EndpointsMixin(
    * Deliver json representation
    * @param {Object} options
    * @param {boolean} options.includeRuntimeInfo include runtime informtion like state
-   * @param {boolean} options.includeDefaults  include default endpoints
+   * @param {boolean} options.includeDefaults include default endpoints
    * @param {boolean} options.includeName include name of the service
-   * @param {boolean} options.includeConfig  include config attributes
+   * @param {boolean} options.includeConfig include config attributes
    * @return {Object} json representation
    */
   toJSONWithOptions(options) {
