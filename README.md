@@ -30,6 +30,8 @@ Base service implementation
         -   [Parameters](#parameters-2)
     -   [timeoutForTransition](#timeoutfortransition)
         -   [Parameters](#parameters-3)
+    -   [\_start](#_start)
+    -   [\_stop](#_stop)
     -   [\_restart](#_restart)
     -   [restartIfRunning](#restartifrunning)
     -   [toStringAttributes](#tostringattributes)
@@ -118,7 +120,7 @@ All services have at least three endpoints:
 
 ### extendetName
 
-use in human readable state messages.
+Used in human readable state messages.
 Besides the actual service name it may contain additional short hints
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
@@ -154,6 +156,14 @@ Deliver transtion timeout
 
 Returns **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** milliseconds before throwing for a long running transition
 
+### \_start
+
+Opens all endpoint connections
+
+### \_stop
+
+Closes all endpoint connections
+
 ### \_restart
 
 Restart action
@@ -170,7 +180,7 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 
 ### toStringAttributes
 
-mapping of properties used in toString
+Mapping of properties used in toString
 
 Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
 
