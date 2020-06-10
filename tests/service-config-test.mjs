@@ -96,7 +96,7 @@ test("configFor & configureValue", async t => {
     key2: "value2"
   });
 
-  sc.clear("s1");
+  sc.clearPreserved("s1");
 
   t.is(await sc.configFor("s1"), undefined);
 });

@@ -248,7 +248,7 @@ export const InitializationContext = LogLevelMixin(
       this.outstandingServices.delete(name);
 
       if (sp.services.config) {
-        sp.services.config.clear(name);
+        sp.services.config.clearPreserved(name);
       }
 
       this.resolveOutstandingEndpointConnections();

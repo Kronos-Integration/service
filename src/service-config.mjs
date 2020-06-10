@@ -42,7 +42,11 @@ export default class ServiceConfig extends Service {
     return config;
   }
 
-  clear(name) {
+  /**
+   * Forget about preserved config of a service
+   * @param {string} name service name
+   */
+  clearPreserved(name) {
     this.preservedConfigs.delete(name);
   }
 
