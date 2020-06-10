@@ -210,7 +210,7 @@ export const InitializationContext = LogLevelMixin(
      * - if there is already an outstanding declaration ongoing wait until it is done configure it done
      * - otherewise declare this action as a new outstanding service declaration
      * @param {Object} config
-     * @param {string} name
+     * @param {string} name service name
      * @return {Service}
      */
     async declareService(config, name) {
