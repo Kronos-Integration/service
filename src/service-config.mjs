@@ -3,7 +3,7 @@ import { keyValue2Object } from "./util.mjs";
 
 /**
  * Config providing service
- * Dispatches config requests to services
+ * Dispatches config requests to services.
  * or preserves them until a maching service becomes avaliable
  * @property {Map<string,Object>} preservedConfigs values for services not alredy established
  */
@@ -42,7 +42,7 @@ export default class ServiceConfig extends Service {
   }
 
   /**
-   * set config entry
+   * Set config entry
    * @param {string} key path to the value
    * @param {any} value
    */
@@ -96,7 +96,7 @@ export default class ServiceConfig extends Service {
 }
 
 /**
- * merge from b into a
+ * Merge from b into a
  * When a and b are arrays of values only the none duplaces are appendend to a
  * @param {any} a
  * @param {any} b

@@ -7,7 +7,6 @@ import {
 import {
   isEndpoint,
   Endpoint,
-  ReceiveEndpoint,
   DummyReceiveEndpoint
 } from "@kronos-integration/endpoint";
 
@@ -49,8 +48,7 @@ export const InitializationContext = LogLevelMixin(
     log(level, ...args) {
       if (this.serviceProvider) {
         this.serviceProvider.log(level, ...args);
-      }
-      else {
+      } else {
         console.log(...args);
       }
     }
@@ -71,8 +69,8 @@ export const InitializationContext = LogLevelMixin(
         return;
       }
 
-      if(Array.isArray(connected)) {
-        for(const c of connected) {
+      if (Array.isArray(connected)) {
+        for (const c of connected) {
           this.connectEndpoint(endpoint, c);
         }
         return;
@@ -89,7 +87,9 @@ export const InitializationContext = LogLevelMixin(
       } else {
         this.trace(level => `${endpoint} ${connected} (connect deffered)`);
 
-        endpoint.addConnection(new DummyReceiveEndpoint(endpoint.name, endpoint.owner));
+        endpoint.addConnection(
+          new DummyReceiveEndpoint(endpoint.name, endpoint.owner)
+        );
 
         this.addOutstandingEndpointConnection(endpoint, connected);
       }
@@ -132,9 +132,8 @@ export const InitializationContext = LogLevelMixin(
       ] of this.outstandingEndpointConnections.entries()) {
         const c = this.endpointForExpression(connected, endpoint);
         if (c) {
-          for(const pc of endpoint.connections()) {
-            if(pc.isDummy)
-             endpoint.removeConnection(pc);
+          for (const pc of endpoint.connections()) {
+            if (pc.isDummy) endpoint.removeConnection(pc);
           }
 
           endpoint.addConnection(c);
@@ -148,7 +147,7 @@ export const InitializationContext = LogLevelMixin(
     }
 
     /**
-     * checks the service providers endpoint for beeing not connected
+     * Checks the service providers endpoint for beeing not connected
      */
     validateEndpoints() {
       Object.values(this.serviceProvider.services).forEach(s => {
@@ -240,7 +239,7 @@ export const InitializationContext = LogLevelMixin(
       }
 
       if (sp.services.config) {
-        config = await sp.services.config.configFor(name,config);
+        config = await sp.services.config.configFor(name, config);
       }
 
       servicePromise = sp.registerService(new clazz(config, this));
