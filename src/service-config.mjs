@@ -21,6 +21,11 @@ export default class ServiceConfig extends Service {
 
   preservedConfigs = new Map();
 
+  /**
+   * Deliver configuration for a given servise
+   * @param {string} name service name
+   * @param {object} config
+   */
   async configFor(name, config) {
     this.trace(`configFor ${name}`);
 
