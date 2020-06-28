@@ -54,26 +54,30 @@ Base service implementation
     -   [endpoints](#endpoints-1)
 -   [ServiceConfig](#serviceconfig)
     -   [Properties](#properties)
-    -   [configureValue](#configurevalue)
+    -   [configFor](#configfor)
         -   [Parameters](#parameters-8)
-    -   [configure](#configure-1)
+    -   [clearPreserved](#clearpreserved)
         -   [Parameters](#parameters-9)
+    -   [configureValue](#configurevalue)
+        -   [Parameters](#parameters-10)
+    -   [configure](#configure-1)
+        -   [Parameters](#parameters-11)
     -   [autostart](#autostart-2)
     -   [name](#name-2)
 -   [merge](#merge)
-    -   [Parameters](#parameters-10)
--   [ServiceProviderMixin](#serviceprovidermixin)
-    -   [Parameters](#parameters-11)
--   [EndpointsMixin](#endpointsmixin)
     -   [Parameters](#parameters-12)
+-   [ServiceProviderMixin](#serviceprovidermixin)
+    -   [Parameters](#parameters-13)
+-   [EndpointsMixin](#endpointsmixin)
+    -   [Parameters](#parameters-14)
 -   [endpoints](#endpoints-2)
 -   [StandaloneServiceProvider](#standaloneserviceprovider)
     -   [name](#name-3)
 -   [defineServiceConsumerProperties](#defineserviceconsumerproperties)
-    -   [Parameters](#parameters-13)
+    -   [Parameters](#parameters-15)
 -   [InitializationContext](#initializationcontext)
 -   [InitializationContext](#initializationcontext-1)
-    -   [Parameters](#parameters-14)
+    -   [Parameters](#parameters-16)
 
 ## DESCRIPTION
 
@@ -301,16 +305,33 @@ Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 **Extends Service**
 
 Config providing service
-Dispatches config requests to services
+Dispatches config requests to services.
 or preserves them until a maching service becomes avaliable
 
 ### Properties
 
 -   `preservedConfigs` **[Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** values for services not alredy established
 
+### configFor
+
+Deliver configuration for a given servise
+
+#### Parameters
+
+-   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** service name
+-   `config` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+
+### clearPreserved
+
+Forget about preserved config of a service
+
+#### Parameters
+
+-   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** service name
+
 ### configureValue
 
-set config entry
+Set config entry
 
 #### Parameters
 
@@ -335,7 +356,7 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ## merge
 
-merge from b into a
+Merge from b into a
 When a and b are arrays of values only the none duplaces are appendend to a
 
 ### Parameters
@@ -378,7 +399,7 @@ Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 **Extends ServiceProviderMixin(Service)**
 
-simple service manager (for examples and testing only)
+Simple service manager (for examples and testing only)
 
 ### name
 
