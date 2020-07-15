@@ -16,6 +16,7 @@ export default function ServiceProviderMixin(
   serviceConfigClass = ServiceConfig
 ) {
   return class ServiceProvider extends superclass {
+    interceptorFactories = {};
     serviceFactories = {};
     services = {};
 
@@ -86,6 +87,15 @@ export default function ServiceProviderMixin(
       return this;
     }
 
+    instantiateInterceptor(def)
+    {
+      let factory = this.interceptorFactory[def];
+
+      if(factory) {
+        return new factory();
+      } 
+    }
+ 
     async registerServiceFactory(factory) {
       this.serviceFactories[factory.name] = factory;
       this.emit("serviceFactoryRegistered", factory);

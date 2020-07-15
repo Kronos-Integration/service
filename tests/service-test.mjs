@@ -14,7 +14,8 @@ const owner = {
   getService(name) {
     return this.services[name];
   },
-  endpointForExpression(expression) {}
+  endpointForExpression(expression) {},
+  instantiateInterceptor(def) {}
 };
 
 const ic = new InitializationContext(owner);
@@ -122,7 +123,7 @@ test(
   {
     name: "service",
     endpoints: {
-      ep1: { in: true }
+      ep1: { in: true, interceptors: ["rate-limit"] }
     }
   },
   {

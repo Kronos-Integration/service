@@ -191,7 +191,7 @@ export default class Service extends EndpointsMixin(
 
   instantiateInterceptor(options)
   {
-    console.log(options);
+    return this.owner.instantiateInterceptor(options);
   }
   
   get configurationAttributes() {
