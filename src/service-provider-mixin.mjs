@@ -102,10 +102,10 @@ export default function ServiceProviderMixin(
       let factory, options;
       
       switch(typeof def) {
-       case 'string': {
+       case "string":
          factory = this.interceptorFactories[def];  
        break;
-       case 'object':
+       case "object":
          factory = this.interceptorFactories[def.type];
          options = def;
       }
