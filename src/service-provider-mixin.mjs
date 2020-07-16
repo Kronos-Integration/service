@@ -87,13 +87,32 @@ export default function ServiceProviderMixin(
       return this;
     }
 
+    registerInterceptorFactory(factory) {
+      this.interceptorFactories[factory.name] = factory;
+      this.emit("interceptorFactoryRegistered", factory);
+      return factory;
+    }
+
+    unregisterInterceptorFactory(factory) {
+      delete this.interceptorFactories[factory.name];
+    }
+
     instantiateInterceptor(def)
     {
-      let factory = this.interceptorFactory[def];
+      let factory, options;
+      
+      switch(typeof def) {
+       case 'string': {
+         factory = this.interceptorFactories[def];  
+       break;
+       case 'object':
+         factory = this.interceptorFactories[def.type];
+         options = def;
+      }
 
       if(factory) {
-        return new factory();
-      } 
+        return new factory(def, options);
+      }
     }
  
     async registerServiceFactory(factory) {
