@@ -16,15 +16,16 @@ export default function ServiceProviderMixin(
   serviceConfigClass = ServiceConfig
 ) {
   return class ServiceProvider extends superclass {
-    interceptorFactories = {};
-    serviceFactories = {};
-    services = {};
 
     constructor(config) {
       const ic = new InitializationContext();
 
       super(Array.isArray(config) ? config[0] : config, ic);
 
+      this.interceptorFactories = {};
+      this.serviceFactories = {};
+      this.services = {};
+  
       ic.logLevel = this.logLevel;
       ic.serviceProvider = this;
 

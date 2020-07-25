@@ -19,7 +19,11 @@ export default class ServiceConfig extends Service {
     return "Config providing service";
   }
 
-  preservedConfigs = new Map();
+  constructor(config, ic) {
+    super(config, ic);
+
+    this.preservedConfigs = new Map();
+  }
 
   /**
    * Deliver configuration for a given servise
