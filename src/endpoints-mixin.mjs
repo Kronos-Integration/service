@@ -23,7 +23,7 @@ export default function EndpointsMixin(superclass) {
       return {};
     }
 
-    constrcutor(...args) {
+    constructor(...args) {
       super(...args);
       this.endpoints = {};
     }
