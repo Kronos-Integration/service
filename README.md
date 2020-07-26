@@ -53,31 +53,32 @@ Base service implementation
     -   [name](#name-1)
     -   [endpoints](#endpoints-1)
 -   [ServiceConfig](#serviceconfig)
+    -   [Parameters](#parameters-8)
     -   [Properties](#properties)
     -   [configFor](#configfor)
-        -   [Parameters](#parameters-8)
-    -   [clearPreserved](#clearpreserved)
         -   [Parameters](#parameters-9)
-    -   [configureValue](#configurevalue)
+    -   [clearPreserved](#clearpreserved)
         -   [Parameters](#parameters-10)
-    -   [configure](#configure-1)
+    -   [configureValue](#configurevalue)
         -   [Parameters](#parameters-11)
+    -   [configure](#configure-1)
+        -   [Parameters](#parameters-12)
     -   [autostart](#autostart-2)
     -   [name](#name-2)
 -   [merge](#merge)
-    -   [Parameters](#parameters-12)
--   [ServiceProviderMixin](#serviceprovidermixin)
     -   [Parameters](#parameters-13)
--   [EndpointsMixin](#endpointsmixin)
+-   [ServiceProviderMixin](#serviceprovidermixin)
     -   [Parameters](#parameters-14)
+-   [EndpointsMixin](#endpointsmixin)
+    -   [Parameters](#parameters-15)
 -   [endpoints](#endpoints-2)
 -   [StandaloneServiceProvider](#standaloneserviceprovider)
     -   [name](#name-3)
 -   [defineServiceConsumerProperties](#defineserviceconsumerproperties)
-    -   [Parameters](#parameters-15)
+    -   [Parameters](#parameters-16)
 -   [InitializationContext](#initializationcontext)
 -   [InitializationContext](#initializationcontext-1)
-    -   [Parameters](#parameters-16)
+    -   [Parameters](#parameters-17)
 
 ## DESCRIPTION
 
@@ -307,6 +308,11 @@ Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 Config providing service
 Dispatches config requests to services.
 or preserves them until a maching service becomes avaliable
+
+### Parameters
+
+-   `config`  
+-   `ic`  
 
 ### Properties
 
