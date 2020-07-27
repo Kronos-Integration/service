@@ -16,16 +16,16 @@ export default function ServiceProviderMixin(
   serviceConfigClass = ServiceConfig
 ) {
   return class ServiceProvider extends superclass {
-
     constructor(config) {
       const ic = new InitializationContext();
 
       super(Array.isArray(config) ? config[0] : config, ic);
 
+      this.listeners = {};
       this.interceptorFactories = {};
       this.serviceFactories = {};
       this.services = {};
-  
+
       ic.logLevel = this.logLevel;
       ic.serviceProvider = this;
 
@@ -83,6 +83,29 @@ export default function ServiceProviderMixin(
       }
     }
 
+    emit(name, ...args) {
+      const listeners = this.listeners[name];
+      if (listeners) {
+        listeners.forEach(l => l(...args));
+      }
+    }
+
+    addListener(name, listener) {
+      const listeners = this.listeners[name];
+      if (listeners) {
+        listeners.push(listener);
+      } else {
+        this.listeners[name] = [listener];
+      }
+    }
+
+    removeListener(name, listener) {
+      const listeners = this.listeners[name];
+      if (listeners) {
+        this.listeners[name] = listeners.filter(l => l !== listener);
+      }
+    }
+
     /** by default be our own owner */
     get owner() {
       return this;
@@ -98,26 +121,24 @@ export default function ServiceProviderMixin(
       delete this.interceptorFactories[factory.name];
     }
 
-    instantiateInterceptor(def)
-    {
+    instantiateInterceptor(def) {
       let factory, options;
-      
-      switch(typeof def) {
-       case "string":
-         factory = this.interceptorFactories[def];  
-       break;
-       case "object":
-         factory = this.interceptorFactories[def.type];
-         options = def;
+
+      switch (typeof def) {
+        case "string":
+          factory = this.interceptorFactories[def];
+          break;
+        case "object":
+          factory = this.interceptorFactories[def.type];
+          options = def;
       }
 
-      if(factory) {
+      if (factory) {
         return new factory(def, options);
       }
     }
- 
-    serviceStateChanged(service,oldState, newState)
-    {
+
+    serviceStateChanged(service, oldState, newState) {
       this.emit("serviceStateChanged", service, oldState, newState);
     }
 

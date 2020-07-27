@@ -1,4 +1,3 @@
-import events from "events";
 import { defaultLogLevels, LogLevelMixin, makeLogEvent } from "loglevel-mixin";
 import { prepareActions, StateTransitionMixin } from "statetransition-mixin";
 import {
@@ -87,7 +86,7 @@ const ssfDefault = {
  */
 export default class Service extends EndpointsMixin(
   StateTransitionMixin(
-    LogLevelMixin(events),
+    LogLevelMixin(class {}),
     prepareActions({
       start: {
         stopped: rsfDefault
