@@ -86,7 +86,7 @@ key of the service description
 
 ## Service
 
-**Extends EndpointsMixin(StateTransitionMixin(LogLevelMixin(events), prepareActions({
+**Extends EndpointsMixin(StateTransitionMixin(LogLevelMixin(class {}), prepareActions({
   start: {
     stopped: rsfDefault
   },
