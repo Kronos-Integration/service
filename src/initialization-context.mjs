@@ -91,7 +91,7 @@ export const InitializationContext = LogLevelMixin(
     }
 
     /**
-     *
+     * Find endpoint for a given expression
      * @param {string} expression
      * @param {Endpoint} from
      */
