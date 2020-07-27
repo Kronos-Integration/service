@@ -8,7 +8,7 @@ import {
 } from "@kronos-integration/service";
 
 export async function wait(msecs = 1000) {
-  return new Promise((resolve, reject) => setTimeout(() => resolve(), msecs));
+  return new Promise(resolve => setTimeout(() => resolve(), msecs));
 }
 
 export class TestLogger extends ServiceLogger {
@@ -121,14 +121,14 @@ export class ServiceProvider extends ServiceProviderMixin(
   }
 }
 
-export async function makeServices(logLevel = "info") {
-  const sp = new ServiceProvider({ logLevel });
-  const ic = new InitializationContext(sp);
+export async function makeServices(options) {
+  const sp = new ServiceProvider(options);
+  const ic = new InitializationContext(sp, options);
 
   await sp.registerService(
     new TestService(
       {
-        logLevel,
+        logLevel: sp.logLevel,
         name: "t2",
         endpoints: { testOut: { connected: "service(logger).log" } }
       },
