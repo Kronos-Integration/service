@@ -1,11 +1,27 @@
 import test from "ava";
-import {  makeServices } from "./helpers/util.mjs";
+import { Service, StandaloneServiceProvider } from "@kronos-integration/service";
 import { data } from "./fixtures/data.mjs";
- 
-test("service provider declare services", async t => {
-  const sp = await makeServices({ waitForFactories: false});
-  const s = await sp.declareServices(data);
 
-  t.is(s.length,5);
- // t.is(Object.values(s.services).length, 5);
+
+class HttpService extends Service {
+  static get name() {
+    return "http";
+  }
+}
+
+class ServiceLDAP extends Service {
+}
+
+
+test("service provider declare services", async t => {
+  const sp = new StandaloneServiceProvider();
+
+  /*
+  sp.registerServiceFactory(HttpService);
+  sp.registerServiceFactory(ServiceLDAP);
+*/
+  const s = await sp.declareServices(data, { waitForFactories: false });
+
+  //t.is(s.length, 5);
+  t.is(Object.values(sp.services).length, 3);
 });
