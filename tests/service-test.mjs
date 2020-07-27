@@ -5,7 +5,6 @@ import { SendEndpoint } from "@kronos-integration/endpoint";
 import { Service, InitializationContext } from "@kronos-integration/service";
 
 const owner = {
-  emit(name, arg1, arg2) {}, // dummy event emitter
   services: {},
 
   warn(...args) { /*console.log(...args);*/ },
@@ -15,7 +14,8 @@ const owner = {
     return this.services[name];
   },
   endpointForExpression(expression) {},
-  instantiateInterceptor(def) {}
+  instantiateInterceptor(def) {},
+  serviceStateChanged() {}
 };
 
 const ic = new InitializationContext(owner);

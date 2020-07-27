@@ -116,6 +116,11 @@ export default function ServiceProviderMixin(
       }
     }
  
+    serviceStateChanged(service,oldState, newState)
+    {
+      this.emit("serviceStateChanged", service, oldState, newState);
+    }
+
     async registerServiceFactory(factory) {
       this.serviceFactories[factory.name] = factory;
       this.emit("serviceFactoryRegistered", factory);
