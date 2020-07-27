@@ -1,15 +1,11 @@
 import events from "events";
-
 import { defaultLogLevels, LogLevelMixin, makeLogEvent } from "loglevel-mixin";
-
 import { prepareActions, StateTransitionMixin } from "statetransition-mixin";
-
 import {
   createAttributes,
   getAttribute,
   setAttributes
 } from "model-attributes";
-
 import EndpointsMixin from "./endpoints-mixin.mjs";
 
 /**
