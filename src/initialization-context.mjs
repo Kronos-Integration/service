@@ -25,7 +25,7 @@ export const InitializationContext = LogLevelMixin(
       this.outstandingServices = new Map();
       this.outstandingFactories = new Map();
       this.outstandingEndpointConnections = new Map();
-  
+
       options = { waitForFactories: true, logLevel: "info", ...options };
       this.waitForFactories = options.waitForFactories;
       defineLogLevelProperties(
@@ -179,25 +179,23 @@ export const InitializationContext = LogLevelMixin(
         return typePromise;
       }
 
-      if (!this.waitForFactories) {
-        return undefined;
+      if (this.waitForFactories) {
+        typePromise = new Promise((resolve, reject) => {
+          const listener = factory => {
+            if (factory.name === type) {
+              this.outstandingFactories.delete(type);
+              sp.removeListener("serviceFactoryRegistered", listener);
+              resolve(factory);
+            }
+          };
+
+          sp.addListener("serviceFactoryRegistered", listener);
+        });
+
+        this.outstandingFactories.set(type, typePromise);
+
+        return typePromise;
       }
-
-      typePromise = new Promise((resolve, reject) => {
-        const listener = factory => {
-          if (factory.name === type) {
-            this.outstandingFactories.delete(type);
-            sp.removeListener("serviceFactoryRegistered", listener);
-            resolve(factory);
-          }
-        };
-
-        sp.addListener("serviceFactoryRegistered", listener);
-      });
-
-      this.outstandingFactories.set(type, typePromise);
-
-      return typePromise;
     }
 
     /**
@@ -228,26 +226,29 @@ export const InitializationContext = LogLevelMixin(
 
       // service factory not present? wait until one arrives
       const type = config.type || config.name;
+
       const clazz = await this.getServiceFactory(type);
-      if (clazz === undefined) {
-        throw new Error(`No factory for ${type}`);
+
+      if (clazz) {
+        if (sp.services.config) {
+          config = await sp.services.config.configFor(name, config);
+        }
+
+        servicePromise = sp.registerService(new clazz(config, this));
+        this.outstandingServices.set(name, servicePromise);
+
+        service = await servicePromise;
+        this.outstandingServices.delete(name);
+
+        if (sp.services.config) {
+          sp.services.config.clearPreserved(name);
+        }
+
+        this.resolveOutstandingEndpointConnections();
+        return service;
       }
 
-      if (sp.services.config) {
-        config = await sp.services.config.configFor(name, config);
-      }
-
-      servicePromise = sp.registerService(new clazz(config, this));
-      this.outstandingServices.set(name, servicePromise);
-      service = await servicePromise;
-      this.outstandingServices.delete(name);
-
-      if (sp.services.config) {
-        sp.services.config.clearPreserved(name);
-      }
-
-      this.resolveOutstandingEndpointConnections();
-      return service;
+      //   throw new Error(`No factory for ${type}`);
     }
   }
 );

@@ -63,8 +63,6 @@ export default function ServiceProviderMixin(
         throw new Error(`Unknown service: ${command.service}`);
       }
 
-      //console.log("CONNECTIONS",[...service.endpoints.log.connections()].map(c=>c.identifier));
-
       switch (command.action) {
         case "get":
           return service.toJSONWithOptions(command.options);
@@ -188,11 +186,11 @@ export default function ServiceProviderMixin(
      * @param {object} config with
      *     name - the service name
      *     type - the service factory name - defaults to config.name
+     * @param {object} options
      * @return {Promise<Object>} resolving to the declared services
      */
-    async declareServices(configs) {
-      const ic = new InitializationContext(this);
-
+    async declareServices(configs, options) {
+      const ic = new InitializationContext(this, options);
       const services = Promise.all(
         Object.entries(configs).map(([name, config]) =>
           ic.declareService(config, name)
@@ -203,7 +201,7 @@ export default function ServiceProviderMixin(
       ic.validateEndpoints();
 
       return Object.fromEntries(
-        (await services).map(service => [service.name, service])
+        (await services).filter(s => s !== undefined).map(service => [service.name, service])
       );
     }
 
