@@ -55,7 +55,7 @@ export const InitializationContext = LogLevelMixin(
     /**
      * Connects an endpoint
      * If the other side is currently not present a dummy endpoint will be created
-     * and listed ad outstanding endpoint connection.
+     * and listed as outstanding endpoint connection.
      * @param {Endpoint} endpoint
      * @param {string} connected
      */

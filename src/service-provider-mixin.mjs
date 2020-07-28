@@ -16,16 +16,15 @@ export default function ServiceProviderMixin(
   serviceConfigClass = ServiceConfig
 ) {
   return class ServiceProvider extends superclass {
-    constructor(config) {
-      const ic = new InitializationContext();
-
+    constructor(config, ic = new InitializationContext()) {
       super(Array.isArray(config) ? config[0] : config, ic);
 
       this.listeners = {};
       this.interceptorFactories = {};
       this.serviceFactories = {};
       this.services = {};
-
+      this.ic = ic;
+  
       ic.logLevel = this.logLevel;
       ic.serviceProvider = this;
 
@@ -186,22 +185,22 @@ export default function ServiceProviderMixin(
      * @param {object} config with
      *     name - the service name
      *     type - the service factory name - defaults to config.name
-     * @param {object} options
      * @return {Promise<Object>} resolving to the declared services
      */
-    async declareServices(configs, options) {
-      const ic = new InitializationContext(this, options);
+    async declareServices(configs) {
       const services = Promise.all(
         Object.entries(configs).map(([name, config]) =>
-          ic.declareService(config, name)
+          this.ic.declareService(config, name)
         )
       );
 
-      ic.resolveOutstandingEndpointConnections();
-      ic.validateEndpoints();
+      this.ic.resolveOutstandingEndpointConnections();
+      this.ic.validateEndpoints();
 
       return Object.fromEntries(
-        (await services).filter(s => s !== undefined).map(service => [service.name, service])
+        (await services)
+          .filter(s => s !== undefined)
+          .map(service => [service.name, service])
       );
     }
 
