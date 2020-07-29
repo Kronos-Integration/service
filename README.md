@@ -432,7 +432,7 @@ Keeps track of all in flight object creations and loose ends during config initi
 
 -   `serviceProvider` **ServiceProvider** 
 -   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
-    -   `options.waitForFactories` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** wait until factory apears in registry
+    -   `options.logLevel` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
 # install
 
