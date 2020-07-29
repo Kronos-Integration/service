@@ -3,7 +3,7 @@ export const data = {
     type: "systemd-logger",
     name: "logger",
     state: "running",
-    logLevel: "trace",
+    logLevel: "debug",
     endpoints: {
       log: {
         in: true,

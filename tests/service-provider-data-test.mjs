@@ -33,4 +33,21 @@ test("service provider declare services", async t => {
   await sp.declareServices(data);
 
   t.is(Object.values(sp.services).length, 11);
+
+  t.is(sp.services.logger.name, "logger");
+  t.is(sp.services.logger.type, "logger");
+  t.is(sp.services.logger.logLevel, "debug");
+  t.is(sp.services.logger.state, "stopped");
+
+  t.is(sp.services.logger.endpoints.log.name, "log");
+  t.is(sp.services.logger.endpoints.log.isIn, true);
+  t.is(sp.services.logger.endpoints.log.isOut, true);
+  t.is(sp.services.logger.endpoints.log.isOpen, true);
+  t.is(sp.services.logger.endpoints.log.hasConnections, true);
+
+  t.is(sp.services.logger.endpoints.config.name, "config");
+  t.is(sp.services.logger.endpoints.config.isIn, true);
+  t.is(sp.services.logger.endpoints.config.isOut, false);
+  t.is(sp.services.logger.endpoints.config.isOpen, true);
+  t.is(sp.services.logger.endpoints.config.hasConnections, false);
 });
