@@ -17,7 +17,7 @@ export const InitializationContext = LogLevelMixin(
   /**
    * @param {ServiceProvider} serviceProvider
    * @param {Object} options
-   * @param {boolean} options.waitForFactories wait until factory apears in registry
+   * @param {string} options.logLevel
    */
   class InitializationContext {
     constructor(serviceProvider, options) {
@@ -26,8 +26,7 @@ export const InitializationContext = LogLevelMixin(
       this.outstandingFactories = new Map();
       this.outstandingEndpointConnections = new Map();
 
-      options = { waitForFactories: true, logLevel: "info", ...options };
-      this.waitForFactories = options.waitForFactories;
+      options = { logLevel: "info", ...options };
       defineLogLevelProperties(
         this,
         defaultLogLevels,
@@ -48,6 +47,16 @@ export const InitializationContext = LogLevelMixin(
       }
     }
 
+    /**
+     * Wait for (Service) factory to be declared when aced for a service
+     *
+     * @return {boolean} true we wait until a factory is known
+     */
+    get waitForFactories()
+    {
+      return true;
+    }
+  
     ownerOfService(service) {
       return this.serviceProvider;
     }

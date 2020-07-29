@@ -16,6 +16,10 @@ class MyInitializationContext extends InitializationContext {
     }
   }
 
+  get waitForFactories() {
+    return false;
+  }
+
   connectEndpoint(endpoint, connected) {
     try {
       super.connectEndpoint(endpoint, connected);
@@ -24,13 +28,9 @@ class MyInitializationContext extends InitializationContext {
 }
 
 test("service provider declare services", async t => {
-  const sp = new StandaloneServiceProvider(
-    {},
-    new MyInitializationContext(undefined, { waitForFactories: false })
-  );
+  const sp = new StandaloneServiceProvider({}, new MyInitializationContext());
 
-  const s = await sp.declareServices(data);
+  await sp.declareServices(data);
 
-  //t.is(s.length, 5);
   t.is(Object.values(sp.services).length, 11);
 });
