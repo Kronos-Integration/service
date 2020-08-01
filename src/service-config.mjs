@@ -79,10 +79,7 @@ export default class ServiceConfig extends Service {
 
         const merged = merge(this.preservedConfigs.get(name), c);
         this.trace(`preserve config for ${name} ${JSON.stringify(merged)}`);
-        this.preservedConfigs.set(
-          name,
-          merged
-        );
+        this.preservedConfigs.set(name, merged);
       } else {
         return s.configure(c);
       }
@@ -110,7 +107,7 @@ export default class ServiceConfig extends Service {
 
 /**
  * Merge from b into a
- * When a and b are arrays of values only the none duplaces are appendend to a
+ * When a and b are arrays of values only the none duplices are appendend to a
  * @param {any} a
  * @param {any} b
  * @return {any} merged b into a
@@ -131,7 +128,7 @@ export function merge(a, b) {
     return b;
   }
 
-  if(b instanceof Buffer) {
+  if (b instanceof Buffer) {
     return b;
   }
 
@@ -142,11 +139,15 @@ export function merge(a, b) {
     case "boolean":
       return b;
     case "object":
-      if (a === undefined || a === null || typeof a !== 'object') {
+      if (a === undefined || a === null || typeof a !== "object") {
         a = {};
       }
       Object.keys(b).forEach(k => (a[k] = merge(a[k], b[k])));
   }
 
   return a;
+}
+
+function equal(a, b) {
+  return Object.is(a, b);
 }
