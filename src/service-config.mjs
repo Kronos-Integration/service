@@ -107,7 +107,7 @@ export default class ServiceConfig extends Service {
 
 /**
  * Merge from b into a
- * When a and b are arrays of values only the none duplices are appendend to a
+ * When a and b are arrays of values only the none duplicates are appendend to a
  * @param {any} a
  * @param {any} b
  * @return {any} merged b into a
