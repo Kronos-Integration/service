@@ -363,7 +363,7 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 ## merge
 
 Merge from b into a
-When a and b are arrays of values only the none duplices are appendend to a
+When a and b are arrays of values only the none duplicates are appendend to a
 
 ### Parameters
 
