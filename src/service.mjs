@@ -184,11 +184,10 @@ export default class Service extends EndpointsMixin(
     this._configure(config);
   }
 
-  instantiateInterceptor(options)
-  {
+  instantiateInterceptor(options) {
     return this.owner.instantiateInterceptor(options);
   }
-  
+
   get configurationAttributes() {
     return this.constructor.configurationAttributes;
   }

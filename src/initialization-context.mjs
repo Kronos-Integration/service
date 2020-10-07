@@ -1,8 +1,4 @@
-import {
-  defaultLogLevels,
-  defineLogLevelProperties,
-  LogLevelMixin
-} from "loglevel-mixin";
+import { LogLevelMixin } from "loglevel-mixin";
 
 import {
   isEndpoint,
@@ -25,17 +21,10 @@ export const InitializationContext = LogLevelMixin(
       this.outstandingServices = new Map();
       this.outstandingFactories = new Map();
       this.outstandingEndpointConnections = new Map();
-
-      options = { logLevel: "info", ...options };
-      defineLogLevelProperties(
-        this,
-        defaultLogLevels,
-        defaultLogLevels[options.logLevel]
-      );
     }
 
     /**
-     * forward to the serviceProvider
+     * Forward to the serviceProvider
      * @param {string} level the log level
      * @param {Object} arg log content
      */
@@ -52,11 +41,10 @@ export const InitializationContext = LogLevelMixin(
      *
      * @return {boolean} true we wait until a factory is known
      */
-    get waitForFactories()
-    {
+    get waitForFactories() {
       return true;
     }
-  
+
     ownerOfService(service) {
       return this.serviceProvider;
     }
