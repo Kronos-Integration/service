@@ -62,3 +62,4 @@ jobs:
           NPM_TOKEN: '${{ secrets.NPM_TOKEN }}'
           path-to-lcov: build/coverage/lcov.info
           parallel-finished: true
+          github-token: '${{ secrets.github_token }}'
