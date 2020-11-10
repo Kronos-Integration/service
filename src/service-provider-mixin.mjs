@@ -178,7 +178,7 @@ export default function ServiceProviderMixin(
     }
 
     /**
-     * Add a new service based on its configuration
+     * Add a new service based on its configuration.
      * If a service for the name is already present and it has a matching type
      * then its configure() is called and returned.
      * Otherwise a new service will be created eventually replacing an already existing service with the same name.
@@ -205,7 +205,7 @@ export default function ServiceProviderMixin(
     }
 
     /**
-     * start all registered services which hanving autostart set
+     * Start all registered services which hanving autostart set
      */
     async _start() {
       await super._start();
