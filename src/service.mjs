@@ -8,7 +8,7 @@ import {
 import EndpointsMixin from "./endpoints-mixin.mjs";
 
 /**
- * key of the service description
+ * Key of the service description
  */
 const DESCRIPTION = Symbol("description");
 
@@ -129,7 +129,7 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-   * Definition of the predefined endpoints
+   * Definition of the predefined endpoints.
    * - log _out_
    * - config _in_
    * - command _in_
@@ -206,7 +206,7 @@ export default class Service extends EndpointsMixin(
 
   /**
    * Used in human readable state messages.
-   * Besides the actual service name it may contain additional short hints
+   * Besides the actual service name it may contain additional short hints.
    * @return {string}
    */
   get extendetName() {
@@ -231,7 +231,7 @@ export default class Service extends EndpointsMixin(
 
   /**
    * Called when the service state changes.
-   * Emits a serviceStateChanged event to the owner
+   * Emits a serviceStateChanged event to the owner.
    * @param {string} oldState
    * @param {string} newState
    */
@@ -255,7 +255,7 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-   * Called when state transition is not allowed
+   * Called when state transition is not allowed.
    * @param {string} action originating action name
    * @throws always
    */
@@ -264,7 +264,7 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-   * Deliver transtion timeout
+   * Deliver transition timeout.
    * @param {Object} transition
    * @return {number} milliseconds before throwing for a long running transition
    */
@@ -276,7 +276,7 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-   * Opens all endpoint connections
+   * Opens all endpoint connections.
    */
   async _start() {
     for (const e of Object.values(this.endpoints)) {
@@ -285,7 +285,7 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-   * Closes all endpoint connections
+   * Closes all endpoint connections.
    */
   async _stop() {
     for (const e of Object.values(this.endpoints)) {
@@ -294,7 +294,7 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-   * Restart action
+   * Restart action.
    * default implementation does a _stop() and a _start()
    * @return {Promise} fulfills after start
    */
@@ -304,8 +304,8 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-   * Restarts if in running mode
-   * Otherwise does nothing
+   * Restarts if in running mode.
+   * Otherwise does nothing.
    * @returns {Promise} resolves when restart is done (or immediate if no restart triggered)
    */
   async restartIfRunning() {
@@ -315,7 +315,7 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-   * Mapping of properties used in toString
+   * Mapping of properties used in toString.
    * @return {Object}
    */
   get toStringAttributes() {
@@ -323,7 +323,7 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-   * Returns the string representation of this service
+   * Returns the string representation of this service.
    * @return {string} human readable name
    */
   toString() {
@@ -342,7 +342,7 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-   * Deliver json representation
+   * Deliver json representation.
    * @param {Object} options
    * @param {boolean} options.includeRuntimeInfo include runtime informtion like state
    * @param {boolean} options.includeDefaults include default endpoints
@@ -392,7 +392,7 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-   * defaults to the type
+   * Defaults to the type.
    * @return {string} type
    */
   get name() {
@@ -400,7 +400,7 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-   * Should we start when beeing registered
+   * Should we start when beeing registered.
    * @return {boolean} false
    */
   get autostart() {
@@ -410,10 +410,10 @@ export default class Service extends EndpointsMixin(
   /**
    * Takes attribute values from config parameters
    * and copies them over to the object.
-   * Copying is done according to configurationAttributes
-   * Which means we loop over all configuration attributes
+   * Copying is done according to configurationAttributes.
+   * Which means we loop over all configuration attributes.
    * and then for each attribute decide if we use the default, call a setter function
-   * or simply assign the attribute value
+   * or simply assign the attribute value.
    * @param {Object} config
    * @return {Set} of modified attributes
    */
@@ -442,9 +442,9 @@ export default class Service extends EndpointsMixin(
 
   /**
    * Use new configuration.
-   * Internally calls _configure(config) as the constructor does
+   * Internally calls _configure(config) as the constructor does.
    * If attribute with needsRestart are touched the restartIfRunning method
-   * will be called
+   * will be called.
    * @param {Object} config
    * @return {Promise} fillfills when config is applied
    */
@@ -459,7 +459,7 @@ export default class Service extends EndpointsMixin(
   }
 
   /**
-   * Adds service name to the log event
+   * Adds service name to the log event.
    * @param {string} level the log level
    * @param {Object} arg log content
    */
