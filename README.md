@@ -77,7 +77,7 @@ Base service implementation
 
 ## DESCRIPTION
 
-key of the service description
+Key of the service description
 
 ## Service
 
@@ -121,14 +121,14 @@ All services have at least three endpoints:
 ### extendetName
 
 Used in human readable state messages.
-Besides the actual service name it may contain additional short hints
+Besides the actual service name it may contain additional short hints.
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
 ### stateChanged
 
 Called when the service state changes.
-Emits a serviceStateChanged event to the owner
+Emits a serviceStateChanged event to the owner.
 
 #### Parameters
 
@@ -137,7 +137,7 @@ Emits a serviceStateChanged event to the owner
 
 ### rejectWrongState
 
-Called when state transition is not allowed
+Called when state transition is not allowed.
 
 #### Parameters
 
@@ -148,7 +148,7 @@ Called when state transition is not allowed
 
 ### timeoutForTransition
 
-Deliver transtion timeout
+Deliver transition timeout.
 
 #### Parameters
 
@@ -158,41 +158,41 @@ Returns **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ### \_start
 
-Opens all endpoint connections
+Opens all endpoint connections.
 
 ### \_stop
 
-Closes all endpoint connections
+Closes all endpoint connections.
 
 ### \_restart
 
-Restart action
+Restart action.
 default implementation does a \_stop() and a \_start()
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** fulfills after start
 
 ### restartIfRunning
 
-Restarts if in running mode
-Otherwise does nothing
+Restarts if in running mode.
+Otherwise does nothing.
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** resolves when restart is done (or immediate if no restart triggered)
 
 ### toStringAttributes
 
-Mapping of properties used in toString
+Mapping of properties used in toString.
 
 Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
 
 ### toString
 
-Returns the string representation of this service
+Returns the string representation of this service.
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** human readable name
 
 ### toJSONWithOptions
 
-Deliver json representation
+Deliver json representation.
 
 #### Parameters
 
@@ -206,13 +206,13 @@ Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ### name
 
-defaults to the type
+Defaults to the type.
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** type
 
 ### autostart
 
-Should we start when beeing registered
+Should we start when beeing registered.
 
 Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** false
 
@@ -220,10 +220,10 @@ Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 
 Takes attribute values from config parameters
 and copies them over to the object.
-Copying is done according to configurationAttributes
-Which means we loop over all configuration attributes
+Copying is done according to configurationAttributes.
+Which means we loop over all configuration attributes.
 and then for each attribute decide if we use the default, call a setter function
-or simply assign the attribute value
+or simply assign the attribute value.
 
 #### Parameters
 
@@ -234,9 +234,9 @@ Returns **[Set](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Glob
 ### configure
 
 Use new configuration.
-Internally calls \_configure(config) as the constructor does
+Internally calls \_configure(config) as the constructor does.
 If attribute with needsRestart are touched the restartIfRunning method
-will be called
+will be called.
 
 #### Parameters
 
@@ -246,7 +246,7 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 
 ### log
 
-Adds service name to the log event
+Adds service name to the log event.
 
 #### Parameters
 
@@ -266,7 +266,7 @@ Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ### endpoints
 
-Definition of the predefined endpoints
+Definition of the predefined endpoints.
 
 -   log _out_
 -   config _in_
