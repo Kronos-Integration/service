@@ -8,7 +8,7 @@ import {
 import EndpointsMixin from "./endpoints-mixin.mjs";
 
 /**
- * Key of the service description
+ * Key of the service description.
  */
 const DESCRIPTION = Symbol("description");
 
