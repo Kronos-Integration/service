@@ -337,7 +337,7 @@ export default class Service extends EndpointsMixin(
       includeRuntimeInfo: true,
       includeDefaults: true,
       includeName: true,
-      includeConfig: false
+      includeConfig: true
     });
   }
 
