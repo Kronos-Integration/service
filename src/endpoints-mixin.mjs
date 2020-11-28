@@ -70,7 +70,7 @@ export default function EndpointsMixin(superclass) {
     }
 
     /**
-     * Determine endpoint factory from the endpoint config
+     * Determine endpoint factory from the endpoint config.
      * @param {string} name of the new endpoint
      * @param {Object} definition endpoints definition
      * @param {boolean} definition.in true will result in a ReceiveEndpoint
@@ -98,7 +98,7 @@ export default function EndpointsMixin(superclass) {
 
     /**
      * Creates a new endpoint form a defintion.
-     * Also creates interceptors if they are present in the definition
+     * Also creates interceptors if they are present in the definition.
      * @param {string} name of the new endpoint
      * @param {Object|string} definition endpoint attributes or alias expression
      * @param {string} definition.target expression pointing to the connected endpoint
@@ -131,7 +131,7 @@ export default function EndpointsMixin(superclass) {
 
     /**
      * Creates the endpoint objects defined as a combination from
-     * implementation and definition
+     * implementation and definition.
      * All implementation Endpoints are marked as default.
      * @param {Object} definition endpoints definition
      * @param {InitializationContext} ic
@@ -152,7 +152,7 @@ export default function EndpointsMixin(superclass) {
     }
 
     /**
-     * Removes a endpoint
+     * Removes a endpoint.
      * @param {string} name name of the endpoint to be removed
      * @return {undefined}
      */
@@ -161,7 +161,7 @@ export default function EndpointsMixin(superclass) {
     }
 
     /**
-     * Deliver all _in_ endpoints
+     * Deliver all _in_ endpoints.
      * @return {Endpoint[]} of all in endpoints
      */
     get inEndpoints() {
@@ -169,7 +169,7 @@ export default function EndpointsMixin(superclass) {
     }
 
     /**
-     * Deliver all _out_ endpoints
+     * Deliver all _out_ endpoints.
      * @return {Endpoint[]} of all out endpoints
      */
     get outEndpoints() {
@@ -177,8 +177,8 @@ export default function EndpointsMixin(superclass) {
     }
 
     /**
-     * Find Endpoint for a given expression
-     * Default implementation only supports direct named endpoints
+     * Find Endpoint for a given expression.
+     * Default implementation only supports direct named endpoints.
      * @param {string} expression to identify endpoint
      * @param {Endpoint} from to identify endpoint
      * @return {Endpoint} for a given expression
