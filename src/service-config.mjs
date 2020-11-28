@@ -2,7 +2,7 @@ import Service from "./service.mjs";
 import { keyValue2Object } from "./util.mjs";
 
 /**
- * Config providing service
+ * Config providing service.
  * Dispatches config requests to services.
  * or preserves them until a maching service becomes avaliable
  * @property {Map<string,Object>} preservedConfigs values for services not alredy established
@@ -26,7 +26,7 @@ export default class ServiceConfig extends Service {
   }
 
   /**
-   * Deliver configuration for a given servise
+   * Deliver configuration for a given service.
    * @param {string} name service name
    * @param {object} config
    */
@@ -47,7 +47,7 @@ export default class ServiceConfig extends Service {
   }
 
   /**
-   * Forget about preserved config of a service
+   * Forget about preserved config of a service.
    * @param {string} name service name
    */
   clearPreserved(name) {
@@ -55,7 +55,7 @@ export default class ServiceConfig extends Service {
   }
 
   /**
-   * Set config entry
+   * Set config entry.
    * @param {string} key path to the value
    * @param {any} value
    */
@@ -93,7 +93,7 @@ export default class ServiceConfig extends Service {
   }
 
   /**
-   * We always start immediate
+   * We always start immediate.
    * @return {boolean} true
    */
   get autostart() {
@@ -106,8 +106,8 @@ export default class ServiceConfig extends Service {
 }
 
 /**
- * Merge from b into a
- * When a and b are arrays of values only the none duplicates are appendend to a
+ * Merge from b into a.
+ * When *a* and *b* are arrays of values only the none duplicates are appendend to *a*.
  * @param {any} a
  * @param {any} b
  * @return {any} merged b into a

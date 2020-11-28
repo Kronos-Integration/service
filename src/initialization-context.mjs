@@ -7,7 +7,7 @@ import {
 } from "@kronos-integration/endpoint";
 
 /**
- * Keeps track of all in flight object creations and loose ends during config initialization
+ * Keeps track of all in flight object creations and loose ends during config initialization.
  */
 export const InitializationContext = LogLevelMixin(
   /**
@@ -37,7 +37,7 @@ export const InitializationContext = LogLevelMixin(
     }
 
     /**
-     * Wait for (Service) factory to be declared when aced for a service
+     * Wait for (Service) factory to be declared when aced for a service.
      *
      * @return {boolean} true we wait until a factory is known
      */
@@ -50,7 +50,7 @@ export const InitializationContext = LogLevelMixin(
     }
 
     /**
-     * Connects an endpoint
+     * Connects an endpoint.
      * If the other side is currently not present a dummy endpoint will be created
      * and listed as outstanding endpoint connection.
      * @param {Endpoint} endpoint
@@ -88,7 +88,7 @@ export const InitializationContext = LogLevelMixin(
     }
 
     /**
-     * Find endpoint for a given expression
+     * Find endpoint for a given expression.
      * @param {string} expression
      * @param {Endpoint} from
      */
@@ -139,7 +139,7 @@ export const InitializationContext = LogLevelMixin(
     }
 
     /**
-     * Checks the service providers endpoint for beeing not connected
+     * Checks the service providers endpoint for beeing not connected.
      */
     validateEndpoints() {
       Object.values(this.serviceProvider.services).forEach(s => {

@@ -8,8 +8,8 @@ import {
 } from "@kronos-integration/endpoint";
 
 /**
- * Endpoint accessor mixin
- * Manages endpoints in a container
+ * Endpoint accessor mixin.
+ * Manages endpoints in a container.
  * @param {Class} superclass class to be extended
  * @return {Class} extended class
  */
@@ -29,7 +29,7 @@ export default function EndpointsMixin(superclass) {
     }
 
     /**
-     * Add a endpoint
+     * Add a endpoint.
      * @param {Endpoint} ep
      * @return {Endpoint} the added endpoint
      */

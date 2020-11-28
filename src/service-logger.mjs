@@ -1,7 +1,7 @@
 import Service from './service.mjs';
 
 /**
- * Log receiving service
+ * Log receiving service.
  */
 export default class ServiceLogger extends Service {
 
@@ -17,7 +17,7 @@ export default class ServiceLogger extends Service {
   }
 
   /**
-   * Adds a log input endpoint to the set of Service endpoints
+   * Adds a log input endpoint to the set of Service endpoints.
    * @return {Object} predefined endpoints
    */
   static get endpoints() {
@@ -37,7 +37,7 @@ export default class ServiceLogger extends Service {
   }
 
   /**
-   * We always start immediate
+   * We always start immediate.
    * @return {boolean} true
    */
   get autostart() {

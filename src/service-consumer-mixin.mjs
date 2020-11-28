@@ -1,5 +1,5 @@
 /**
- * Assign services based on a configuration
+ * Assign services based on a configuration.
  * @param {Object} target object
  * @param {Object} config service defintion
  * @param {Object} provider service provider
