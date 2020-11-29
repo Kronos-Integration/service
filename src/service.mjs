@@ -337,7 +337,8 @@ export default class Service extends EndpointsMixin(
       includeRuntimeInfo: true,
       includeDefaults: true,
       includeName: true,
-      includeConfig: true
+      includeConfig: true,
+      includePrivate: false
     });
   }
 
@@ -348,6 +349,7 @@ export default class Service extends EndpointsMixin(
    * @param {boolean} options.includeDefaults include default endpoints
    * @param {boolean} options.includeName include name of the service
    * @param {boolean} options.includeConfig include config attributes
+   * @param {boolean} options.includePrivate include private config attributes
    * @return {Object} json representation
    */
   toJSONWithOptions(options) {
