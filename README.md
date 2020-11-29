@@ -77,7 +77,7 @@ Base service implementation
 
 ## DESCRIPTION
 
-Key of the service description
+Key of the service description.
 
 ## Service
 
@@ -278,11 +278,11 @@ Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 **Extends Service**
 
-Log receiving service
+Log receiving service.
 
 ### autostart
 
-We always start immediate
+We always start immediate.
 
 Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true
 
@@ -292,7 +292,7 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ### endpoints
 
-Adds a log input endpoint to the set of Service endpoints
+Adds a log input endpoint to the set of Service endpoints.
 
 Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** predefined endpoints
 
@@ -300,7 +300,7 @@ Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 **Extends Service**
 
-Config providing service
+Config providing service.
 Dispatches config requests to services.
 or preserves them until a maching service becomes avaliable
 
@@ -315,7 +315,7 @@ or preserves them until a maching service becomes avaliable
 
 ### configFor
 
-Deliver configuration for a given servise
+Deliver configuration for a given service.
 
 #### Parameters
 
@@ -324,7 +324,7 @@ Deliver configuration for a given servise
 
 ### clearPreserved
 
-Forget about preserved config of a service
+Forget about preserved config of a service.
 
 #### Parameters
 
@@ -332,7 +332,7 @@ Forget about preserved config of a service
 
 ### configureValue
 
-Set config entry
+Set config entry.
 
 #### Parameters
 
@@ -347,7 +347,7 @@ Set config entry
 
 ### autostart
 
-We always start immediate
+We always start immediate.
 
 Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true
 
@@ -357,8 +357,8 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ## merge
 
-Merge from b into a
-When a and b are arrays of values only the none duplicates are appendend to a
+Merge from b into a.
+When _a_ and _b_ are arrays of values only the none duplicates are appendend to _a_.
 
 ### Parameters
 
@@ -381,8 +381,8 @@ By default a service provider has two build in services
 
 ## EndpointsMixin
 
-Endpoint accessor mixin
-Manages endpoints in a container
+Endpoint accessor mixin.
+Manages endpoints in a container.
 
 ### Parameters
 
@@ -400,7 +400,7 @@ Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 **Extends ServiceProviderMixin(Service)**
 
-Simple service manager (for examples and testing only)
+Simple service manager (for examples and testing only).
 
 ### name
 
@@ -408,7 +408,7 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ## defineServiceConsumerProperties
 
-Assign services based on a configuration
+Assign services based on a configuration.
 
 ### Parameters
 
@@ -419,7 +419,7 @@ Assign services based on a configuration
 
 ## InitializationContext
 
-Keeps track of all in flight object creations and loose ends during config initialization
+Keeps track of all in flight object creations and loose ends during config initialization.
 
 ## InitializationContext
 
