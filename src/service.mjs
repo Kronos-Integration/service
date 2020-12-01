@@ -3,6 +3,7 @@ import { prepareActions, StateTransitionMixin } from "statetransition-mixin";
 import {
   createAttributes,
   getAttribute,
+  getAttributes,
   setAttributes
 } from "model-attributes";
 import EndpointsMixin from "./endpoints-mixin.mjs";
@@ -367,8 +368,15 @@ export default class Service extends EndpointsMixin(
     }
 
     if (options.includeConfig) {
-      const ca = this.configurationAttributes;
-      Object.keys(ca).forEach(name => (json[name] = this[name]));
+      let atts = getAttributes(this, this.configurationAttributes);
+
+      if (!options.includePrivate) {
+        atts = Object.fromEntries(
+          Object.entries(atts).filter(([k, v]) => !v.private)
+        );
+      }
+
+      Object.assign(json, atts);
     }
 
     for (const endpointName in this.endpoints) {
