@@ -16,7 +16,7 @@ import {
 export default function EndpointsMixin(superclass) {
   return class EndpointsMixin extends superclass {
     /**
-     * default set of endpoints to create
+     * Default set of endpoints to create.
      * @return {Object} {} empty set
      */
     static get endpoints() {
