@@ -393,7 +393,7 @@ Returns **Class** extended class
 
 ## endpoints
 
-default set of endpoints to create
+Default set of endpoints to create.
 
 Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** {} empty set
 
