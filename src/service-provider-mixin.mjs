@@ -24,7 +24,7 @@ export default function ServiceProviderMixin(
       this.serviceFactories = {};
       this.services = {};
       this.ic = ic;
-  
+
       ic.logLevel = this.logLevel;
       ic.serviceProvider = this;
 
@@ -103,11 +103,21 @@ export default function ServiceProviderMixin(
       }
     }
 
-    /** by default be our own owner */
+    /**
+     * By default be our own owner.
+     * @return this
+     */
     get owner() {
       return this;
     }
 
+    /**
+     * Registers a interceptor factory for later use by
+     * @see {instantiateInterceptor}.
+     *
+     * @param {Class} factory
+     * @returns {Class} factory
+     */
     registerInterceptorFactory(factory) {
       this.interceptorFactories[factory.name] = factory;
       this.emit("interceptorFactoryRegistered", factory);
@@ -118,6 +128,12 @@ export default function ServiceProviderMixin(
       delete this.interceptorFactories[factory.name];
     }
 
+    /**
+     * Instanciates an interceptor from its definition data.
+     * @see {interceptorFactories}
+     * @param {string|Object} def data
+     * @returns {Interceptor}
+     */
     instantiateInterceptor(def) {
       let factory, options;
 
