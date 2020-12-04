@@ -24,7 +24,7 @@ export const InitializationContext = LogLevelMixin(
     }
 
     /**
-     * Forward to the serviceProvider
+     * Forward to the serviceProvider.
      * @param {string} level the log level
      * @param {Object} arg log content
      */
