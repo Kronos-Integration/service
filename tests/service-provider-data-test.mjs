@@ -25,6 +25,15 @@ class MyInitializationContext extends InitializationContext {
       super.connectEndpoint(endpoint, connected);
     } catch (e) {}
   }
+
+  instantiateInterceptor(def) {
+    console.log(def);
+    const interceptor = super.instantiateInterceptor(def);
+    if (interceptor) {
+      return interceptor;
+    }
+    return new Interceptor(def);
+  }
 }
 
 test("service provider declare services", async t => {
@@ -32,11 +41,11 @@ test("service provider declare services", async t => {
 
   await sp.declareServices(data);
 
-  t.is(Object.values(sp.services).length, 11);
+  t.is(Object.values(sp.services).length, 10);
 
   t.is(sp.services.logger.name, "logger");
   t.is(sp.services.logger.type, "logger");
-  t.is(sp.services.logger.logLevel, "debug");
+  t.is(sp.services.logger.logLevel, "error");
   t.is(sp.services.logger.state, "stopped");
 
   t.is(sp.services.logger.endpoints.log.name, "log");
@@ -50,4 +59,19 @@ test("service provider declare services", async t => {
   t.is(sp.services.logger.endpoints.config.isOut, false);
   t.is(sp.services.logger.endpoints.config.isOpen, true);
   t.is(sp.services.logger.endpoints.config.hasConnections, false);
+
+  const ep = sp.services.http.endpoints["/entitlement"];
+
+  t.is(ep.name, "/entitlement");
+  /*
+  t.is(ep.type, "GET");
+  t.is(ep.method, "GET");
+  */
+
+  /*
+ t.is(ep.interceptors.length, 3);
+
+  const i0 = ep.interceptors[0];
+  t.is(i0.type, "ctx-jwt-verify");
+*/
 });

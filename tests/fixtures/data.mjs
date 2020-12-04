@@ -3,7 +3,9 @@ export const data = {
     type: "systemd-logger",
     name: "logger",
     state: "running",
-    logLevel: "debug",
+    logLevel: "error",
+    description: "Log consuming service",
+    timeout: { start: 20, stop: 20, restart: 20 },
     endpoints: {
       log: {
         in: true,
@@ -18,105 +20,63 @@ export const data = {
           "service(ldap).log",
           "service(logger).log",
           "service(logger).log",
-          "service(swarm).log",
-          "service(systemctl).log",
+          "service(smtp).log",
           "service(systemd).log"
         ]
       },
-      config: {
-        in: true,
-        open: true
-      },
-      command: {
-        in: true,
-        open: true
-      }
+      config: { in: true, open: true },
+      command: { in: true, open: true }
     }
   },
   config: {
     type: "systemd-config",
     name: "config",
     state: "running",
-    logLevel: "trace",
+    logLevel: "error",
+    description: "Config providing service",
+    timeout: { start: 20, stop: 20, restart: 20 },
     endpoints: {
-      log: {
-        out: true,
-        open: true,
-        connected: "service(logger).log"
-      },
-      config: {
-        in: true,
-        open: true
-      },
-      command: {
-        in: true,
-        open: true
-      }
+      log: { out: true, open: true, connected: "service(logger).log" },
+      config: { in: true, open: true },
+      command: { in: true, open: true }
     }
   },
   systemd: {
     type: "systemd",
     name: "systemd",
-    state: "starting",
-    logLevel: "trace",
+    state: "running",
+    logLevel: "error",
+    description: "This service is the base class for service implementations",
+    timeout: { start: 20, stop: 20, restart: 20 },
     endpoints: {
-      log: {
-        out: true,
-        open: true,
-        connected: "service(logger).log"
-      },
-      config: {
-        in: true,
-        open: true
-      },
-      command: {
-        in: true,
-        open: true
-      }
+      log: { out: true, open: true, connected: "service(logger).log" },
+      config: { in: true, open: true },
+      command: { in: true, open: true }
     }
   },
   http: {
     type: "http",
     name: "http",
     state: "running",
-    logLevel: "trace",
+    logLevel: "error",
+    description: "This service is the base class for service implementations",
+    timeout: { server: 120, start: 20, stop: 20, restart: 20 },
+    listen: {
+      url: "https://mfelten.dynv6.net/services/entitlements/api",
+      socket: { fd: 3, name: "http.listen.socket" }
+    },
+    url: "https://mfelten.dynv6.net/services/entitlements/api",
     endpoints: {
-      log: {
-        out: true,
-        open: true,
-        connected: "service(logger).log"
-      },
-      config: {
-        in: true,
-        open: true
-      },
-      command: {
-        in: true,
-        open: true
-      },
-      "/services/peers": {
-        path: "/services/peers",
-        ws: true,
-        in: true,
-        out: true,
-        connected: "service(swarm).peers.services",
-        interceptors: [
-          {
-            type: "decode-json"
-          }
-        ]
-      },
+      log: { out: true, open: true, connected: "service(logger).log" },
+      config: { in: true, open: true },
+      command: { in: true, open: true },
       "/state/uptime": {
         path: "/state/uptime",
         ws: true,
         in: true,
         out: true,
         connected: "service(health).uptime",
-        interceptors: [
-          {
-            type: "decode-json"
-          }
-        ]
+        interceptors: [{ type: "decode-json" }]
       },
       "/state/cpu": {
         path: "/state/cpu",
@@ -124,11 +84,7 @@ export const data = {
         in: true,
         out: true,
         connected: "service(health).cpu",
-        interceptors: [
-          {
-            type: "decode-json"
-          }
-        ]
+        interceptors: [{ type: "decode-json" }]
       },
       "/state/memory": {
         path: "/state/memory",
@@ -136,23 +92,16 @@ export const data = {
         in: true,
         out: true,
         connected: "service(health).memory",
-        interceptors: [
-          {
-            type: "decode-json"
-          }
-        ]
+        interceptors: [{ type: "decode-json" }]
       },
-      "/state": {
-        path: "/state",
+      "/services": {
+        path: "/services",
         ws: true,
         in: true,
         out: true,
-        connected: "service(health).state",
-        interceptors: [
-          {
-            type: "decode-json"
-          }
-        ]
+        open: true,
+        connected: "service(admin).services",
+        interceptors: [{ type: "decode-json" }]
       },
       "/authenticate": {
         method: "POST",
@@ -160,132 +109,193 @@ export const data = {
         out: true,
         open: true,
         connected: "service(auth).access_token",
+        interceptors: [{ type: "ctx-body-param", headers: {} }]
+      },
+      "/entitlement": {
+        method: "GET",
+        path: "/entitlement",
+        out: true,
+        open: true,
+        connected: "service(ldap).search",
         interceptors: [
+          { type: "ctx-jwt-verify" },
+          { type: "ctx", headers: {} },
           {
-            type: "ctx-body-param"
+            type: "template",
+            request: {
+              base: "ou=groups,dc=mf,dc=de",
+              scope: "children",
+              attributes: ["cn"],
+              filter: "(objectclass=groupOfUniqueNames)"
+            }
           }
         ]
       },
-      "/services": {
-        method: "GET",
-        path: "/services",
+      "/user": {
+        method: "PUT",
+        path: "/user",
         out: true,
         open: true,
-        connected: "service(admin).services",
+        connected: "service(ldap).add",
         interceptors: [
+          { type: "ctx-body-param", headers: {} },
           {
-            type: "ctx-jwt-verify"
-          },
-          {
-            type: "ctx"
+            type: "template",
+            request: {
+              dn: "uid={{user}},ou=accounts,dc=mf,dc=de",
+              entry: {
+                objectClass: [
+                  "inetOrgPerson",
+                  "organizationalPerson",
+                  "person",
+                  "top"
+                ],
+                cn: "{{user}}",
+                sn: "{{user}}",
+                userPassword: "{{password}}"
+              }
+            }
           }
         ]
       },
-      "/systemctl/status": {
-        method: "GET",
-        path: "/systemctl/status",
+      "/user/password": {
+        method: "PATCH",
+        path: "/user/password",
         out: true,
         open: true,
-        connected: "service(systemctl).status",
+        connected: "service(ldap).modify",
         interceptors: [
+          { type: "ctx-body-param", headers: {} },
           {
-            type: "ctx-jwt-verify"
-          },
-          {
-            type: "ctx"
+            type: "template",
+            request: {
+              bind: {
+                dn: "uid={{user}},ou=accounts,dc=mf,dc=de",
+                password: "{{password}}"
+              },
+              dn: "uid={{user}},ou=accounts,dc=mf,dc=de",
+              replace: { userPassword: "{{new_password}}" }
+            }
           }
         ]
       },
-      "/systemctl/start/:unit": {
-        method: "GET",
-        path: "/systemctl/start/:unit",
+      "/user/:user": {
+        method: "DEL",
+        path: "/user/:user",
         out: true,
         open: true,
-        connected: "service(systemctl).start",
+        connected: "service(ldap).del",
         interceptors: [
+          { type: "ctx-jwt-verify" },
+          { type: "ctx", headers: {} },
           {
-            type: "ctx-jwt-verify"
-          },
-          {
-            type: "ctx"
+            type: "template",
+            request: { dn: "uid={{user}},ou=accounts,dc=mf,dc=de" }
           }
         ]
       },
-      "/systemctl/stop/:unit": {
+      "/user/:user/entitlements": {
         method: "GET",
-        path: "/systemctl/stop/:unit",
+        path: "/user/:user/entitlements",
         out: true,
         open: true,
-        connected: "service(systemctl).stop",
+        connected: "service(ldap).search",
         interceptors: [
+          { type: "ctx-jwt-verify" },
+          { type: "ctx", headers: {} },
           {
-            type: "ctx-jwt-verify"
-          },
-          {
-            type: "ctx"
-          }
-        ]
-      },
-      "/systemctl/restart/:unit": {
-        method: "GET",
-        path: "/systemctl/restart/:unit",
-        out: true,
-        open: true,
-        connected: "service(systemctl).restart",
-        interceptors: [
-          {
-            type: "ctx-jwt-verify"
-          },
-          {
-            type: "ctx"
-          }
-        ]
-      },
-      "/systemctl/reload/:unit": {
-        method: "GET",
-        path: "/systemctl/reload/:unit",
-        out: true,
-        open: true,
-        connected: "service(systemctl).reload",
-        interceptors: [
-          {
-            type: "ctx-jwt-verify"
-          },
-          {
-            type: "ctx"
+            type: "template",
+            request: {
+              base: "ou=groups,dc=mf,dc=de",
+              scope: "sub",
+              attributes: ["cn"],
+              filter:
+                "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=mf,dc=de))"
+            }
           }
         ]
       }
     }
   },
-  ldap: {
-    type: "ServiceLDAP",
-    name: "ldap",
-    state: "stopped",
-    logLevel: "trace",
+  auth: {
+    type: "authenticator",
+    name: "auth",
+    state: "running",
+    logLevel: "error",
+    description: "provide authentication services",
+    timeout: { server: 120, start: 20, stop: 20, restart: 20 },
+    listen: {},
     endpoints: {
-      log: {
+      log: { out: true, open: true, connected: "service(logger).log" },
+      config: { in: true, open: true },
+      command: { in: true, open: true },
+      change_password: { in: true, open: true },
+      access_token: {
+        in: true,
+        open: true,
+        connected: "service(http)./authenticate"
+      },
+      "ldap.authenticate": {
         out: true,
         open: true,
-        connected: "service(logger).log"
-      },
-      config: {
-        in: true,
-        open: true
-      },
-      command: {
-        in: true,
-        open: true
-      },
+        connected: "service(ldap).authenticate"
+      }
+    }
+  },
+  ldap: {
+    type: "ldap",
+    name: "ldap",
+    state: "stopped",
+    logLevel: "error",
+    description: "This service is the base class for service implementations",
+    timeout: { server: 120, start: 20, stop: 20, restart: 20 },
+    jwt: {
+      access_token: { algorithm: "RS256", expiresIn: "1h" },
+      refresh_token: { algorithm: "RS256", expiresIn: "30d" }
+    },
+    listen: {},
+    url: "ldaps://mfelten.dynv6.net",
+    entitlements: {
+      bindDN: "uid={{username}},ou=accounts,dc=mf,dc=de",
+      base: "ou=groups,dc=mf,dc=de",
+      attribute: "cn",
+      scope: "sub",
+      filter:
+        "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{username}},ou=accounts,dc=mf,dc=de))"
+    },
+    endpoints: {
+      log: { out: true, open: true, connected: "service(logger).log" },
+      config: { in: true, open: true },
+      command: { in: true, open: true },
       authenticate: {
         in: true,
         out: true,
         open: true,
-        connected: "service(auth).ldap"
+        connected: "service(auth).ldap.authenticate"
+      },
+      add: {
+        in: true,
+        out: true,
+        open: true,
+        connected: "service(http)./user"
+      },
+      del: {
+        in: true,
+        out: true,
+        open: true,
+        connected: "service(http)./user/:user"
+      },
+      modify: {
+        in: true,
+        out: true,
+        open: true,
+        connected: "service(http)./user/password"
       },
       search: {
         in: true,
-        out: true
+        out: true,
+        open: true,
+        connected: "service(http)./entitlement"
       }
     }
   },
@@ -293,27 +303,24 @@ export const data = {
     type: "health-check",
     name: "health",
     state: "running",
-    logLevel: "trace",
+    logLevel: "error",
+    cpuInterval: 30,
+    memoryInterval: 30,
+    uptimeInterval: 30,
+    resourceUsageInterval: 30,
+    description: "This service is the base class for service implementations",
+    timeout: { server: 120, start: 20, stop: 20, restart: 20 },
+    jwt: {
+      access_token: { algorithm: "RS256", expiresIn: "1h" },
+      refresh_token: { algorithm: "RS256", expiresIn: "30d" }
+    },
+    listen: {},
+    entitlements: { attribute: "cn", scope: "sub" },
     endpoints: {
-      log: {
-        out: true,
-        open: true,
-        connected: "service(logger).log"
-      },
-      config: {
-        in: true,
-        open: true
-      },
-      command: {
-        in: true,
-        open: true
-      },
-      state: {
-        in: true,
-        out: true,
-        open: true,
-        connected: "service(http)./state"
-      },
+      log: { out: true, open: true, connected: "service(logger).log" },
+      config: { in: true, open: true },
+      command: { in: true, open: true },
+      state: { in: true, out: true, open: true },
       cpu: {
         in: true,
         out: true,
@@ -332,152 +339,55 @@ export const data = {
         open: true,
         connected: "service(http)./state/uptime"
       },
-      resourceUsage: {
-        in: true,
-        out: true,
-        open: true
-      }
-    }
-  },
-  auth: {
-    type: "ServiceAuthenticator",
-    name: "auth",
-    state: "running",
-    logLevel: "trace",
-    endpoints: {
-      log: {
-        out: true,
-        open: true,
-        connected: "service(logger).log"
-      },
-      config: {
-        in: true,
-        open: true
-      },
-      command: {
-        in: true,
-        open: true
-      },
-      access_token: {
-        in: true,
-        open: true,
-        connected: "service(http)./authenticate"
-      },
-      ldap: {
-        out: true,
-        open: true,
-        connected: "service(ldap).authenticate"
-      }
+      resourceUsage: { in: true, out: true, open: true }
     }
   },
   admin: {
     type: "admin",
     name: "admin",
     state: "running",
-    logLevel: "trace",
+    logLevel: "error",
+    description: "This service is the base class for service implementations",
+    timeout: { server: 120, start: 20, stop: 20, restart: 20 },
+    jwt: {
+      access_token: { algorithm: "RS256", expiresIn: "1h" },
+      refresh_token: { algorithm: "RS256", expiresIn: "30d" }
+    },
+    listen: {},
+    entitlements: { attribute: "cn", scope: "sub" },
     endpoints: {
-      log: {
-        out: true,
-        open: true,
-        connected: "service(logger).log"
-      },
-      config: {
-        in: true,
-        open: true
-      },
-      command: {
-        in: true,
-        open: true
-      },
+      log: { out: true, open: true, connected: "service(logger).log" },
+      config: { in: true, open: true },
+      command: { in: true, open: true },
       services: {
         in: true,
         out: true,
         open: true,
-        connected: ["service(http)./services", "service(swarm).topic.services"]
+        connected: "service(http)./services"
       }
     }
   },
-  swarm: {
-    type: "swarm",
-    name: "swarm",
-    state: "starting",
-    logLevel: "trace",
+  smtp: {
+    type: "smtp",
+    name: "smtp",
+    state: "stopped",
+    logLevel: "error",
+    description: "This service is the base class for service implementations",
+    timeout: { server: 120, start: 20, stop: 20, restart: 20 },
+    jwt: {
+      access_token: { algorithm: "RS256", expiresIn: "1h" },
+      refresh_token: { algorithm: "RS256", expiresIn: "30d" }
+    },
+    listen: {},
+    entitlements: { attribute: "cn", scope: "sub" },
+    port: 25,
+    secure: false,
+    auth: {},
     endpoints: {
-      log: {
-        out: true,
-        open: true,
-        connected: "service(logger).log"
-      },
-      config: {
-        in: true,
-        open: true
-      },
-      command: {
-        in: true,
-        open: true
-      },
-      "topic.services": {
-        topic: {},
-        in: true,
-        out: true,
-        connected: "service(admin).services"
-      },
-      "peers.services": {
-        topic: {},
-        out: true,
-        connected: "service(http)./services/peers"
-      }
-    }
-  },
-  systemctl: {
-    type: "ServiceSystemdControl",
-    name: "systemctl",
-    state: "running",
-    logLevel: "trace",
-    endpoints: {
-      log: {
-        out: true,
-        open: true,
-        connected: "service(logger).log"
-      },
-      config: {
-        in: true,
-        open: true
-      },
-      command: {
-        in: true,
-        open: true
-      },
-      status: {
-        in: true,
-        out: true,
-        open: true,
-        connected: "service(http)./systemctl/status"
-      },
-      start: {
-        in: true,
-        out: true,
-        open: true,
-        connected: "service(http)./systemctl/start/:unit"
-      },
-      stop: {
-        in: true,
-        out: true,
-        open: true,
-        connected: "service(http)./systemctl/stop/:unit"
-      },
-      restart: {
-        in: true,
-        out: true,
-        open: true,
-        connected: "service(http)./systemctl/restart/:unit"
-      },
-      reload: {
-        in: true,
-        out: true,
-        open: true,
-        connected: "service(http)./systemctl/reload/:unit"
-      }
+      log: { out: true, open: true, connected: "service(logger).log" },
+      config: { in: true, open: true },
+      command: { in: true, open: true },
+      send: { in: true, out: true }
     }
   }
 };
