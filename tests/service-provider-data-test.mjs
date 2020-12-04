@@ -60,6 +60,8 @@ test("service provider declare services", async t => {
   t.is(sp.services.logger.endpoints.config.isOpen, true);
   t.is(sp.services.logger.endpoints.config.hasConnections, false);
 
+  t.is(sp.services.http.type, "service");
+
   const ep = sp.services.http.endpoints["/entitlement"];
 
   t.is(ep.name, "/entitlement");
