@@ -34,7 +34,7 @@ test("inEndpoints", t => {
   const o = new Owner();
   t.deepEqual(
     o.inEndpoints.map(e => e.name),
-    ["config", "command"]
+    ["config"]
   );
 });
 
@@ -53,7 +53,6 @@ test("endpointForExpression simple", t => {
 test("endpointForExpression service", t => {
   const o = new Owner();
 
-  t.is(o.endpointForExpression("service(config).command").name, "command");
   t.is(o.endpointForExpression("service(logger).log").name, "log");
 });
 

@@ -144,10 +144,6 @@ export default class Service extends EndpointsMixin(
       config: {
         in: true,
         receive: "configure"
-      },
-      command: {
-        in: true,
-        receive: "execute"
       }
     };
   }
@@ -212,22 +208,6 @@ export default class Service extends EndpointsMixin(
    */
   get extendetName() {
     return this.name;
-  }
-
-  async execute(command) {
-    // TODO admin query language ?
-    // for now we return the config
-
-    const ca = this.configurationAttributes;
-
-    for (const an in ca) {
-      getAttribute(this, ca, an);
-    }
-
-    return {
-      name: this.name,
-      state: this.state
-    };
   }
 
   /**

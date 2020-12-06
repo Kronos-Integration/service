@@ -43,43 +43,6 @@ export default function ServiceProviderMixin(
       configService.configure(config);
     }
 
-    async execute(command) {
-      if (Array.isArray(command)) {
-        return Promise.all(command.map(c => this.execute(c)));
-      }
-
-      if (command.action === "list") {
-        return Object.keys(this.services)
-          .map(name => this.services[name])
-          .map(s =>
-            command.options ? s.toJSONWithOptions(command.options) : s.toJSON()
-          );
-      }
-
-      const service = this.services[command.service];
-
-      if (service === undefined) {
-        throw new Error(`Unknown service: ${command.service}`);
-      }
-
-      switch (command.action) {
-        case "get":
-          return service.toJSONWithOptions(command.options);
-
-        case "start":
-          return service.start();
-
-        case "stop":
-          return service.stop();
-
-        case "restart":
-          return service.restart();
-
-        default:
-          throw new Error(`Unknown command: ${command.action}`);
-      }
-    }
-
     emit(name, ...args) {
       const listeners = this.listeners[name];
       if (listeners) {
