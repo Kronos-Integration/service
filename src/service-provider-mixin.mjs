@@ -184,7 +184,7 @@ export default function ServiceProviderMixin(
     }
 
     /**
-     * Start all registered services which hanving autostart set
+     * Start all registered services which hanving autostart set.
      */
     async _start() {
       await super._start();
@@ -197,7 +197,7 @@ export default function ServiceProviderMixin(
     }
 
     /**
-     * Stop all services
+     * Stop all services.
      * @return {Promise} that resolves when all services are stopped
      */
     async _stop() {
