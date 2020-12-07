@@ -89,7 +89,7 @@ export default function EndpointsMixin(superclass) {
         return definition.default ? ReceiveEndpointDefault : ReceiveEndpoint;
       }
 
-      if(definition.multi === true || Array.isArray(definition.connected)) {
+      if (definition.multi === true || Array.isArray(definition.connected)) {
         return MultiSendEndpoint;
       }
 
@@ -107,14 +107,6 @@ export default function EndpointsMixin(superclass) {
      */
     createEndpointFromConfig(name, definition, ic) {
       definition = this.endpointOptions(name, definition, ic);
-
-    /*  console.log(
-        "EP",
-        this.name,
-        name,
-        this.endpointFactoryFromConfig(name, definition, ic),
-        definition
-      );*/
 
       const ep = new (this.endpointFactoryFromConfig(name, definition, ic))(
         name,
@@ -182,31 +174,32 @@ export default function EndpointsMixin(superclass) {
      * @param {string} expression to identify endpoint
      * @param {Endpoint} from to identify endpoint
      * @return {Endpoint} for a given expression
-     * @throws if no Endpoint can be found and throwOnError is true
      */
     endpointForExpression(expression, from) {
-      const endpoint = this.endpoints[expression];
-      if (endpoint === undefined) {
-        const m = expression.match(/^service\(([^\)]+)\).(.*)/);
-        if (m) {
-          const serviceName = m[1];
-          const suffixExpression = m[2];
-          const serviceProvider = this.owner;
-          const service = serviceProvider.getService(serviceName);
+      if (expression !== undefined) {
+        const endpoint = this.endpoints[expression];
+        if (endpoint === undefined) {
+          const m = expression.match(/^service\(([^\)]+)\).(.*)/);
+          if (m) {
+            const serviceName = m[1];
+            const suffixExpression = m[2];
+            const serviceProvider = this.owner;
+            const service = serviceProvider.getService(serviceName);
 
-          return service
-            ? service.endpointForExpression(suffixExpression)
-            : undefined;
-        }
+            return service
+              ? service.endpointForExpression(suffixExpression)
+              : undefined;
+          }
 
-        if (from !== undefined) {
-          if (expression === "self") {
-            return from;
+          if (from !== undefined) {
+            if (expression === "self") {
+              return from;
+            }
           }
         }
-      }
 
-      return endpoint;
+        return endpoint;
+      }
     }
   };
 }

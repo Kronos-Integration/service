@@ -56,18 +56,23 @@ test("endpointForExpression service", t => {
   t.is(o.endpointForExpression("service(logger).log").name, "log");
 });
 
-test("endpointForExpression service undefined", t => {
+test("endpointForExpression service not found", t => {
   const o = new Owner();
   t.is(o.endpointForExpression("service(something).something"), undefined);
 });
 
-test("endpointForExpression undefined", t => {
+test("endpointForExpression not found 2", t => {
   const o = new Owner();
   const r1 = new ReceiveEndpoint("r1");
 
   o.addEndpoint(r1);
 
   t.is(o.endpointForExpression("r2"), undefined);
+});
+
+test("endpointForExpression undefined", t => {
+  const o = new Owner();
+  t.is(o.endpointForExpression(undefined), undefined);
 });
 
 test("endpointFromConfig simple connected", t => {
