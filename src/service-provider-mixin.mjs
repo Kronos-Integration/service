@@ -74,6 +74,11 @@ export default function ServiceProviderMixin(
       return this;
     }
 
+    get isServiceProvider()
+    {
+      return true;
+    }
+  
     /**
      * Registers a interceptor factory for later use by
      * @see {instantiateInterceptor}.

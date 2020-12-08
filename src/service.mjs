@@ -303,6 +303,11 @@ export default class Service extends EndpointsMixin(
     return { state: "state" };
   }
 
+  get isServiceProvider()
+  {
+    return false;
+  }
+  
   /**
    * Returns the string representation of this service.
    * @return {string} human readable name
@@ -337,6 +342,10 @@ export default class Service extends EndpointsMixin(
     const json = {
       type: this.type
     };
+
+    if(this.isServiceProvider) {
+      json.serviceProvider = true;
+    }
 
     if (options.includeName) {
       json.name = this.name;

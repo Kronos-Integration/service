@@ -1,5 +1,8 @@
 import test from "ava";
-import { TestService, TestServiceWithoutAdditionalEndpoints } from "./helpers/util.mjs";
+import {
+  TestService,
+  TestServiceWithoutAdditionalEndpoints
+} from "./helpers/util.mjs";
 
 import { SendEndpoint } from "@kronos-integration/endpoint";
 import { Service, InitializationContext } from "@kronos-integration/service";
@@ -7,7 +10,9 @@ import { Service, InitializationContext } from "@kronos-integration/service";
 const owner = {
   services: {},
 
-  warn(...args) { /*console.log(...args);*/ },
+  warn(...args) {
+    /*console.log(...args);*/
+  },
   trace() {},
   error() {},
   getService(name) {
@@ -40,6 +45,8 @@ function st(t, factory, options, expected = {}) {
   const s1 = new factory(options, ic);
 
   t.is(s1.owner, owner, "owner");
+  t.false(s1.isServiceProvider);
+  t.is(s1.toJSON().serviceProvider, undefined);
 
   t.is(s1.type, factory.name, "name");
 
@@ -77,12 +84,15 @@ function st(t, factory, options, expected = {}) {
   }
 
   if (expected.json !== undefined) {
-    t.deepEqual(s1.toJSONWithOptions({
-      includeRuntimeInfo: false,
-      includeDefaults: false,
-      includeName: true,
-      includeConfig: false
-    }), expected.json);
+    t.deepEqual(
+      s1.toJSONWithOptions({
+        includeRuntimeInfo: false,
+        includeDefaults: false,
+        includeName: true,
+        includeConfig: false
+      }),
+      expected.json
+    );
   }
 
   t.is(s1.toString(), `${s1.name}(state=stopped)`);

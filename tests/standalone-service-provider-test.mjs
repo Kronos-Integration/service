@@ -2,6 +2,12 @@ import test from "ava";
 import { TestService } from "./helpers/util.mjs";
 import { StandaloneServiceProvider } from "@kronos-integration/service";
 
+test("basics",  t => {
+  const ssm = new StandaloneServiceProvider();
+  t.true(ssm.isServiceProvider);
+  t.true(ssm.toJSON().serviceProvider);
+});
+
 test("declareService", async t => {
   const ssm = new StandaloneServiceProvider();
   ssm.registerServiceFactory(TestService);
