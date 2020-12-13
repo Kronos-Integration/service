@@ -29,11 +29,11 @@
     "lint:docs": "documentation lint ./src/module.mjs"
   },
   "dependencies": {
-    "@kronos-integration/endpoint": "^9.3.0",
-    "@kronos-integration/interceptor": "^10.2.0",
-    "loglevel-mixin": "^6.0.0",
+    "@kronos-integration/endpoint": "^9.3.2",
+    "@kronos-integration/interceptor": "^10.2.1",
+    "loglevel-mixin": "^6.0.1",
     "model-attributes": "^4.1.8",
-    "statetransition-mixin": "^6.0.10"
+    "statetransition-mixin": "^6.0.11"
   },
   "devDependencies": {
     "ava": "^3.14.0",
