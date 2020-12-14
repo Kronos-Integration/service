@@ -119,7 +119,7 @@ export function merge(a, b) {
 
   if (Array.isArray(a)) {
     if (Array.isArray(b)) {
-      return [...a, ...b.filter(x => !a.find(e => equal(e, x)))];
+      return [...a, ...b.filter(x => !a.find(e => Object.is(e, x)))];
     }
     return [...a, b];
   }
@@ -146,8 +146,4 @@ export function merge(a, b) {
   }
 
   return a;
-}
-
-function equal(a, b) {
-  return Object.is(a, b);
 }
