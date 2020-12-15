@@ -2,7 +2,6 @@ import { defaultLogLevels, LogLevelMixin, makeLogEvent } from "loglevel-mixin";
 import { prepareActions, StateTransitionMixin } from "statetransition-mixin";
 import {
   createAttributes,
-  getAttribute,
   getAttributes,
   setAttributes
 } from "model-attributes";
@@ -72,7 +71,7 @@ const ssfDefault = {
 
 /**
  * Service
- * The initial state is 'stopped'
+ * The initial state is 'stopped'.
  * All services have at least three endpoints:
  * - log _out_: log events
  * - config _in_: configuration request
