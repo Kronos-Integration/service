@@ -27,7 +27,6 @@ class MyInitializationContext extends InitializationContext {
   }
 
   instantiateInterceptor(def) {
-    console.log(def);
     const interceptor = super.instantiateInterceptor(def);
     if (interceptor) {
       return interceptor;

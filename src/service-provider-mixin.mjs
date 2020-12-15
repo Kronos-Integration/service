@@ -99,23 +99,15 @@ export default function ServiceProviderMixin(
     /**
      * Instanciates an interceptor from its definition data.
      * @see {interceptorFactories}
-     * @param {string|Object} def data
+     * @param {Object} definition data
      * @returns {Interceptor}
      */
-    instantiateInterceptor(def) {
-      let factory, options;
-
-      switch (typeof def) {
-        case "string":
-          factory = this.interceptorFactories[def];
-          break;
-        case "object":
-          factory = this.interceptorFactories[def.type];
-          options = def;
-      }
+    instantiateInterceptor(definition) {
+      const factory = this.interceptorFactories[definition.type];
 
       if (factory) {
-        return new factory(def, options);
+        delete definition.type;
+        return new factory(definition);
       }
     }
 
