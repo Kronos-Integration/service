@@ -1,11 +1,30 @@
 import test from "ava";
-import { TestService } from "./helpers/util.mjs";
-import { StandaloneServiceProvider } from "@kronos-integration/service";
+import {
+  TestService,
+  TestServiceWithoutAdditionalEndpoints
+} from "./helpers/util.mjs";
+import { TemplateInterceptor } from "@kronos-integration/interceptor";
+import { StandaloneServiceProvider, ServiceLogger } from "@kronos-integration/service";
 
-test("basics",  t => {
+test("basics", t => {
   const ssm = new StandaloneServiceProvider();
   t.true(ssm.isServiceProvider);
   t.true(ssm.toJSON().serviceProvider);
+});
+
+test("registerFactories", async t => {
+  const ssm = new StandaloneServiceProvider();
+  ssm.registerFactories([TestService, TestServiceWithoutAdditionalEndpoints,TemplateInterceptor]);
+
+  t.is(ssm.serviceFactories.logger, ServiceLogger);
+
+  t.is(ssm.serviceFactories.test, TestService);
+  t.is(
+    ssm.serviceFactories["test-without-additional-endpoints"],
+    TestServiceWithoutAdditionalEndpoints
+  );
+
+  t.is(ssm.interceptorFactories.template, TemplateInterceptor);
 });
 
 test("declareService", async t => {

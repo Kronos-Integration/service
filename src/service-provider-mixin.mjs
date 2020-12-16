@@ -1,3 +1,5 @@
+import { Interceptor } from "@kronos-integration/interceptor";
+import Service from "./service.mjs";
 import ServiceLogger from "./service-logger.mjs";
 import ServiceConfig from "./service-config.mjs";
 import { InitializationContext } from "./initialization-context.mjs";
@@ -28,6 +30,8 @@ export default function ServiceProviderMixin(
       ic.logLevel = this.logLevel;
       ic.serviceProvider = this;
 
+      this.registerFactories([serviceConfigClass, serviceLoggerClass]);
+
       // let our own logging go into the logger service
       const loggerService = new serviceLoggerClass(undefined, ic);
       this.registerService(loggerService);
@@ -37,7 +41,6 @@ export default function ServiceProviderMixin(
       this.registerService(configService);
 
       this.registerService(this);
-
       ic.resolveOutstandingEndpointConnections();
 
       configService.configure(config);
@@ -74,11 +77,26 @@ export default function ServiceProviderMixin(
       return this;
     }
 
-    get isServiceProvider()
-    {
+    get isServiceProvider() {
       return true;
     }
-  
+
+    /**
+     *
+     *
+     * @param {Function[]} factories
+     */
+    registerFactories(factories) {
+      for (const f of factories) {
+        const p = f.prototype;
+        if (p instanceof Interceptor) {
+          this.registerInterceptorFactory(f);
+        } else if (p instanceof Service) {
+          this.registerServiceFactory(f);
+        }
+      }
+    }
+
     /**
      * Registers a interceptor factory for later use by
      * @see {instantiateInterceptor}.
