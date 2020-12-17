@@ -14,6 +14,10 @@ export const InitializationContext = LogLevelMixin(
    * @param {ServiceProvider} serviceProvider
    * @param {Object} options
    * @param {string} options.logLevel
+   * 
+   * @property {Map<string,Promise<Service>>} outstandingServices
+   * @property {Map<string,Promise<Function>>} outstandingFactories
+   * @property {Map<string,Promise<Endpoint>>} outstandingEndpointConnections
    */
   class InitializationContext {
     constructor(serviceProvider, options) {
