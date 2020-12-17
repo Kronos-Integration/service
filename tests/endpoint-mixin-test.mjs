@@ -75,6 +75,13 @@ test("endpointForExpression undefined", t => {
   t.is(o.endpointForExpression(undefined), undefined);
 });
 
+test("endpointForExpression Endpoint", t => {
+  const o = new Owner();
+  const r1 = new ReceiveEndpoint("r1");
+
+  t.is(o.endpointForExpression(r1), r1);
+});
+
 test("endpointFromConfig simple connected", t => {
   const o = new Owner();
   const ic = new InitializationContext(o);

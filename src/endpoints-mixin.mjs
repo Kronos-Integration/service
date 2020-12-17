@@ -171,12 +171,12 @@ export default function EndpointsMixin(superclass) {
     /**
      * Find Endpoint for a given expression.
      * Default implementation only supports direct named endpoints.
-     * @param {string} expression to identify endpoint
+     * @param {string|Endpoint} expression to identify endpoint
      * @param {Endpoint} from to identify endpoint
      * @return {Endpoint} for a given expression
      */
     endpointForExpression(expression, from) {
-      if (expression !== undefined) {
+      if (typeof expression === "string") {
         const endpoint = this.endpoints[expression];
         if (endpoint === undefined) {
           const m = expression.match(/^service\(([^\)]+)\).(.*)/);
@@ -200,6 +200,7 @@ export default function EndpointsMixin(superclass) {
 
         return endpoint;
       }
+      return expression;
     }
   };
 }
