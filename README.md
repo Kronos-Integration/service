@@ -105,7 +105,7 @@ Key of the service description.
 }), "stopped"))**
 
 Service
-The initial state is 'stopped'
+The initial state is 'stopped'.
 All services have at least three endpoints:
 
 -   log _out_: log events
