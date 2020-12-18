@@ -9,10 +9,6 @@ test("service provider additional service", async t => {
   await sp.start();
   await sp.registerService(new TestService({ name: "test1" }, ic));
 
-  // await sp.registerService(new TestService({ name: "test2" }, ic));
-
-  //console.log(JSON.stringify(sp.services, undefined, 2));
-
   t.is(sp.services.test1.name, "test1");
 
   t.deepEqual(sp.services.test1.endpoints.log.toJSON(), {
@@ -151,6 +147,22 @@ test("declare service with factory class", async t => {
   const s2a = await sp.declareService({
     name: "s2",
     type: TestService,
+    endpoints: { testOut: { connected: "service(logger).log" } },
+    key3: 77
+  });
+  t.is(s2a.name, "s2");
+  t.is(s2a.type, "test");
+  t.is(s2a.key3, 77);
+});
+
+test("declare service with registerFactories", async t => {
+  const sp = await makeServices();
+
+  sp.registerFactories([TestService]);
+
+  const s2a = await sp.declareService({
+    name: "s2",
+    type: "test",
     endpoints: { testOut: { connected: "service(logger).log" } },
     key3: 77
   });

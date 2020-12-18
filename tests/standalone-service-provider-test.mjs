@@ -4,7 +4,10 @@ import {
   TestServiceWithoutAdditionalEndpoints
 } from "./helpers/util.mjs";
 import { TemplateInterceptor } from "@kronos-integration/interceptor";
-import { StandaloneServiceProvider, ServiceLogger } from "@kronos-integration/service";
+import {
+  StandaloneServiceProvider,
+  ServiceLogger
+} from "@kronos-integration/service";
 
 test("basics", t => {
   const ssm = new StandaloneServiceProvider();
@@ -14,7 +17,11 @@ test("basics", t => {
 
 test("registerFactories", async t => {
   const ssm = new StandaloneServiceProvider();
-  ssm.registerFactories([TestService, TestServiceWithoutAdditionalEndpoints,TemplateInterceptor]);
+  ssm.registerFactories([
+    TestService,
+    TestServiceWithoutAdditionalEndpoints,
+    TemplateInterceptor
+  ]);
 
   t.is(ssm.serviceFactories.logger, ServiceLogger);
 
