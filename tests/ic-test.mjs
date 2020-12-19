@@ -1,6 +1,5 @@
 import test from "ava";
-import { TestService } from "./helpers/util.mjs";
-
+import { TestService } from "./helpers/test-service.mjs";
 import { StandaloneServiceProvider, InitializationContext } from "@kronos-integration/service";
 
 function icet(t, sp, expression, ep, result) {

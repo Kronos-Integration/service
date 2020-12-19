@@ -2,16 +2,14 @@ import test from "ava";
 
 import { Interceptor } from "@kronos-integration/interceptor";
 
-import {
-  TestService,
-  TestServiceWithoutAdditionalEndpoints,
-  makeServices
-} from "./helpers/util.mjs";
+import { TestServiceWithoutAdditionalEndpoints } from "./helpers/test-service-without-additional-configs.mjs";
+import { makeServices } from "./helpers/test-service-provider.mjs";
+import { TestService } from "./helpers/test-service.mjs";
 
 test("declare services", async t => {
   const sp = await makeServices();
 
-  const {s2, s3, s4} = await sp.declareServices(
+  const { s2, s3, s4 } = await sp.declareServices(
     {
       s3: {
         type: TestService,
@@ -48,7 +46,7 @@ test("declare services", async t => {
   t.is(s3.key3, 2);
 
   t.true(s2.endpoints.testOut.hasConnections);
-//  console.log(s2.endpoints.testOut.toString());
+  //  console.log(s2.endpoints.testOut.toString());
   t.true(s2.endpoints.testOut.isConnected(s3.endpoints.testIn));
 
   t.true(s3.endpoints.testOut.hasConnections);

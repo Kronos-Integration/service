@@ -1,10 +1,12 @@
 import test from "ava";
 
-import { ServiceProvider, TestService, makeServices } from "./helpers/util.mjs";
+import { TestServiceProvider, makeServices } from "./helpers/test-service-provider.mjs";
+import { TestService } from "./helpers/test-service.mjs";
+
 import { InitializationContext } from "@kronos-integration/service";
 
 test("service provider additional service", async t => {
-  const sp = new ServiceProvider();
+  const sp = new TestServiceProvider();
   const ic = new InitializationContext(sp);
   await sp.start();
   await sp.registerService(new TestService({ name: "test1" }, ic));
@@ -27,7 +29,7 @@ test("service provider additional service", async t => {
 });
 
 test("service provider additional service configure service", async t => {
-  const sp = new ServiceProvider();
+  const sp = new TestServiceProvider();
   const ic = new InitializationContext(sp);
   await sp.start();
   await sp.registerService(
@@ -48,7 +50,7 @@ test("service provider additional service configure service", async t => {
 });
 
 test("service provider additional service send change request over config service", async t => {
-  const sp = new ServiceProvider();
+  const sp = new TestServiceProvider();
   const ic = new InitializationContext(sp);
   await sp.registerService(
     new TestService(
@@ -79,7 +81,7 @@ test("service provider additional service send change request over config servic
 test("service provider logging", async t => {
   const logLevel = "trace";
 
-  const sp = new ServiceProvider({ logLevel });
+  const sp = new TestServiceProvider({ logLevel });
 
   t.true(sp.endpoints.log.isConnected(sp.services.logger.endpoints.log));
   t.true(

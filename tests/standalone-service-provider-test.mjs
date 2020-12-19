@@ -1,8 +1,7 @@
 import test from "ava";
-import {
-  TestService,
-  TestServiceWithoutAdditionalEndpoints
-} from "./helpers/util.mjs";
+import { TestServiceWithoutAdditionalEndpoints } from "./helpers/test-service-without-additional-configs.mjs";
+import { TestService } from "./helpers/test-service.mjs";
+
 import { TemplateInterceptor } from "@kronos-integration/interceptor";
 import {
   StandaloneServiceProvider,

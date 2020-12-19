@@ -1,9 +1,9 @@
 import test from "ava";
 import { StandaloneServiceProvider } from "@kronos-integration/service";
-import { ServiceProvider } from "./helpers/util.mjs";
+import { TestServiceProvider } from "./helpers/test-service-provider.mjs";
 
 test("service provider without initial config", async t => {
-  const sp = new ServiceProvider();
+  const sp = new TestServiceProvider();
 
   await sp.start();
 
@@ -11,7 +11,7 @@ test("service provider without initial config", async t => {
 });
 
 test("service provider config service", async t => {
-  const sp = new ServiceProvider([
+  const sp = new TestServiceProvider([
     {
       name: "a" // provider itself
     },
