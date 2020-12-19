@@ -5,6 +5,7 @@ import {
   Endpoint,
   DummyReceiveEndpoint
 } from "@kronos-integration/endpoint";
+import Service from "./service.mjs";
 
 /**
  * Keeps track of all in flight object creations and loose ends during config initialization.
@@ -175,13 +176,23 @@ export const InitializationContext = LogLevelMixin(
         return factory;
       }
 
-      let outstandingFactory = this.outstandingFactories.get(type);
+      const outstandingFactory = this.outstandingFactories.get(type);
       if (outstandingFactory !== undefined) {
         return outstandingFactory.promise;
       }
 
       if (this.waitForFactories) {
-        let outstandingFactory = {};
+        try {
+          const module = await import(type);
+          if (module.default && module.default.prototype instanceof Service) {
+            sp.registerServiceFactory(type, module.default);
+            return module.default;
+          }
+        } catch (e) {
+          this.info(e);
+        }
+
+        const outstandingFactory = {};
 
         outstandingFactory.promise = new Promise((resolve, reject) => {
           const listener = factory => {

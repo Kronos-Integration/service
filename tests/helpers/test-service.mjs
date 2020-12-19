@@ -59,3 +59,5 @@ export class TestService extends Service {
 
   async testReceive(entry) {}
 }
+
+export default TestService;

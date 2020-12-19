@@ -49,10 +49,7 @@ test("declareService", async t => {
     )
   );
 
-  // console.log(s.map(s => s.name));
-
   t.is(ssm.services.s1.name, "s1");
-  //  t.is(ssm.services.s3.name, "s3");
 });
 
 test("declareService delayed", async t => {
@@ -97,6 +94,24 @@ test.only("declareService delayed timeout", async t => {
   } catch (e) {
     t.is(e.message, "timeout waiting for test");
   }
+});
+
+test.only("declareService from as module", async t => {
+  const ssm = new StandaloneServiceProvider();
+
+  const s = await Promise.all(
+    ["s1", "s2", "s3", "s4", "s5"].map(name =>
+      ssm.declareService(
+        {
+          name,
+          type: new URL("./helpers/test-service.mjs", import.meta.url).pathname
+        },
+        true
+      )
+    )
+  );
+
+  t.is(ssm.services.s1.name, "s1");
 });
 
 test("configure", async t => {
