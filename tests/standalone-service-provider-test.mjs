@@ -74,7 +74,29 @@ test("declareService delayed", async t => {
 
   await declarations;
   t.is(ssm.services.s1.name, "s1");
-  // t.is(ssm.services.s3.name, "s3");
+});
+
+test.only("declareService delayed timeout", async t => {
+  const ssm = new StandaloneServiceProvider();
+
+  const declarations = Promise.all(
+    ["s1", "s2", "s3", "s4", "s5"].map(name =>
+      ssm.declareService(
+        {
+          name,
+          type: "test"
+        },
+        true
+      )
+    )
+  );
+
+  try {
+    await declarations;
+    t.true(false);
+  } catch (e) {
+    t.is(e.message, "timeout waiting for test");
+  }
 });
 
 test("configure", async t => {

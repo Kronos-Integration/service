@@ -14,7 +14,7 @@ export const InitializationContext = LogLevelMixin(
    * @param {ServiceProvider} serviceProvider
    * @param {Object} options
    * @param {string} options.logLevel
-   * 
+   *
    * @property {Map<string,Promise<Service>>} outstandingServices
    * @property {Map<string,Promise<Function>>} outstandingFactories
    * @property {Map<string,Promise<Endpoint>>} outstandingEndpointConnections
@@ -175,27 +175,37 @@ export const InitializationContext = LogLevelMixin(
         return factory;
       }
 
-      let typePromise = this.outstandingFactories.get(type);
-      if (typePromise !== undefined) {
-        return typePromise;
+      let outstandingFactory = this.outstandingFactories.get(type);
+      if (outstandingFactory !== undefined) {
+        return outstandingFactory.promise;
       }
 
       if (this.waitForFactories) {
-        typePromise = new Promise((resolve, reject) => {
+        let outstandingFactory = {};
+
+        outstandingFactory.promise = new Promise((resolve, reject) => {
           const listener = factory => {
             if (factory.name === type) {
-              this.outstandingFactories.delete(type);
+              clearTimeout(outstandingFactory.timeout);
               sp.removeListener("serviceFactoryRegistered", listener);
+              this.outstandingFactories.delete(type);
+
               resolve(factory);
             }
           };
 
+          outstandingFactory.timeout = setTimeout(() => {
+            const message = `timeout waiting for ${type}`;
+            this.info(message);
+            reject(new Error(message));
+          }, 1000 * 10);
+
           sp.addListener("serviceFactoryRegistered", listener);
         });
 
-        this.outstandingFactories.set(type, typePromise);
+        this.outstandingFactories.set(type, outstandingFactory);
 
-        return typePromise;
+        return outstandingFactory.promise;
       }
     }
 
