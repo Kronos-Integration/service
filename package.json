@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@kronos-integration/endpoint": "^9.3.6",
-    "@kronos-integration/interceptor": "^10.2.3",
+    "@kronos-integration/interceptor": "^10.2.4",
     "loglevel-mixin": "^6.0.1",
     "model-attributes": "^4.1.8",
     "remove-sensible-values": "^1.0.9",
