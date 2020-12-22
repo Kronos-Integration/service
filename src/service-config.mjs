@@ -1,3 +1,4 @@
+import { removeSensibleValues } from "remove-sensible-values";
 import Service from "./service.mjs";
 import { keyValue2Object } from "./util.mjs";
 
@@ -78,7 +79,11 @@ export default class ServiceConfig extends Service {
         delete c.name;
 
         const merged = merge(this.preservedConfigs.get(name), c);
-        this.trace(`preserve config for ${name} ${JSON.stringify(merged)}`);
+        this.trace(
+          `preserve config for ${name} ${JSON.stringify(
+            removeSensibleValues(merged)
+          )}`
+        );
         this.preservedConfigs.set(name, merged);
       } else {
         return s.configure(c);
