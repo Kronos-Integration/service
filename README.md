@@ -78,6 +78,7 @@ Base service implementation
 -   [InitializationContext](#initializationcontext)
 -   [InitializationContext](#initializationcontext-1)
     -   [Parameters](#parameters-17)
+    -   [Properties](#properties-1)
 
 ## DESCRIPTION
 
@@ -306,8 +307,8 @@ Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 **Extends Service**
 
 Config providing service.
-Dispatches config requests to services.
-or preserves them until a maching service becomes avaliable
+Dispatches config requests to services;
+or preserves them until a maching service becomes avaliable.
 
 ### Parameters
 
@@ -433,6 +434,12 @@ Keeps track of all in flight object creations and loose ends during config initi
 -   `serviceProvider` **ServiceProvider** 
 -   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
     -   `options.logLevel` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### Properties
+
+-   `outstandingServices` **[Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Service](#service)>>** 
+-   `outstandingFactories` **[Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)>>** 
+-   `outstandingEndpointConnections` **[Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;Endpoint>>** 
 
 # install
 
