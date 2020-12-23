@@ -133,7 +133,7 @@ export function merge(a, b) {
     return b;
   }
 
-  if (b instanceof Buffer) {
+  if (b.constructor && b.constructor.name === "Buffer") {
     return b;
   }
 
