@@ -228,7 +228,7 @@ export const InitializationContext = LogLevelMixin(
      * @param {string} name service name
      * @return {Service}
      */
-    async declareService(config, name) {
+    async declareService(config, name) {      
       const sp = this.serviceProvider;
       let service = sp.getService(name);
 
@@ -242,6 +242,11 @@ export const InitializationContext = LogLevelMixin(
         service = await servicePromise;
         await service.configure(config);
         return service;
+      }
+
+      /** if config belongs to the provider we represent ourselfs */
+      if(config.serviceProvider) {
+        return sp;
       }
 
       config.name = name;

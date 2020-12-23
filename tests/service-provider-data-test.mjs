@@ -40,7 +40,7 @@ test("service provider declare services", async t => {
 
   await sp.declareServices(data);
 
-  t.is(Object.values(sp.services).length, 10);
+  t.is(Object.values(sp.services).length, 9);
 
   t.is(sp.services.logger.name, "logger");
   t.is(sp.services.logger.type, "logger");

@@ -24,8 +24,7 @@ export const data = {
           "service(systemd).log"
         ]
       },
-      config: { in: true, open: true },
-      command: { in: true, open: true }
+      config: { in: true, open: true }
     }
   },
   config: {
@@ -37,21 +36,20 @@ export const data = {
     timeout: { start: 20, stop: 20, restart: 20 },
     endpoints: {
       log: { out: true, open: true, connected: "service(logger).log" },
-      config: { in: true, open: true },
-      command: { in: true, open: true }
+      config: { in: true, open: true }
     }
   },
   systemd: {
     type: "systemd",
     name: "systemd",
+    serviceProvider: true,
     state: "running",
     logLevel: "error",
     description: "This service is the base class for service implementations",
     timeout: { start: 20, stop: 20, restart: 20 },
     endpoints: {
       log: { out: true, open: true, connected: "service(logger).log" },
-      config: { in: true, open: true },
-      command: { in: true, open: true }
+      config: { in: true, open: true }
     }
   },
   http: {
@@ -69,7 +67,6 @@ export const data = {
     endpoints: {
       log: { out: true, open: true, connected: "service(logger).log" },
       config: { in: true, open: true },
-      command: { in: true, open: true },
       "/state/uptime": {
         path: "/state/uptime",
         ws: true,
@@ -228,7 +225,6 @@ export const data = {
     endpoints: {
       log: { out: true, open: true, connected: "service(logger).log" },
       config: { in: true, open: true },
-      command: { in: true, open: true },
       change_password: { in: true, open: true },
       access_token: {
         in: true,
@@ -266,7 +262,6 @@ export const data = {
     endpoints: {
       log: { out: true, open: true, connected: "service(logger).log" },
       config: { in: true, open: true },
-      command: { in: true, open: true },
       authenticate: {
         in: true,
         out: true,
@@ -319,7 +314,6 @@ export const data = {
     endpoints: {
       log: { out: true, open: true, connected: "service(logger).log" },
       config: { in: true, open: true },
-      command: { in: true, open: true },
       state: { in: true, out: true, open: true },
       cpu: {
         in: true,
@@ -358,7 +352,6 @@ export const data = {
     endpoints: {
       log: { out: true, open: true, connected: "service(logger).log" },
       config: { in: true, open: true },
-      command: { in: true, open: true },
       services: {
         in: true,
         out: true,
@@ -386,7 +379,6 @@ export const data = {
     endpoints: {
       log: { out: true, open: true, connected: "service(logger).log" },
       config: { in: true, open: true },
-      command: { in: true, open: true },
       send: { in: true, out: true }
     }
   }
