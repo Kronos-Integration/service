@@ -246,6 +246,11 @@ export const InitializationContext = LogLevelMixin(
 
       /** if config belongs to the provider we represent ourselfs */
       if(config.serviceProvider) {
+        if (sp.services.config) {
+          config = await sp.services.config.configFor(name, config);
+          sp.configure(config);
+        }
+
         return sp;
       }
 
