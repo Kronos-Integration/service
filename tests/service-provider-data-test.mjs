@@ -44,7 +44,7 @@ test("service provider declare services", async t => {
 
   t.is(sp.services.logger.name, "logger");
   t.is(sp.services.logger.type, "logger");
-  t.is(sp.services.logger.logLevel, "error");
+  t.is(sp.services.logger.logLevel, "trace");
   t.is(sp.services.logger.state, "stopped");
 
   t.is(sp.services.logger.endpoints.log.name, "log");
