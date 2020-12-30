@@ -1,6 +1,7 @@
 import {
   SendEndpoint,
   SendEndpointDefault,
+  SendReceiveEndpoint,
   MultiSendEndpoint,
   ReceiveEndpoint,
   ReceiveEndpointDefault,
@@ -86,6 +87,10 @@ export default function EndpointsMixin(superclass) {
       }
 
       if (definition.in) {
+        if (definition.out) {
+          return SendReceiveEndpoint;
+        }
+
         return definition.default ? ReceiveEndpointDefault : ReceiveEndpoint;
       }
 

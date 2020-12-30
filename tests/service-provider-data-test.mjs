@@ -20,14 +20,6 @@ class MyInitializationContext extends InitializationContext {
     return false;
   }
 
-  connectEndpoint(endpoint, connected) {
-    try {
-      super.connectEndpoint(endpoint, connected);
-    } catch (e) {
-    //  console.log(e);
-    }
-  }
-
   instantiateInterceptor(def) {
     const interceptor = super.instantiateInterceptor(def);
     if (interceptor) {
@@ -73,7 +65,7 @@ test("service provider declare services", async t => {
   t.is(ep2.name, "services");
   t.is(ep3.name, "/admin/services");
 
-  // t.true(ep2.isConnected(ep3));
+  t.true(ep2.isConnected(ep3));
 
   /*
   t.is(ep.type, "GET");
