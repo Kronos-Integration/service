@@ -34,6 +34,7 @@ Base service implementation
     -   [\_restart](#_restart)
     -   [restartIfRunning](#restartifrunning)
     -   [toStringAttributes](#tostringattributes)
+    -   [isServiceProvider](#isserviceprovider)
     -   [toString](#tostring)
     -   [toJSONWithOptions](#tojsonwithoptions)
         -   [Parameters](#parameters-4)
@@ -190,6 +191,12 @@ Mapping of properties used in toString.
 
 Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
 
+### isServiceProvider
+
+Base service is not a provider.
+
+Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** false
+
 ### toString
 
 Returns the string representation of this service.
@@ -318,7 +325,7 @@ or preserves them until a maching service becomes avaliable.
 
 ### Properties
 
--   `preservedConfigs` **[Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** values for services not alredy established
+-   `preservedConfigs` **[Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** values for services not already established
 
 ### configFor
 
