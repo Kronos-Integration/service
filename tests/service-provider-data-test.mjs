@@ -34,7 +34,7 @@ test("service provider declare services", async t => {
 
   await sp.declareServices(data);
 
-  t.is(Object.values(sp.services).length, 9);
+  t.is(Object.values(sp.services).length, 12);
 
   t.is(sp.services.logger.name, "logger");
   t.is(sp.services.logger.type, "logger");
@@ -55,9 +55,9 @@ test("service provider declare services", async t => {
 
   t.is(sp.services.http.type, "service");
 
-  const ep = sp.services.http.endpoints["/entitlement"];
+  const ep = sp.services.http.endpoints["/authenticate"];
 
-  t.is(ep.name, "/entitlement");
+  t.is(ep.name, "/authenticate");
 
   const ep2 = sp.services.admin.endpoints.services;
   const ep3 = sp.services.http.endpoints["/admin/services"];

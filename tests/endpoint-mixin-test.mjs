@@ -55,6 +55,12 @@ test("endpointForExpression service", t => {
   t.is(o.endpointForExpression("service(logger).log").name, "log");
 });
 
+test("endpointForExpression service and state", t => {
+  const o = new Owner();
+
+  t.is(o.endpointForExpression("service(logger).log[TC]").name, "log");
+});
+
 test("endpointForExpression service not found", t => {
   const o = new Owner();
   t.is(o.endpointForExpression("service(something).something"), undefined);
@@ -150,7 +156,7 @@ test("endpointFromConfig foreign connected expression only", t => {
   const o = new Owner();
   const ic = new InitializationContext(o);
 
-  const e = o.createEndpointFromConfig("e", "service(logger).log", ic);
+  const e = o.createEndpointFromConfig("e", "service(logger).log[T]", ic);
 
   t.true(e.isConnected(o.services.logger.endpoints.log));
 

@@ -20,7 +20,10 @@ export const data = {
           "service(ldap).log",
           "service(logger).log",
           "service(logger).log",
-          "service(smtp).log",
+          "service(named).log",
+          "service(networkctl).log",
+          "service(swarm).log",
+          "service(systemctl).log",
           "service(systemd).log"
         ]
       },
@@ -48,7 +51,12 @@ export const data = {
     description: "Bridge to systemd",
     timeout: { start: 20, stop: 20, restart: 20 },
     endpoints: {
-      log: { out: true, open: true, connected: "service(logger).log" },
+      log: {
+        out: true,
+        open: true,
+        connected: "service(logger).log",
+        interceptors: [{ type: "live-probe" }]
+      },
       config: { in: true, open: true }
     }
   },
@@ -59,16 +67,40 @@ export const data = {
     logLevel: "info",
     description: "http server",
     timeout: { server: 120, start: 20, stop: 20, restart: 20 },
-    jwt: {
-    },
+    jwt: {},
     listen: {
-      url: "https://mfelten.dynv6.net/services/entitlements/api",
+      url: "https://mfelten.dynv6.net/services/system-dashboard/api",
       socket: { fd: 3, name: "http.listen.socket" }
     },
-    url: "https://mfelten.dynv6.net/services/entitlements/api",
+    url: "https://mfelten.dynv6.net/services/system-dashboard/api",
     endpoints: {
       log: { out: true, open: true, connected: "service(logger).log" },
       config: { in: true, open: true },
+      "/services/peers": {
+        path: "/services/peers",
+        ws: true,
+        in: true,
+        out: true,
+        connected: "service(swarm).peers.services",
+        interceptors: [{ type: "decode-json" }]
+      },
+      "/admin/services": {
+        path: "/admin/services",
+        ws: true,
+        in: true,
+        out: true,
+        open: true,
+        connected: "service(admin).services",
+        interceptors: [{ type: "decode-json" }]
+      },
+      "/admin/requests": {
+        path: "/admin/requests",
+        ws: true,
+        in: true,
+        out: true,
+        connected: "service(admin).requests",
+        interceptors: [{ type: "decode-json" }]
+      },
       "/state/uptime": {
         path: "/state/uptime",
         ws: true,
@@ -83,7 +115,7 @@ export const data = {
         in: true,
         out: true,
         connected: "service(health).cpu",
-        interceptors: [{ type: "decode-json" }]
+        interceptors: [{ type: "decode-json" }, { type: "live-probe" }]
       },
       "/state/memory": {
         path: "/state/memory",
@@ -93,21 +125,12 @@ export const data = {
         connected: "service(health).memory",
         interceptors: [{ type: "decode-json" }]
       },
-      "/admin/services": {
-        path: "/admin/services",
+      "/state": {
+        path: "/state",
         ws: true,
         in: true,
         out: true,
-        open: true,
-        connected: "service(admin).services",
-        interceptors: [{ type: "decode-json" }, { type: "live-probe" }]
-      },
-      "/admin/requests": {
-        path: "/admin/requests",
-        ws: true,
-        in: true,
-        out: true,
-        connected: "service(admin).requests",
+        connected: "service(health).state",
         interceptors: [{ type: "decode-json" }]
       },
       "/authenticate": {
@@ -118,183 +141,277 @@ export const data = {
         connected: "service(authenticator).access_token",
         interceptors: [{ type: "ctx-body-param", headers: {} }]
       },
-      "/entitlement": {
+      "/systemctl/machine": {
         method: "GET",
-        path: "/entitlement",
+        path: "/systemctl/machine",
         out: true,
         open: true,
-        connected: "service(ldap).search",
+        connected: "service(systemctl).machines",
         interceptors: [
           { type: "ctx-jwt-verify" },
-          { type: "ctx", headers: {} },
           {
-            type: "template",
-            request: {
-              base: "ou=groups,dc=mf,dc=de",
-              scope: "children",
-              attributes: ["cn"],
-              filter: "(objectclass=groupOfUniqueNames)"
+            type: "ctx",
+            headers: {
+              "cache-control": "no-store, no-cache, must-revalidate",
+              pragma: "no-cache",
+              expires: 0
             }
           },
           { type: "live-probe" }
         ]
       },
-      "/user": {
+      "/systemctl/timer": {
         method: "GET",
-        path: "/user",
+        path: "/systemctl/timer",
         out: true,
         open: true,
-        connected: "service(ldap).search",
+        connected: "service(systemctl).timers",
         interceptors: [
           { type: "ctx-jwt-verify" },
-          { type: "ctx", headers: {} },
           {
-            type: "template",
-            request: {
-              base: "ou=accounts,dc=mf,dc=de",
-              scope: "children",
-              filter: "(objectclass=posixAccount)"
+            type: "ctx",
+            headers: {
+              "cache-control": "no-store, no-cache, must-revalidate",
+              pragma: "no-cache",
+              expires: 0
+            }
+          }
+        ]
+      },
+      "/systemctl/socket": {
+        method: "GET",
+        path: "/systemctl/socket",
+        out: true,
+        open: true,
+        connected: "service(systemctl).sockets",
+        interceptors: [
+          { type: "ctx-jwt-verify" },
+          {
+            type: "ctx",
+            headers: {
+              "cache-control": "no-store, no-cache, must-revalidate",
+              pragma: "no-cache",
+              expires: 0
+            }
+          }
+        ]
+      },
+      "/systemctl/unit": {
+        method: "GET",
+        path: "/systemctl/unit",
+        out: true,
+        open: true,
+        connected: "service(systemctl).units",
+        interceptors: [
+          { type: "ctx-jwt-verify" },
+          {
+            type: "ctx",
+            headers: {
+              "cache-control": "no-store, no-cache, must-revalidate",
+              pragma: "no-cache",
+              expires: 0
+            }
+          }
+        ]
+      },
+      "/systemctl/unit/:unit": {
+        method: "GET",
+        path: "/systemctl/unit/:unit",
+        out: true,
+        open: true,
+        connected: "service(systemctl).unit",
+        interceptors: [
+          { type: "ctx-jwt-verify" },
+          {
+            type: "ctx",
+            headers: {
+              "cache-control": "no-store, no-cache, must-revalidate",
+              pragma: "no-cache",
+              expires: 0
+            }
+          }
+        ]
+      },
+      "/systemctl/unit/:unit/files": {
+        method: "GET",
+        path: "/systemctl/unit/:unit/files",
+        out: true,
+        open: true,
+        connected: "service(systemctl).files",
+        interceptors: [
+          { type: "ctx-jwt-verify" },
+          {
+            type: "ctx",
+            headers: {
+              "cache-control": "no-store, no-cache, must-revalidate",
+              pragma: "no-cache",
+              expires: 0
+            }
+          }
+        ]
+      },
+      "/systemctl/unit/:unit/start": {
+        method: "POST",
+        path: "/systemctl/unit/:unit/start",
+        out: true,
+        open: true,
+        connected: "service(systemctl).start",
+        interceptors: [
+          { type: "ctx-jwt-verify" },
+          {
+            type: "ctx",
+            headers: {
+              "cache-control": "no-store, no-cache, must-revalidate",
+              pragma: "no-cache",
+              expires: 0
+            }
+          }
+        ]
+      },
+      "/systemctl/unit/:unit/stop": {
+        method: "POST",
+        path: "/systemctl/unit/:unit/stop",
+        out: true,
+        open: true,
+        connected: "service(systemctl).stop",
+        interceptors: [
+          { type: "ctx-jwt-verify" },
+          {
+            type: "ctx",
+            headers: {
+              "cache-control": "no-store, no-cache, must-revalidate",
+              pragma: "no-cache",
+              expires: 0
+            }
+          }
+        ]
+      },
+      "/systemctl/unit/:unit/restart": {
+        method: "POST",
+        path: "/systemctl/unit/:unit/restart",
+        out: true,
+        open: true,
+        connected: "service(systemctl).restart",
+        interceptors: [
+          { type: "ctx-jwt-verify" },
+          {
+            type: "ctx",
+            headers: {
+              "cache-control": "no-store, no-cache, must-revalidate",
+              pragma: "no-cache",
+              expires: 0
+            }
+          }
+        ]
+      },
+      "/systemctl/unit/:unit/reload": {
+        method: "POST",
+        path: "/systemctl/unit/:unit/reload",
+        out: true,
+        open: true,
+        connected: "service(systemctl).reload",
+        interceptors: [
+          { type: "ctx-jwt-verify" },
+          {
+            type: "ctx",
+            headers: {
+              "cache-control": "no-store, no-cache, must-revalidate",
+              pragma: "no-cache",
+              expires: 0
+            }
+          }
+        ]
+      },
+      "/systemctl/unit/:unit/freeze": {
+        method: "POST",
+        path: "/systemctl/unit/:unit/freeze",
+        out: true,
+        open: true,
+        connected: "service(systemctl).freeze",
+        interceptors: [
+          { type: "ctx-jwt-verify" },
+          {
+            type: "ctx",
+            headers: {
+              "cache-control": "no-store, no-cache, must-revalidate",
+              pragma: "no-cache",
+              expires: 0
+            }
+          }
+        ]
+      },
+      "/systemctl/unit/:unit/thaw": {
+        method: "POST",
+        path: "/systemctl/unit/:unit/thaw",
+        out: true,
+        open: true,
+        connected: "service(systemctl).thaw",
+        interceptors: [
+          { type: "ctx-jwt-verify" },
+          {
+            type: "ctx",
+            headers: {
+              "cache-control": "no-store, no-cache, must-revalidate",
+              pragma: "no-cache",
+              expires: 0
+            }
+          }
+        ]
+      },
+      "/networkctl/interfaces": {
+        method: "GET",
+        path: "/networkctl/interfaces",
+        out: true,
+        open: true,
+        connected: "service(networkctl).interfaces",
+        interceptors: [
+          { type: "ctx-jwt-verify" },
+          {
+            type: "ctx",
+            headers: {
+              "cache-control": "no-store, no-cache, must-revalidate",
+              pragma: "no-cache",
+              expires: 0
+            }
+          }
+        ]
+      },
+      "/fail2ban": {
+        method: "GET",
+        path: "/fail2ban",
+        out: true,
+        open: true,
+        connected: "service(systemctl).fail2ban",
+        interceptors: [
+          { type: "ctx-jwt-verify" },
+          {
+            type: "ctx",
+            headers: {
+              "cache-control": "no-store, no-cache, must-revalidate",
+              pragma: "no-cache",
+              expires: 0
+            }
+          }
+        ]
+      },
+      "/named": {
+        method: "GET",
+        path: "/named",
+        out: true,
+        open: true,
+        connected: "service(named).status",
+        interceptors: [
+          { type: "ctx-jwt-verify" },
+          {
+            type: "ctx",
+            headers: {
+              "cache-control": "no-store, no-cache, must-revalidate",
+              pragma: "no-cache",
+              expires: 0
             }
           },
           { type: "live-probe" }
         ]
-      },
-      "PUT:/user": {
-        method: "PUT",
-        path: "/user",
-        out: true,
-        open: true,
-        connected: "service(ldap).add",
-        interceptors: [
-          {
-            type: "ctx-jwt-verify",
-            requiredEntitlements: ["entitlement-provider.user.add"]
-          },
-          { type: "ctx-body-param", headers: {} },
-          {
-            type: "template",
-            request: {
-              dn: "uid={{user}},ou=accounts,dc=mf,dc=de",
-              entry: {
-                objectClass: [
-                  "inetOrgPerson",
-                  "organizationalPerson",
-                  "person",
-                  "top"
-                ],
-                cn: "{{user}}",
-                sn: "{{user}}",
-                userPassword: "{{password}}"
-              }
-            }
-          }
-        ]
-      },
-      "PATCH:/user/password": {
-        method: "PATCH",
-        path: "/user/password",
-        out: true,
-        open: true,
-        connected: "service(ldap).modify",
-        interceptors: [
-          { type: "ctx-body-param", headers: {} },
-          {
-            type: "template",
-            request: {
-              bind: {
-                dn: "uid={{user}},ou=accounts,dc=mf,dc=de",
-                password: "{{password}}"
-              },
-              dn: "uid={{user}},ou=accounts,dc=mf,dc=de",
-              replace: { userPassword: "{{new_password}}" }
-            }
-          }
-        ]
-      },
-      "PATCH:/user/:user": {
-        method: "PATCH",
-        path: "/user/:user",
-        out: true,
-        open: true,
-        connected: "service(ldap).modify",
-        interceptors: [
-          {
-            type: "ctx-jwt-verify",
-            requiredEntitlements: ["entitlement-provider.user.modify"]
-          },
-          { type: "ctx-body-param", headers: {} },
-          {
-            type: "template",
-            request: {
-              bind: {
-                dn: "uid={{user}},ou=accounts,dc=mf,dc=de",
-                password: "{{password}}"
-              },
-              dn: "uid={{user}},ou=accounts,dc=mf,dc=de",
-              replace: {}
-            }
-          }
-        ]
-      },
-      "DELETE:/user/:user": {
-        method: "DELETE",
-        path: "/user/:user",
-        out: true,
-        open: true,
-        connected: "service(ldap).del",
-        interceptors: [
-          { type: "ctx-jwt-verify" },
-          { type: "ctx", headers: {} },
-          {
-            type: "template",
-            request: { dn: "uid={{user}},ou=accounts,dc=mf,dc=de" }
-          }
-        ]
-      },
-      "/user/:user/entitlements": {
-        method: "GET",
-        path: "/user/:user/entitlements",
-        out: true,
-        open: true,
-        connected: "service(ldap).search",
-        interceptors: [
-          { type: "ctx-jwt-verify" },
-          { type: "ctx", headers: {} },
-          {
-            type: "template",
-            request: {
-              base: "ou=groups,dc=mf,dc=de",
-              scope: "sub",
-              attributes: ["cn"],
-              filter:
-                "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=mf,dc=de))"
-            }
-          }
-        ]
-      }
-    }
-  },
-  authenticator: {
-    type: "authenticator",
-    name: "authenticator",
-    state: "stopped",
-    logLevel: "info",
-    description: "provide authentication services",
-    timeout: { server: 120, start: 20, stop: 20, restart: 20 },
-    listen: {},
-    endpoints: {
-      log: { out: true, open: true, connected: "service(logger).log" },
-      config: { in: true, open: true },
-      change_password: { in: true, open: true },
-      access_token: {
-        in: true,
-        open: true,
-        connected: "service(http)./authenticate"
-      },
-      "ldap.authenticate": {
-        out: true,
-        open: true,
-        connected: "service(ldap).authenticate"
       }
     }
   },
@@ -305,10 +422,7 @@ export const data = {
     logLevel: "info",
     description: "LDAP server access for bind/add/modify/del/query",
     timeout: { server: 120, start: 20, stop: 20, restart: 20 },
-    jwt: {
-      access_token: { algorithm: "RS256", expiresIn: "1h" },
-      refresh_token: { algorithm: "RS256", expiresIn: "30d" }
-    },
+    jwt: {},
     listen: {},
     url: "ldaps://mfelten.dynv6.net",
     entitlements: {
@@ -328,30 +442,10 @@ export const data = {
         open: true,
         connected: "service(authenticator).ldap.authenticate"
       },
-      add: {
-        in: true,
-        out: true,
-        open: true,
-        connected: "service(http).PUT:/user"
-      },
-      del: {
-        in: true,
-        out: true,
-        open: true,
-        connected: "service(http).DELETE:/user/:user"
-      },
-      modify: {
-        in: true,
-        out: true,
-        open: true,
-        connected: "service(http).PATCH:/user/password"
-      },
-      search: {
-        in: true,
-        out: true,
-        open: true,
-        connected: "service(http)./entitlement"
-      }
+      add: { in: true, out: true },
+      del: { in: true, out: true },
+      modify: { in: true, out: true },
+      search: { in: true, out: true }
     }
   },
   health: {
@@ -365,16 +459,18 @@ export const data = {
     resourceUsageInterval: 30,
     description: "This service is the base class for service implementations",
     timeout: { server: 120, start: 20, stop: 20, restart: 20 },
-    jwt: {
-      access_token: { algorithm: "RS256", expiresIn: "1h" },
-      refresh_token: { algorithm: "RS256", expiresIn: "30d" }
-    },
+    jwt: {},
     listen: {},
     entitlements: { attribute: "cn", scope: "sub" },
     endpoints: {
       log: { out: true, open: true, connected: "service(logger).log" },
       config: { in: true, open: true },
-      state: { in: true, out: true, open: true },
+      state: {
+        in: true,
+        out: true,
+        open: true,
+        connected: "service(http)./state"
+      },
       cpu: {
         in: true,
         out: true,
@@ -394,6 +490,31 @@ export const data = {
         connected: "service(http)./state/uptime"
       },
       resourceUsage: { in: true, out: true, open: true }
+    }
+  },
+  authenticator: {
+    type: "authenticator",
+    name: "authenticator",
+    state: "stopped",
+    logLevel: "info",
+    description: "provide authentication services",
+    timeout: { server: 120, start: 20, stop: 20, restart: 20 },
+    listen: {},
+    entitlements: { attribute: "cn", scope: "sub" },
+    endpoints: {
+      log: { out: true, open: true, connected: "service(logger).log" },
+      config: { in: true, open: true },
+      change_password: { in: true, open: true },
+      access_token: {
+        in: true,
+        open: true,
+        connected: "service(http)./authenticate"
+      },
+      "ldap.authenticate": {
+        out: true,
+        open: true,
+        connected: "service(ldap).authenticate"
+      }
     }
   },
   admin: {
@@ -417,14 +538,84 @@ export const data = {
         in: true,
         out: true,
         open: true,
-        connected: "service(http)./admin/services"
+        connected: [
+          "service(http)./admin/services",
+          "service(swarm).topic.services[T]"
+        ]
       },
       requests: { out: true, connected: "service(http)./admin/requests" }
     }
   },
-  smtp: {
-    type: "smtp",
-    name: "smtp",
+  swarm: {
+    type: "swarm",
+    name: "swarm",
+    state: "running",
+    logLevel: "info",
+    description: "This service is the base class for service implementations",
+    timeout: { server: 120, start: 20, stop: 20, restart: 20 },
+    jwt: {
+      access_token: { algorithm: "RS256", expiresIn: "1h" },
+      refresh_token: { algorithm: "RS256", expiresIn: "30d" }
+    },
+    listen: {},
+    entitlements: { attribute: "cn", scope: "sub" },
+    maxPeers: 7,
+    ephemeral: false,
+    endpoints: {
+      log: { out: true, open: true, connected: "service(logger).log" },
+      config: { in: true, open: true },
+      "topic.services": {
+        in: true,
+        out: true,
+        open: true,
+        connected: "service(admin).services[C]",
+        sockets: 9,
+        topic: {
+          name: "services",
+          peers: [
+            { host: "93.197.152.114", port: 34685, local: false },
+            { host: "93.197.152.114", port: 43183, local: false },
+            { host: "10.0.6.2", port: 36573, local: true },
+            { host: "93.197.152.114", port: 40963, local: false },
+            { host: "93.197.152.114", port: 41457, local: false },
+            { host: "93.197.152.114", port: 36573, local: false },
+            { host: "93.197.149.194", port: 43862, local: false },
+            { host: "93.197.149.194", port: 42017, local: false },
+            { host: "93.197.156.26", port: 36573, local: false },
+            { host: "93.197.149.194", port: 41457, local: false }
+          ],
+          sockets: 1,
+          announce: true,
+          lookup: true
+        }
+      },
+      "peers.services": {
+        out: true,
+        connected: "service(http)./services/peers",
+        topic: {
+          name: "services",
+          peers: [
+            { host: "93.197.152.114", port: 34685, local: false },
+            { host: "93.197.152.114", port: 43183, local: false },
+            { host: "10.0.6.2", port: 36573, local: true },
+            { host: "93.197.152.114", port: 40963, local: false },
+            { host: "93.197.152.114", port: 41457, local: false },
+            { host: "93.197.152.114", port: 36573, local: false },
+            { host: "93.197.149.194", port: 43862, local: false },
+            { host: "93.197.149.194", port: 42017, local: false },
+            { host: "93.197.156.26", port: 36573, local: false },
+            { host: "93.197.149.194", port: 41457, local: false }
+          ],
+          sockets: 1,
+          announce: true,
+          lookup: true
+        }
+      }
+    }
+  },
+  systemctl: {
+    type: "systemctl",
+    name: "systemctl",
     state: "stopped",
     logLevel: "info",
     description: "This service is the base class for service implementations",
@@ -435,13 +626,139 @@ export const data = {
     },
     listen: {},
     entitlements: { attribute: "cn", scope: "sub" },
-    port: 25,
-    secure: false,
-    auth: {},
+    maxPeers: 10,
     endpoints: {
       log: { out: true, open: true, connected: "service(logger).log" },
       config: { in: true, open: true },
-      send: { in: true, out: true }
+      files: {
+        in: true,
+        out: true,
+        open: true,
+        connected: "service(http)./systemctl/unit/:unit/files"
+      },
+      unit: {
+        in: true,
+        out: true,
+        open: true,
+        connected: "service(http)./systemctl/unit/:unit"
+      },
+      units: {
+        in: true,
+        out: true,
+        open: true,
+        connected: "service(http)./systemctl/unit"
+      },
+      timers: {
+        in: true,
+        out: true,
+        open: true,
+        connected: "service(http)./systemctl/timer"
+      },
+      sockets: {
+        in: true,
+        out: true,
+        open: true,
+        connected: "service(http)./systemctl/socket"
+      },
+      machines: {
+        in: true,
+        out: true,
+        open: true,
+        connected: "service(http)./systemctl/machine"
+      },
+      start: {
+        in: true,
+        out: true,
+        open: true,
+        connected: "service(http)./systemctl/unit/:unit/start"
+      },
+      stop: {
+        in: true,
+        out: true,
+        open: true,
+        connected: "service(http)./systemctl/unit/:unit/stop"
+      },
+      restart: {
+        in: true,
+        out: true,
+        open: true,
+        connected: "service(http)./systemctl/unit/:unit/restart"
+      },
+      reload: {
+        in: true,
+        out: true,
+        open: true,
+        connected: "service(http)./systemctl/unit/:unit/reload"
+      },
+      freeze: {
+        in: true,
+        out: true,
+        open: true,
+        connected: "service(http)./systemctl/unit/:unit/freeze"
+      },
+      thaw: {
+        in: true,
+        out: true,
+        open: true,
+        connected: "service(http)./systemctl/unit/:unit/thaw"
+      },
+      fail2ban: {
+        in: true,
+        out: true,
+        open: true,
+        connected: "service(http)./fail2ban"
+      }
+    }
+  },
+  networkctl: {
+    type: "networkctl",
+    name: "networkctl",
+    state: "stopped",
+    logLevel: "info",
+    description: "This service is the base class for service implementations",
+    timeout: { server: 120, start: 20, stop: 20, restart: 20 },
+    jwt: {
+      access_token: { algorithm: "RS256", expiresIn: "1h" },
+      refresh_token: { algorithm: "RS256", expiresIn: "30d" }
+    },
+    listen: {},
+    entitlements: { attribute: "cn", scope: "sub" },
+    maxPeers: 10,
+    endpoints: {
+      log: { out: true, open: true, connected: "service(logger).log" },
+      config: { in: true, open: true },
+      interfaces: {
+        in: true,
+        out: true,
+        open: true,
+        connected: "service(http)./networkctl/interfaces"
+      },
+      neighbours: { in: true, out: true }
+    }
+  },
+  named: {
+    type: "named",
+    name: "named",
+    state: "stopped",
+    logLevel: "info",
+    description: "This service is the base class for service implementations",
+    timeout: { server: 120, start: 20, stop: 20, restart: 20 },
+    jwt: {
+      access_token: { algorithm: "RS256", expiresIn: "1h" },
+      refresh_token: { algorithm: "RS256", expiresIn: "30d" }
+    },
+    listen: {},
+    entitlements: { attribute: "cn", scope: "sub" },
+    maxPeers: 10,
+    endpoints: {
+      log: { out: true, open: true, connected: "service(logger).log" },
+      config: { in: true, open: true },
+      status: {
+        in: true,
+        out: true,
+        open: true,
+        connected: "service(http)./named"
+      }
     }
   }
 };
