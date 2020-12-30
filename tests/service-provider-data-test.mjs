@@ -23,7 +23,9 @@ class MyInitializationContext extends InitializationContext {
   connectEndpoint(endpoint, connected) {
     try {
       super.connectEndpoint(endpoint, connected);
-    } catch (e) {}
+    } catch (e) {
+    //  console.log(e);
+    }
   }
 
   instantiateInterceptor(def) {
@@ -44,7 +46,7 @@ test("service provider declare services", async t => {
 
   t.is(sp.services.logger.name, "logger");
   t.is(sp.services.logger.type, "logger");
-  t.is(sp.services.logger.logLevel, "trace");
+  t.is(sp.services.logger.logLevel, "info");
   t.is(sp.services.logger.state, "stopped");
 
   t.is(sp.services.logger.endpoints.log.name, "log");
@@ -64,6 +66,15 @@ test("service provider declare services", async t => {
   const ep = sp.services.http.endpoints["/entitlement"];
 
   t.is(ep.name, "/entitlement");
+
+  const ep2 = sp.services.admin.endpoints.services;
+  const ep3 = sp.services.http.endpoints["/admin/services"];
+
+  t.is(ep2.name, "services");
+  t.is(ep3.name, "/admin/services");
+
+  // t.true(ep2.isConnected(ep3));
+
   /*
   t.is(ep.type, "GET");
   t.is(ep.method, "GET");

@@ -3,7 +3,7 @@ export const data = {
     type: "systemd-logger",
     name: "logger",
     state: "running",
-    logLevel: "trace",
+    logLevel: "info",
     description: "Forward log entries into systemd journal",
     timeout: { start: 20, stop: 20, restart: 20 },
     endpoints: {
@@ -31,7 +31,7 @@ export const data = {
     type: "systemd-config",
     name: "config",
     state: "running",
-    logLevel: "trace",
+    logLevel: "info",
     description: "Synchronize configuration with systemd",
     timeout: { start: 20, stop: 20, restart: 20 },
     endpoints: {
@@ -44,7 +44,7 @@ export const data = {
     serviceProvider: true,
     name: "systemd",
     state: "running",
-    logLevel: "trace",
+    logLevel: "info",
     description: "Bridge to systemd",
     timeout: { start: 20, stop: 20, restart: 20 },
     endpoints: {
@@ -56,7 +56,7 @@ export const data = {
     type: "http",
     name: "http",
     state: "running",
-    logLevel: "trace",
+    logLevel: "info",
     description: "http server",
     timeout: { server: 120, start: 20, stop: 20, restart: 20 },
     jwt: {
@@ -278,7 +278,7 @@ export const data = {
     type: "authenticator",
     name: "authenticator",
     state: "stopped",
-    logLevel: "trace",
+    logLevel: "info",
     description: "provide authentication services",
     timeout: { server: 120, start: 20, stop: 20, restart: 20 },
     listen: {},
@@ -302,7 +302,7 @@ export const data = {
     type: "ldap",
     name: "ldap",
     state: "stopped",
-    logLevel: "trace",
+    logLevel: "info",
     description: "LDAP server access for bind/add/modify/del/query",
     timeout: { server: 120, start: 20, stop: 20, restart: 20 },
     jwt: {
@@ -358,7 +358,7 @@ export const data = {
     type: "health",
     name: "health",
     state: "running",
-    logLevel: "trace",
+    logLevel: "info",
     cpuInterval: 30,
     memoryInterval: 30,
     uptimeInterval: 30,
@@ -400,7 +400,7 @@ export const data = {
     type: "admin",
     name: "admin",
     state: "stopped",
-    logLevel: "trace",
+    logLevel: "info",
     description: "Live administration of kronos services",
     timeout: { server: 120, start: 20, stop: 20, restart: 20 },
     jwt: {
@@ -426,7 +426,7 @@ export const data = {
     type: "smtp",
     name: "smtp",
     state: "stopped",
-    logLevel: "trace",
+    logLevel: "info",
     description: "This service is the base class for service implementations",
     timeout: { server: 120, start: 20, stop: 20, restart: 20 },
     jwt: {
