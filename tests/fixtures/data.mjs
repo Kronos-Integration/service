@@ -3,8 +3,8 @@ export const data = {
     type: "systemd-logger",
     name: "logger",
     state: "running",
-    logLevel: "error",
-    description: "Log consuming service",
+    logLevel: "trace",
+    description: "Forward log entries into systemd journal",
     timeout: { start: 20, stop: 20, restart: 20 },
     endpoints: {
       log: {
@@ -13,7 +13,7 @@ export const data = {
         open: true,
         connected: [
           "service(admin).log",
-          "service(auth).log",
+          "service(authenticator).log",
           "service(config).log",
           "service(health).log",
           "service(http).log",
@@ -31,8 +31,8 @@ export const data = {
     type: "systemd-config",
     name: "config",
     state: "running",
-    logLevel: "error",
-    description: "Config providing service",
+    logLevel: "trace",
+    description: "Synchronize configuration with systemd",
     timeout: { start: 20, stop: 20, restart: 20 },
     endpoints: {
       log: { out: true, open: true, connected: "service(logger).log" },
@@ -41,11 +41,11 @@ export const data = {
   },
   systemd: {
     type: "systemd",
-    name: "systemd",
     serviceProvider: true,
+    name: "systemd",
     state: "running",
-    logLevel: "error",
-    description: "This service is the base class for service implementations",
+    logLevel: "trace",
+    description: "Bridge to systemd",
     timeout: { start: 20, stop: 20, restart: 20 },
     endpoints: {
       log: { out: true, open: true, connected: "service(logger).log" },
@@ -56,9 +56,11 @@ export const data = {
     type: "http",
     name: "http",
     state: "running",
-    logLevel: "error",
-    description: "This service is the base class for service implementations",
+    logLevel: "trace",
+    description: "http server",
     timeout: { server: 120, start: 20, stop: 20, restart: 20 },
+    jwt: {
+    },
     listen: {
       url: "https://mfelten.dynv6.net/services/entitlements/api",
       socket: { fd: 3, name: "http.listen.socket" }
@@ -91,13 +93,21 @@ export const data = {
         connected: "service(health).memory",
         interceptors: [{ type: "decode-json" }]
       },
-      "/services": {
-        path: "/services",
+      "/admin/services": {
+        path: "/admin/services",
         ws: true,
         in: true,
         out: true,
         open: true,
         connected: "service(admin).services",
+        interceptors: [{ type: "decode-json" }, { type: "live-probe" }]
+      },
+      "/admin/requests": {
+        path: "/admin/requests",
+        ws: true,
+        in: true,
+        out: true,
+        connected: "service(admin).requests",
         interceptors: [{ type: "decode-json" }]
       },
       "/authenticate": {
@@ -105,7 +115,7 @@ export const data = {
         path: "/authenticate",
         out: true,
         open: true,
-        connected: "service(auth).access_token",
+        connected: "service(authenticator).access_token",
         interceptors: [{ type: "ctx-body-param", headers: {} }]
       },
       "/entitlement": {
@@ -125,16 +135,41 @@ export const data = {
               attributes: ["cn"],
               filter: "(objectclass=groupOfUniqueNames)"
             }
-          }
+          },
+          { type: "live-probe" }
         ]
       },
       "/user": {
+        method: "GET",
+        path: "/user",
+        out: true,
+        open: true,
+        connected: "service(ldap).search",
+        interceptors: [
+          { type: "ctx-jwt-verify" },
+          { type: "ctx", headers: {} },
+          {
+            type: "template",
+            request: {
+              base: "ou=accounts,dc=mf,dc=de",
+              scope: "children",
+              filter: "(objectclass=posixAccount)"
+            }
+          },
+          { type: "live-probe" }
+        ]
+      },
+      "PUT:/user": {
         method: "PUT",
         path: "/user",
         out: true,
         open: true,
         connected: "service(ldap).add",
         interceptors: [
+          {
+            type: "ctx-jwt-verify",
+            requiredEntitlements: ["entitlement-provider.user.add"]
+          },
           { type: "ctx-body-param", headers: {} },
           {
             type: "template",
@@ -155,7 +190,7 @@ export const data = {
           }
         ]
       },
-      "/user/password": {
+      "PATCH:/user/password": {
         method: "PATCH",
         path: "/user/password",
         out: true,
@@ -176,8 +211,33 @@ export const data = {
           }
         ]
       },
-      "/user/:user": {
-        method: "DEL",
+      "PATCH:/user/:user": {
+        method: "PATCH",
+        path: "/user/:user",
+        out: true,
+        open: true,
+        connected: "service(ldap).modify",
+        interceptors: [
+          {
+            type: "ctx-jwt-verify",
+            requiredEntitlements: ["entitlement-provider.user.modify"]
+          },
+          { type: "ctx-body-param", headers: {} },
+          {
+            type: "template",
+            request: {
+              bind: {
+                dn: "uid={{user}},ou=accounts,dc=mf,dc=de",
+                password: "{{password}}"
+              },
+              dn: "uid={{user}},ou=accounts,dc=mf,dc=de",
+              replace: {}
+            }
+          }
+        ]
+      },
+      "DELETE:/user/:user": {
+        method: "DELETE",
         path: "/user/:user",
         out: true,
         open: true,
@@ -214,11 +274,11 @@ export const data = {
       }
     }
   },
-  auth: {
+  authenticator: {
     type: "authenticator",
-    name: "auth",
-    state: "running",
-    logLevel: "error",
+    name: "authenticator",
+    state: "stopped",
+    logLevel: "trace",
     description: "provide authentication services",
     timeout: { server: 120, start: 20, stop: 20, restart: 20 },
     listen: {},
@@ -242,8 +302,8 @@ export const data = {
     type: "ldap",
     name: "ldap",
     state: "stopped",
-    logLevel: "error",
-    description: "This service is the base class for service implementations",
+    logLevel: "trace",
+    description: "LDAP server access for bind/add/modify/del/query",
     timeout: { server: 120, start: 20, stop: 20, restart: 20 },
     jwt: {
       access_token: { algorithm: "RS256", expiresIn: "1h" },
@@ -266,25 +326,25 @@ export const data = {
         in: true,
         out: true,
         open: true,
-        connected: "service(auth).ldap.authenticate"
+        connected: "service(authenticator).ldap.authenticate"
       },
       add: {
         in: true,
         out: true,
         open: true,
-        connected: "service(http)./user"
+        connected: "service(http).PUT:/user"
       },
       del: {
         in: true,
         out: true,
         open: true,
-        connected: "service(http)./user/:user"
+        connected: "service(http).DELETE:/user/:user"
       },
       modify: {
         in: true,
         out: true,
         open: true,
-        connected: "service(http)./user/password"
+        connected: "service(http).PATCH:/user/password"
       },
       search: {
         in: true,
@@ -295,10 +355,10 @@ export const data = {
     }
   },
   health: {
-    type: "health-check",
+    type: "health",
     name: "health",
     state: "running",
-    logLevel: "error",
+    logLevel: "trace",
     cpuInterval: 30,
     memoryInterval: 30,
     uptimeInterval: 30,
@@ -339,9 +399,9 @@ export const data = {
   admin: {
     type: "admin",
     name: "admin",
-    state: "running",
-    logLevel: "error",
-    description: "This service is the base class for service implementations",
+    state: "stopped",
+    logLevel: "trace",
+    description: "Live administration of kronos services",
     timeout: { server: 120, start: 20, stop: 20, restart: 20 },
     jwt: {
       access_token: { algorithm: "RS256", expiresIn: "1h" },
@@ -352,19 +412,21 @@ export const data = {
     endpoints: {
       log: { out: true, open: true, connected: "service(logger).log" },
       config: { in: true, open: true },
+      command: { in: true, open: true },
       services: {
         in: true,
         out: true,
         open: true,
-        connected: "service(http)./services"
-      }
+        connected: "service(http)./admin/services"
+      },
+      requests: { out: true, connected: "service(http)./admin/requests" }
     }
   },
   smtp: {
     type: "smtp",
     name: "smtp",
     state: "stopped",
-    logLevel: "error",
+    logLevel: "trace",
     description: "This service is the base class for service implementations",
     timeout: { server: 120, start: 20, stop: 20, restart: 20 },
     jwt: {
