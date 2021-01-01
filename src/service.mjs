@@ -15,7 +15,7 @@ const DESCRIPTION = Symbol("description");
 const _ca = createAttributes({
   description: {
     type: "string",
-    description: "human readable description of the step"
+    description: "human readable description of the service"
   },
   logLevel: {
     description: `logging level one of: ${Object.keys(defaultLogLevels)}`,
