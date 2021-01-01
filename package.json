@@ -29,7 +29,7 @@
     "lint:docs": "documentation lint ./src/module.mjs"
   },
   "dependencies": {
-    "@kronos-integration/endpoint": "^9.3.6",
+    "@kronos-integration/endpoint": "^9.4.0",
     "@kronos-integration/interceptor": "^10.2.4",
     "loglevel-mixin": "^6.0.1",
     "model-attributes": "^4.1.8",
@@ -40,7 +40,7 @@
     "ava": "^3.14.0",
     "c8": "^7.3.5",
     "documentation": "github:arlac77/documentation",
-    "semantic-release": "^17.3.0"
+    "semantic-release": "^17.3.1"
   },
   "engines": {
     "node": ">=14.15.3"

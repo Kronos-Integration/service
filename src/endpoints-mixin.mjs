@@ -1,6 +1,7 @@
 import {
   SendEndpoint,
   SendEndpointDefault,
+  SendReceiveEndpoint,
   MultiSendEndpoint,
   ReceiveEndpoint,
   ReceiveEndpointDefault,
@@ -85,12 +86,16 @@ export default function EndpointsMixin(superclass) {
         return ReceiveEndpointSelfConnectedDefault;
       }
 
-      if (definition.in) {
-        return definition.default ? ReceiveEndpointDefault : ReceiveEndpoint;
-      }
-
       if (definition.multi === true || Array.isArray(definition.connected)) {
         return MultiSendEndpoint;
+      }
+
+      if (definition.in) {
+        if (definition.out) {
+          return SendReceiveEndpoint;
+        }
+
+        return definition.default ? ReceiveEndpointDefault : ReceiveEndpoint;
       }
 
       return definition.default ? SendEndpointDefault : SendEndpoint;
@@ -179,7 +184,7 @@ export default function EndpointsMixin(superclass) {
       if (typeof expression === "string") {
         const endpoint = this.endpoints[expression];
         if (endpoint === undefined) {
-          const m = expression.match(/^service\(([^\)]+)\).(.*)/);
+          const m = expression.match(/^service\(([^\)]+)\).([^\[]*)/);
           if (m) {
             const serviceName = m[1];
             const suffixExpression = m[2];

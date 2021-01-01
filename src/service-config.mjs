@@ -6,7 +6,7 @@ import { keyValue2Object } from "./util.mjs";
  * Config providing service.
  * Dispatches config requests to services;
  * or preserves them until a maching service becomes avaliable.
- * @property {Map<string,Object>} preservedConfigs values for services not alredy established
+ * @property {Map<string,Object>} preservedConfigs values for services not already established
  */
 export default class ServiceConfig extends Service {
   /**

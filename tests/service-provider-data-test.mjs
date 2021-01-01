@@ -20,12 +20,6 @@ class MyInitializationContext extends InitializationContext {
     return false;
   }
 
-  connectEndpoint(endpoint, connected) {
-    try {
-      super.connectEndpoint(endpoint, connected);
-    } catch (e) {}
-  }
-
   instantiateInterceptor(def) {
     const interceptor = super.instantiateInterceptor(def);
     if (interceptor) {
@@ -40,11 +34,11 @@ test("service provider declare services", async t => {
 
   await sp.declareServices(data);
 
-  t.is(Object.values(sp.services).length, 9);
+  t.is(Object.values(sp.services).length, 12);
 
   t.is(sp.services.logger.name, "logger");
   t.is(sp.services.logger.type, "logger");
-  t.is(sp.services.logger.logLevel, "error");
+  t.is(sp.services.logger.logLevel, "info");
   t.is(sp.services.logger.state, "stopped");
 
   t.is(sp.services.logger.endpoints.log.name, "log");
@@ -61,9 +55,18 @@ test("service provider declare services", async t => {
 
   t.is(sp.services.http.type, "service");
 
-  const ep = sp.services.http.endpoints["/entitlement"];
+  const ep = sp.services.http.endpoints["/authenticate"];
 
-  t.is(ep.name, "/entitlement");
+  t.is(ep.name, "/authenticate");
+
+  const ep2 = sp.services.admin.endpoints.services;
+  const ep3 = sp.services.http.endpoints["/admin/services"];
+
+  t.is(ep2.name, "services");
+  t.is(ep3.name, "/admin/services");
+
+  t.true(ep2.isConnected(ep3));
+
   /*
   t.is(ep.type, "GET");
   t.is(ep.method, "GET");

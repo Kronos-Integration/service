@@ -34,6 +34,7 @@ Base service implementation
     -   [\_restart](#_restart)
     -   [restartIfRunning](#restartifrunning)
     -   [toStringAttributes](#tostringattributes)
+    -   [isServiceProvider](#isserviceprovider)
     -   [toString](#tostring)
     -   [toJSONWithOptions](#tojsonwithoptions)
         -   [Parameters](#parameters-4)
@@ -79,6 +80,7 @@ Base service implementation
 -   [InitializationContext](#initializationcontext-1)
     -   [Parameters](#parameters-17)
     -   [Properties](#properties-1)
+-   [serviceProvider](#serviceprovider)
 
 ## DESCRIPTION
 
@@ -188,6 +190,12 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 Mapping of properties used in toString.
 
 Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+
+### isServiceProvider
+
+Base service is not a provider.
+
+Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** false
 
 ### toString
 
@@ -317,7 +325,7 @@ or preserves them until a maching service becomes avaliable.
 
 ### Properties
 
--   `preservedConfigs` **[Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** values for services not alredy established
+-   `preservedConfigs` **[Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** values for services not already established
 
 ### configFor
 
@@ -440,6 +448,10 @@ Keeps track of all in flight object creations and loose ends during config initi
 -   `outstandingServices` **[Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Service](#service)>>** 
 -   `outstandingFactories` **[Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)>>** 
 -   `outstandingEndpointConnections` **[Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;Endpoint>>** 
+
+## serviceProvider
+
+if config belongs to the provider we represent ourselfs
 
 # install
 

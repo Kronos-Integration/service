@@ -302,6 +302,10 @@ export default class Service extends EndpointsMixin(
     return { state: "state" };
   }
 
+  /**
+   * Base service is not a provider.
+   * @return {boolean} false
+   */
   get isServiceProvider()
   {
     return false;
