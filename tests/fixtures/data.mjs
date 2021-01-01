@@ -51,12 +51,7 @@ export const data = {
     description: "Bridge to systemd",
     timeout: { start: 20, stop: 20, restart: 20 },
     endpoints: {
-      log: {
-        out: true,
-        open: true,
-        connected: "service(logger).log",
-        interceptors: [{ type: "live-probe" }]
-      },
+      log: { out: true, open: true, connected: "service(logger).log" },
       config: { in: true, open: true }
     }
   },
@@ -65,14 +60,13 @@ export const data = {
     name: "http",
     state: "running",
     logLevel: "info",
-    description: "http server",
-    timeout: { server: 120, start: 20, stop: 20, restart: 20 },
     jwt: {},
     listen: {
       url: "https://mfelten.dynv6.net/services/system-dashboard/api",
       socket: { fd: 3, name: "http.listen.socket" }
     },
-    url: "https://mfelten.dynv6.net/services/system-dashboard/api",
+    timeout: { start: 20, stop: 20, restart: 20, server: 120 },
+    description: "http server",
     endpoints: {
       log: { out: true, open: true, connected: "service(logger).log" },
       config: { in: true, open: true },
@@ -98,7 +92,8 @@ export const data = {
         ws: true,
         in: true,
         out: true,
-        connected: "service(admin).requests",
+        open: true,
+        connected: "service(admin).requests[C]",
         interceptors: [{ type: "decode-json" }]
       },
       "/state/uptime": {
@@ -115,7 +110,7 @@ export const data = {
         in: true,
         out: true,
         connected: "service(health).cpu",
-        interceptors: [{ type: "decode-json" }, { type: "live-probe" }]
+        interceptors: [{ type: "decode-json" }]
       },
       "/state/memory": {
         path: "/state/memory",
@@ -156,8 +151,7 @@ export const data = {
               pragma: "no-cache",
               expires: 0
             }
-          },
-          { type: "live-probe" }
+          }
         ]
       },
       "/systemctl/timer": {
@@ -409,8 +403,7 @@ export const data = {
               pragma: "no-cache",
               expires: 0
             }
-          },
-          { type: "live-probe" }
+          }
         ]
       }
     }
@@ -420,10 +413,6 @@ export const data = {
     name: "ldap",
     state: "stopped",
     logLevel: "info",
-    description: "LDAP server access for bind/add/modify/del/query",
-    timeout: { server: 120, start: 20, stop: 20, restart: 20 },
-    jwt: {},
-    listen: {},
     url: "ldaps://mfelten.dynv6.net",
     entitlements: {
       bindDN: "uid={{username}},ou=accounts,dc=mf,dc=de",
@@ -433,6 +422,8 @@ export const data = {
       filter:
         "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{username}},ou=accounts,dc=mf,dc=de))"
     },
+    description: "LDAP server access for bind/add/modify/del/query",
+    timeout: { start: 20, stop: 20, restart: 20, server: 120 },
     endpoints: {
       log: { out: true, open: true, connected: "service(logger).log" },
       config: { in: true, open: true },
@@ -458,10 +449,7 @@ export const data = {
     uptimeInterval: 30,
     resourceUsageInterval: 30,
     description: "This service is the base class for service implementations",
-    timeout: { server: 120, start: 20, stop: 20, restart: 20 },
-    jwt: {},
-    listen: {},
-    entitlements: { attribute: "cn", scope: "sub" },
+    timeout: { start: 20, stop: 20, restart: 20, server: 120 },
     endpoints: {
       log: { out: true, open: true, connected: "service(logger).log" },
       config: { in: true, open: true },
@@ -498,9 +486,7 @@ export const data = {
     state: "stopped",
     logLevel: "info",
     description: "provide authentication services",
-    timeout: { server: 120, start: 20, stop: 20, restart: 20 },
-    listen: {},
-    entitlements: { attribute: "cn", scope: "sub" },
+    timeout: { start: 20, stop: 20, restart: 20, server: 120 },
     endpoints: {
       log: { out: true, open: true, connected: "service(logger).log" },
       config: { in: true, open: true },
@@ -523,13 +509,7 @@ export const data = {
     state: "stopped",
     logLevel: "info",
     description: "Live administration of kronos services",
-    timeout: { server: 120, start: 20, stop: 20, restart: 20 },
-    jwt: {
-      access_token: { algorithm: "RS256", expiresIn: "1h" },
-      refresh_token: { algorithm: "RS256", expiresIn: "30d" }
-    },
-    listen: {},
-    entitlements: { attribute: "cn", scope: "sub" },
+    timeout: { start: 20, stop: 20, restart: 20, server: 120 },
     endpoints: {
       log: { out: true, open: true, connected: "service(logger).log" },
       config: { in: true, open: true },
@@ -540,10 +520,10 @@ export const data = {
         open: true,
         connected: [
           "service(http)./admin/services",
-          "service(swarm).topic.services[T]"
+          "service(swarm).topic.services"
         ]
       },
-      requests: { out: true, connected: "service(http)./admin/requests" }
+      requests: { out: true, connected: "service(http)./admin/requests[T]" }
     }
   },
   swarm: {
@@ -551,40 +531,28 @@ export const data = {
     name: "swarm",
     state: "running",
     logLevel: "info",
-    description: "This service is the base class for service implementations",
-    timeout: { server: 120, start: 20, stop: 20, restart: 20 },
-    jwt: {
-      access_token: { algorithm: "RS256", expiresIn: "1h" },
-      refresh_token: { algorithm: "RS256", expiresIn: "30d" }
-    },
-    listen: {},
-    entitlements: { attribute: "cn", scope: "sub" },
     maxPeers: 7,
     ephemeral: false,
+    key: "sdlfjksdfjdflk56kj5jk5jk54lk6sdcfffmgdfklf",
+    description: "This service is the base class for service implementations",
+    timeout: { start: 20, stop: 20, restart: 20, server: 120 },
     endpoints: {
       log: { out: true, open: true, connected: "service(logger).log" },
       config: { in: true, open: true },
       "topic.services": {
         in: true,
         out: true,
-        open: true,
-        connected: "service(admin).services[C]",
-        sockets: 9,
+        connected: "service(admin).services",
+        sockets: 0,
         topic: {
           name: "services",
           peers: [
-            { host: "93.197.152.114", port: 34685, local: false },
-            { host: "93.197.152.114", port: 43183, local: false },
-            { host: "10.0.6.2", port: 36573, local: true },
-            { host: "93.197.152.114", port: 40963, local: false },
-            { host: "93.197.152.114", port: 41457, local: false },
-            { host: "93.197.152.114", port: 36573, local: false },
-            { host: "93.197.149.194", port: 43862, local: false },
-            { host: "93.197.149.194", port: 42017, local: false },
-            { host: "93.197.156.26", port: 36573, local: false },
-            { host: "93.197.149.194", port: 41457, local: false }
+            { host: "79.194.38.132", port: 44415, local: false },
+            { host: "79.194.38.132", port: 39003, local: false },
+            { host: "79.194.38.132", port: 40555, local: false },
+            { host: "79.194.38.132", port: 45073, local: false }
           ],
-          sockets: 1,
+          sockets: 0,
           announce: true,
           lookup: true
         }
@@ -595,18 +563,12 @@ export const data = {
         topic: {
           name: "services",
           peers: [
-            { host: "93.197.152.114", port: 34685, local: false },
-            { host: "93.197.152.114", port: 43183, local: false },
-            { host: "10.0.6.2", port: 36573, local: true },
-            { host: "93.197.152.114", port: 40963, local: false },
-            { host: "93.197.152.114", port: 41457, local: false },
-            { host: "93.197.152.114", port: 36573, local: false },
-            { host: "93.197.149.194", port: 43862, local: false },
-            { host: "93.197.149.194", port: 42017, local: false },
-            { host: "93.197.156.26", port: 36573, local: false },
-            { host: "93.197.149.194", port: 41457, local: false }
+            { host: "79.194.38.132", port: 44415, local: false },
+            { host: "79.194.38.132", port: 39003, local: false },
+            { host: "79.194.38.132", port: 40555, local: false },
+            { host: "79.194.38.132", port: 45073, local: false }
           ],
-          sockets: 1,
+          sockets: 0,
           announce: true,
           lookup: true
         }
@@ -619,14 +581,7 @@ export const data = {
     state: "stopped",
     logLevel: "info",
     description: "This service is the base class for service implementations",
-    timeout: { server: 120, start: 20, stop: 20, restart: 20 },
-    jwt: {
-      access_token: { algorithm: "RS256", expiresIn: "1h" },
-      refresh_token: { algorithm: "RS256", expiresIn: "30d" }
-    },
-    listen: {},
-    entitlements: { attribute: "cn", scope: "sub" },
-    maxPeers: 10,
+    timeout: { start: 20, stop: 20, restart: 20, server: 120 },
     endpoints: {
       log: { out: true, open: true, connected: "service(logger).log" },
       config: { in: true, open: true },
@@ -716,14 +671,7 @@ export const data = {
     state: "stopped",
     logLevel: "info",
     description: "This service is the base class for service implementations",
-    timeout: { server: 120, start: 20, stop: 20, restart: 20 },
-    jwt: {
-      access_token: { algorithm: "RS256", expiresIn: "1h" },
-      refresh_token: { algorithm: "RS256", expiresIn: "30d" }
-    },
-    listen: {},
-    entitlements: { attribute: "cn", scope: "sub" },
-    maxPeers: 10,
+    timeout: { start: 20, stop: 20, restart: 20, server: 120 },
     endpoints: {
       log: { out: true, open: true, connected: "service(logger).log" },
       config: { in: true, open: true },
@@ -742,14 +690,7 @@ export const data = {
     state: "stopped",
     logLevel: "info",
     description: "This service is the base class for service implementations",
-    timeout: { server: 120, start: 20, stop: 20, restart: 20 },
-    jwt: {
-      access_token: { algorithm: "RS256", expiresIn: "1h" },
-      refresh_token: { algorithm: "RS256", expiresIn: "30d" }
-    },
-    listen: {},
-    entitlements: { attribute: "cn", scope: "sub" },
-    maxPeers: 10,
+    timeout: { start: 20, stop: 20, restart: 20, server: 120 },
     endpoints: {
       log: { out: true, open: true, connected: "service(logger).log" },
       config: { in: true, open: true },
