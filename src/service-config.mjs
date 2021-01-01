@@ -80,7 +80,7 @@ export default class ServiceConfig extends Service {
 
         const merged = merge(this.preservedConfigs.get(name), c);
         this.trace(
-          `preserve config for ${name} ${JSON.stringify(
+          `Preserve config ${name} ${JSON.stringify(
             removeSensibleValues(merged)
           )}`
         );
