@@ -433,7 +433,8 @@ Meta information for the config attributes.
 *   default optional default value of the attribute
 *   needsRestart optional modification requires a service restart
 *   setter(newValue,attribute) optional function to be used if simple value assignment is not enough
-    The Service class only defines the logLevel, and start/stop/restart timeout attribute
+
+The Service class only defines the logLevel, and start/stop/restart timeout attribute
 
 Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
 
