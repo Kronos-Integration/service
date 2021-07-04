@@ -77,12 +77,16 @@ export default function ServiceProviderMixin(
       return this;
     }
 
+    /**
+     * We are the service provider.
+     * @return {boolean} true
+     */
     get isServiceProvider() {
       return true;
     }
 
     /**
-     *
+     * Register service or interceptor factories.
      *
      * @param {Function[]} factories
      */
