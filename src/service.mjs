@@ -132,7 +132,6 @@ export default class Service extends EndpointsMixin(
    * Definition of the predefined endpoints.
    * - log _out_
    * - config _in_
-   * - command _in_
    * @return {Object} predefined endpoints
    */
   static get endpoints() {
