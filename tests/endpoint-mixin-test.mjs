@@ -57,14 +57,15 @@ function eet(t, expression, from, name) {
 eet.title = (providedTitle = "", expression) =>
   `endpointForExpression ${providedTitle} ${expression}`.trim();
 
-test(eet, undefined, undefined, undefined)
-test(eet, "", undefined, undefined)
-test(eet, "s1", undefined, "s1")
-test(eet, "r1", undefined, "r1")
-test(eet, "r2", undefined, undefined)
-test(eet, "service(logger).log", undefined, "log")
-test(eet, "service(logger).log[TC]", undefined, "log")
-test(eet, "service(something).something", undefined, undefined)
+test(eet, undefined, undefined, undefined);
+test(eet, "", undefined, undefined);
+test(eet, "self", new SendEndpoint("sx"), "sx");
+test(eet, "s1", undefined, "s1");
+test(eet, "r1", undefined, "r1");
+test(eet, "r2", undefined, undefined);
+test(eet, "service(logger).log", undefined, "log");
+test(eet, "service(logger).log[TC]", undefined, "log");
+test(eet, "service(something).something", undefined, undefined);
 
 test("endpointFromConfig simple connected", t => {
   const o = new Owner();
