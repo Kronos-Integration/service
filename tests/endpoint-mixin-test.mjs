@@ -37,7 +37,7 @@ test("inEndpoints", t => {
   );
 });
 
-test("endpointForExpression simple", t => {
+function eet(t, expression, from, name) {
   const o = new Owner();
   const s1 = new SendEndpoint("s1");
   const r1 = new ReceiveEndpoint("r1");
@@ -45,47 +45,26 @@ test("endpointForExpression simple", t => {
   o.addEndpoint(s1);
   o.addEndpoint(r1);
 
-  t.deepEqual(o.endpointForExpression("r1"), r1);
-  t.deepEqual(o.endpointForExpression("s1"), s1);
-});
+  const ep = o.endpointForExpression(expression, from);
+  if (name) {
+    t.is(ep.name, name);
+  }
+  else {
+    t.falsy(ep);
+  }
+}
 
-test("endpointForExpression service", t => {
-  const o = new Owner();
+eet.title = (providedTitle = "", expression) =>
+  `endpointForExpression ${providedTitle} ${expression}`.trim();
 
-  t.is(o.endpointForExpression("service(logger).log").name, "log");
-});
-
-test("endpointForExpression service and state", t => {
-  const o = new Owner();
-
-  t.is(o.endpointForExpression("service(logger).log[TC]").name, "log");
-});
-
-test("endpointForExpression service not found", t => {
-  const o = new Owner();
-  t.is(o.endpointForExpression("service(something).something"), undefined);
-});
-
-test("endpointForExpression not found 2", t => {
-  const o = new Owner();
-  const r1 = new ReceiveEndpoint("r1");
-
-  o.addEndpoint(r1);
-
-  t.is(o.endpointForExpression("r2"), undefined);
-});
-
-test("endpointForExpression undefined", t => {
-  const o = new Owner();
-  t.is(o.endpointForExpression(undefined), undefined);
-});
-
-test("endpointForExpression Endpoint", t => {
-  const o = new Owner();
-  const r1 = new ReceiveEndpoint("r1");
-
-  t.is(o.endpointForExpression(r1), r1);
-});
+test(eet, undefined, undefined, undefined)
+test(eet, "", undefined, undefined)
+test(eet, "s1", undefined, "s1")
+test(eet, "r1", undefined, "r1")
+test(eet, "r2", undefined, undefined)
+test(eet, "service(logger).log", undefined, "log")
+test(eet, "service(logger).log[TC]", undefined, "log")
+test(eet, "service(something).something", undefined, undefined)
 
 test("endpointFromConfig simple connected", t => {
   const o = new Owner();
@@ -109,7 +88,7 @@ test("endpointFromConfig multiple connected", t => {
   const r2 = new ReceiveEndpoint("r2");
   o.addEndpoint(r2);
 
-  const e = o.createEndpointFromConfig("e", { connected: ["r1","r2"] }, ic);
+  const e = o.createEndpointFromConfig("e", { connected: ["r1", "r2"] }, ic);
 
   t.is(e.name, "e");
   t.true(e.isConnected(r1));
@@ -129,11 +108,11 @@ test("endpointFromConfig request multi", t => {
   const e = o.createEndpointFromConfig("e", { multi: true }, ic);
 
   t.is(e.name, "e");
-  
+
   // connect later
   e.addConnection(r1);
   e.addConnection(r2);
-  
+
   t.true(e.isConnected(r1));
   t.true(e.isConnected(r2));
 });
