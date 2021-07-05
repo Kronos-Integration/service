@@ -59,6 +59,7 @@ eet.title = (providedTitle = "", expression) =>
 test(eet, undefined, undefined, undefined);
 test(eet, "", undefined, undefined);
 test(eet, "self", new SendEndpoint("sx"), "sx");
+test(eet, new SendEndpoint("e"), undefined, "e");
 test(eet, "s1", undefined, "s1");
 test(eet, "r1", undefined, "r1");
 test(eet, "something", undefined, undefined);
