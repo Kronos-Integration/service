@@ -48,8 +48,7 @@ function eet(t, expression, from, name) {
   const ep = o.endpointForExpression(expression, from);
   if (name) {
     t.is(ep.name, name);
-  }
-  else {
+  } else {
     t.falsy(ep);
   }
 }
@@ -62,7 +61,8 @@ test(eet, "", undefined, undefined);
 test(eet, "self", new SendEndpoint("sx"), "sx");
 test(eet, "s1", undefined, "s1");
 test(eet, "r1", undefined, "r1");
-test(eet, "r2", undefined, undefined);
+test(eet, "something", undefined, undefined);
+test(eet, "config", undefined, "config");
 test(eet, "service(logger).log", undefined, "log");
 test(eet, "service(logger).log[TC]", undefined, "log");
 test(eet, "service(something).something", undefined, undefined);
