@@ -9,7 +9,7 @@ import {
 
 class Owner extends ServiceProviderMixin(Service, TestLogger) {
   get name() {
-    return "owner";
+    return "__owner__";
   }
 
   get myProperty() {
@@ -20,6 +20,43 @@ class Owner extends ServiceProviderMixin(Service, TestLogger) {
     return 78;
   }
 }
+
+const o = new Owner();
+const ic = new InitializationContext(o);
+
+o.addEndpoint(new SendEndpoint("s1"));
+o.addEndpoint(new ReceiveEndpoint("r1"));
+const s1 = new Service({ name: "s1" }, ic, 's1');
+o.registerService(s1);
+
+function eet(t, model, expression, from, name) {
+  const ep = model.endpointForExpression(expression, from);
+  if (name) {
+    t.is(ep.name, name);
+  } else {
+    t.falsy(ep);
+  }
+}
+
+eet.title = (providedTitle = "", model, expression) =>
+  `endpointForExpression ${providedTitle} ${expression}`.trim();
+
+test(eet, o, undefined, undefined, undefined);
+test(eet, o, "", undefined, undefined);
+test(eet, o, "something", undefined, undefined);
+test(eet, o, "service(something).something", undefined, undefined);
+
+test(eet, o, "self", new SendEndpoint("sx"), "sx");
+test(eet, o, new SendEndpoint("e"), undefined, "e");
+test(eet, o, "s1", undefined, "s1");
+test(eet, o, "r1", undefined, "r1");
+test(eet, o, "config", undefined, "config");
+test(eet, o, "service(logger).log", undefined, "log");
+test(eet, o, "service(logger).log[TC]", undefined, "log");
+test(eet, o, "service(s1).log", undefined, "log");
+test(eet, s1, "log", undefined, "log");
+test(eet, s1, "service(config).log", undefined, "log");
+test(eet, s1, "service().log", undefined, "log");
 
 test("outEndpoints", t => {
   const o = new Owner();
@@ -36,37 +73,6 @@ test("inEndpoints", t => {
     ["config"]
   );
 });
-
-function eet(t, expression, from, name) {
-  const o = new Owner();
-  const s1 = new SendEndpoint("s1");
-  const r1 = new ReceiveEndpoint("r1");
-
-  o.addEndpoint(s1);
-  o.addEndpoint(r1);
-
-  const ep = o.endpointForExpression(expression, from);
-  if (name) {
-    t.is(ep.name, name);
-  } else {
-    t.falsy(ep);
-  }
-}
-
-eet.title = (providedTitle = "", expression) =>
-  `endpointForExpression ${providedTitle} ${expression}`.trim();
-
-test(eet, undefined, undefined, undefined);
-test(eet, "", undefined, undefined);
-test(eet, "self", new SendEndpoint("sx"), "sx");
-test(eet, new SendEndpoint("e"), undefined, "e");
-test(eet, "s1", undefined, "s1");
-test(eet, "r1", undefined, "r1");
-test(eet, "something", undefined, undefined);
-test(eet, "config", undefined, "config");
-test(eet, "service(logger).log", undefined, "log");
-test(eet, "service(logger).log[TC]", undefined, "log");
-test(eet, "service(something).something", undefined, undefined);
 
 test("endpointFromConfig simple connected", t => {
   const o = new Owner();

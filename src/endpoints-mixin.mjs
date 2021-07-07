@@ -184,12 +184,12 @@ export default function EndpointsMixin(superclass) {
       if (typeof expression === "string") {
         const endpoint = this.endpoints[expression];
         if (endpoint === undefined) {
-          const m = expression.match(/^service\(([^\)]+)\).([^\[]*)/);
+          const m = expression.match(/^service\(([^\)]*)\).([^\[]*)/);
           if (m) {
             const serviceName = m[1];
             const suffixExpression = m[2];
             const serviceProvider = this.owner;
-            const service = serviceProvider.getService(serviceName);
+            const service = serviceName.length === 0 ? serviceProvider : serviceProvider.getService(serviceName);
 
             return service
               ? service.endpointForExpression(suffixExpression)
