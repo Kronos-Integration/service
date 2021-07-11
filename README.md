@@ -444,7 +444,6 @@ Definition of the predefined endpoints.
 
 *   log *out*
 *   config *in*
-*   command *in*
 
 Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** predefined endpoints
 
