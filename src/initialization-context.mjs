@@ -82,7 +82,7 @@ export const InitializationContext = LogLevelMixin(
         endpoint.addConnection(other);
         this.trace(level => `${endpoint} ${connected} (connected)`);
       } else {
-        this.trace(level => `${endpoint} ${connected} (connect deffered)`);
+        this.trace(level => `${endpoint} ${connected} (deffered)`);
 
         endpoint.addConnection(
           new DummyReceiveEndpoint(endpoint.name, endpoint.owner)
@@ -122,6 +122,9 @@ export const InitializationContext = LogLevelMixin(
       this.outstandingEndpointConnections.set(endpoint, connected);
     }
 
+    /**
+     * Resolve any outstanding centdpoint connections.
+     */
     resolveOutstandingEndpointConnections() {
       for (const [
         endpoint,
@@ -136,7 +139,7 @@ export const InitializationContext = LogLevelMixin(
           endpoint.addConnection(c);
 
           this.outstandingEndpointConnections.delete(endpoint);
-          this.trace(level => `${endpoint} (connection resolved)`);
+          this.trace(level => `${endpoint} (connection)`);
         } else {
           this.error(level => `Unable to connect ${endpoint} ${connected}`);
         }
