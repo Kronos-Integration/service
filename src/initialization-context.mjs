@@ -192,7 +192,7 @@ export const InitializationContext = LogLevelMixin(
             return module.default;
           }
         } catch (e) {
-          this.info(e);
+          this.warn(e);
         }
 
         const outstandingFactory = {};
@@ -210,7 +210,7 @@ export const InitializationContext = LogLevelMixin(
 
           outstandingFactory.timeout = setTimeout(() => {
             const message = `timeout waiting for ${type}`;
-            this.info(message);
+            this.warn(message);
             reject(new Error(message));
           }, 1000 * 10);
 
