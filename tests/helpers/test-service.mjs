@@ -1,6 +1,6 @@
 import { createAttributes } from "model-attributes";
 import { Service } from "@kronos-integration/service";
-import { wait } from "./util.mjs";
+import { setTimeout } from "timers/promises";
 
 export class TestService extends Service {
   static get name() {
@@ -52,7 +52,7 @@ export class TestService extends Service {
     delete config.endpoints;
     delete config.type;
     Object.assign(this, config);
-    wait(1000);
+    await setTimeout(1000);
 
     return this.restartIfRunning();
   }

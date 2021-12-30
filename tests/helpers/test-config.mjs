@@ -1,9 +1,9 @@
 import { ServiceConfig } from "@kronos-integration/service";
-import { wait } from "./util.mjs";
+import { setTimeout } from "timers/promises";
 
 export class TestConfig extends ServiceConfig {
   async _start() {
-    wait(1000);
+    await setTimeout(1000);
 
     super.configure({
       service1: {

@@ -1,5 +1,5 @@
 import { ServiceLogger } from "@kronos-integration/service";
-import { wait } from "./util.mjs";
+import { setTimeout } from "timers/promises";
 
 export class TestLogger extends ServiceLogger {
     constructor(...args) {
@@ -9,7 +9,6 @@ export class TestLogger extends ServiceLogger {
     }
   
     async _start() {
-      return wait(1000);
+      return setTimeout(1000);
     }
   }
-  
