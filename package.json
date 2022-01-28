@@ -33,7 +33,7 @@
     "@kronos-integration/interceptor": "^10.2.16",
     "loglevel-mixin": "^6.0.7",
     "model-attributes": "^4.1.12",
-    "remove-sensible-values": "^1.0.9",
+    "remove-sensible-values": "^3.0.12",
     "statetransition-mixin": "^6.0.15"
   },
   "devDependencies": {
