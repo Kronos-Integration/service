@@ -53,7 +53,7 @@ const _ca = createAttributes({
   }
 });
 
-const timeout = 20000;
+const timeout = 30000;
 
 const rsfDefault = {
   target: "running",
