@@ -32,7 +32,7 @@
     "@kronos-integration/endpoint": "^9.4.24",
     "@kronos-integration/interceptor": "^10.2.18",
     "loglevel-mixin": "^6.1.0",
-    "model-attributes": "^4.1.14",
+    "model-attributes": "^4.1.15",
     "remove-sensible-values": "^1.0.11",
     "statetransition-mixin": "^7.0.2"
   },
