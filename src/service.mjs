@@ -252,7 +252,7 @@ export class Service extends EndpointsMixin(
 
     return timeout === undefined
       ? super.timeoutForTransition(transition)
-      : timeout;
+      : timeout * 1000;
   }
 
   /**
