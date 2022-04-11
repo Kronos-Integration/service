@@ -5,7 +5,7 @@ import {
   getAttributes,
   setAttributes
 } from "model-attributes";
-import EndpointsMixin from "./endpoints-mixin.mjs";
+import { EndpointsMixin } from "./endpoints-mixin.mjs";
 
 /**
  * Key of the service description.
@@ -84,7 +84,7 @@ const ssfDefault = {
  * @param {Object} config.endpoints will be merged with the build in ones
  * @param {InitializationContext} ic
  */
-export default class Service extends EndpointsMixin(
+export class Service extends EndpointsMixin(
   StateTransitionMixin(
     LogLevelMixin(class {}),
     prepareActions({
@@ -249,6 +249,7 @@ export default class Service extends EndpointsMixin(
    */
   timeoutForTransition(transition) {
     const timeout = this.timeout[transition.name];
+
     return timeout === undefined
       ? super.timeoutForTransition(transition)
       : timeout;
@@ -305,11 +306,10 @@ export default class Service extends EndpointsMixin(
    * Base service is not a provider.
    * @return {boolean} false
    */
-  get isServiceProvider()
-  {
+  get isServiceProvider() {
     return false;
   }
-  
+
   /**
    * Returns the string representation of this service.
    * @return {string} human readable name
@@ -345,7 +345,7 @@ export default class Service extends EndpointsMixin(
       type: this.type
     };
 
-    if(this.isServiceProvider) {
+    if (this.isServiceProvider) {
       json.serviceProvider = true;
     }
 

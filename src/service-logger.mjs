@@ -1,9 +1,9 @@
-import Service from './service.mjs';
+import { Service } from './service.mjs';
 
 /**
  * Log receiving service.
  */
-export default class ServiceLogger extends Service {
+export class ServiceLogger extends Service {
 
   /**
    * @return {string} 'logger'

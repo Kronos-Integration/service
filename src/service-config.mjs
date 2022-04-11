@@ -1,5 +1,5 @@
 import { removeSensibleValues } from "remove-sensible-values";
-import Service from "./service.mjs";
+import { Service } from "./service.mjs";
 import { keyValue2Object } from "./util.mjs";
 
 /**
@@ -8,7 +8,7 @@ import { keyValue2Object } from "./util.mjs";
  * or preserves them until a maching service becomes avaliable.
  * @property {Map<string,Object>} preservedConfigs values for services not already established
  */
-export default class ServiceConfig extends Service {
+export class ServiceConfig extends Service {
   /**
    * @return {string} 'config'
    */

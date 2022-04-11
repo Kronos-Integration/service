@@ -1,7 +1,7 @@
 import { Interceptor } from "@kronos-integration/interceptor";
-import Service from "./service.mjs";
-import ServiceLogger from "./service-logger.mjs";
-import ServiceConfig from "./service-config.mjs";
+import { Service } from "./service.mjs";
+import { ServiceLogger } from "./service-logger.mjs";
+import { ServiceConfig } from "./service-config.mjs";
 import { InitializationContext } from "./initialization-context.mjs";
 
 /**
@@ -12,7 +12,7 @@ import { InitializationContext } from "./initialization-context.mjs";
  * @param {Class} serviceLoggerClass where the logging houtd go
  * @param {Class} serviceConfigClass where the config comes from
  */
-export default function ServiceProviderMixin(
+export function ServiceProviderMixin(
   superclass,
   serviceLoggerClass = ServiceLogger,
   serviceConfigClass = ServiceConfig

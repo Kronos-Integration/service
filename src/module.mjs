@@ -1,18 +1,8 @@
-import Service from "./service.mjs";
-import ServiceLogger from "./service-logger.mjs";
-import ServiceConfig from "./service-config.mjs";
-import ServiceProviderMixin from "./service-provider-mixin.mjs";
-import EndpointsMixin from "./endpoints-mixin.mjs";
-import StandaloneServiceProvider from "./standalone-service-provider.mjs";
-
-export {
-  EndpointsMixin,
-  ServiceProviderMixin,
-  ServiceConfig,
-  ServiceLogger,
-  Service,
-  StandaloneServiceProvider
-};
-
+export * from "./service.mjs";
+export * from "./service-logger.mjs";
+export * from "./service-config.mjs";
+export * from "./service-provider-mixin.mjs";
+export * from "./endpoints-mixin.mjs";
+export * from "./standalone-service-provider.mjs";
 export * from "./service-consumer-mixin.mjs";
 export * from "./initialization-context.mjs";

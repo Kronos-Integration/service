@@ -14,7 +14,7 @@ import {
  * @param {Class} superclass class to be extended
  * @return {Class} extended class
  */
-export default function EndpointsMixin(superclass) {
+export function EndpointsMixin(superclass) {
   return class EndpointsMixin extends superclass {
     /**
      * Default set of endpoints to create.

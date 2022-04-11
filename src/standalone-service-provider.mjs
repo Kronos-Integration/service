@@ -1,15 +1,15 @@
-import Service  from './service.mjs';
-import ServiceProviderMixin from './service-provider-mixin.mjs';
+import { Service } from "./service.mjs";
+import { ServiceProviderMixin } from "./service-provider-mixin.mjs";
 
 /**
  * Simple service manager (for examples and testing only).
  */
-export default class StandaloneServiceProvider extends ServiceProviderMixin(Service) {
+export class StandaloneServiceProvider extends ServiceProviderMixin(Service) {
   /**
    * @return {string} 'standalone-provider'
    */
   static get name() {
-    return 'standalone-provider';
+    return "standalone-provider";
   }
 
   static get description() {
