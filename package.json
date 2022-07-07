@@ -29,8 +29,8 @@
     "lint:docs": "documentation lint ./src/**/*.mjs"
   },
   "dependencies": {
-    "@kronos-integration/endpoint": "^9.4.31",
-    "@kronos-integration/interceptor": "^10.2.24",
+    "@kronos-integration/endpoint": "^9.4.32",
+    "@kronos-integration/interceptor": "^10.2.25",
     "loglevel-mixin": "^6.1.4",
     "model-attributes": "^4.1.18",
     "remove-sensible-values": "^3.0.16",
