@@ -296,6 +296,7 @@ Emits a serviceStateChanged event to the owner.
 
 #### Parameters
 
+*   `origin`  
 *   `oldState` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 *   `newState` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
