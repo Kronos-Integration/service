@@ -214,7 +214,7 @@ export class Service extends EndpointsMixin(
    * @param {string} oldState
    * @param {string} newState
    */
-  stateChanged(oldState, newState) {
+  stateChanged(origin, oldState, newState) {
     this.owner.serviceStateChanged(this, oldState, newState);
     this.trace({
       message: `${this.extendetName}: transitioned from ${oldState} to ${newState}`,
