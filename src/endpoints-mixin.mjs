@@ -24,10 +24,7 @@ export function EndpointsMixin(superclass) {
       return {};
     }
 
-    constructor(...args) {
-      super(...args);
-      this.endpoints = {};
-    }
+    endpoints = {};
 
     /**
      * Add a endpoint.
