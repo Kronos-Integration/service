@@ -22,61 +22,56 @@ Base service implementation
 *   [EndpointsMixin](#endpointsmixin)
     *   [Parameters](#parameters)
 *   [endpoints](#endpoints)
-*   [InitializationContext](#initializationcontext)
-*   [InitializationContext](#initializationcontext-1)
+*   [ServiceConfig](#serviceconfig)
     *   [Parameters](#parameters-1)
     *   [Properties](#properties)
-*   [serviceProvider](#serviceprovider)
-*   [ServiceConfig](#serviceconfig)
-    *   [Parameters](#parameters-2)
-    *   [Properties](#properties-1)
     *   [configFor](#configfor)
-        *   [Parameters](#parameters-3)
+        *   [Parameters](#parameters-2)
     *   [clearPreserved](#clearpreserved)
-        *   [Parameters](#parameters-4)
+        *   [Parameters](#parameters-3)
     *   [configureValue](#configurevalue)
-        *   [Parameters](#parameters-5)
+        *   [Parameters](#parameters-4)
     *   [configure](#configure)
-        *   [Parameters](#parameters-6)
+        *   [Parameters](#parameters-5)
     *   [autostart](#autostart)
     *   [name](#name)
 *   [merge](#merge)
-    *   [Parameters](#parameters-7)
+    *   [Parameters](#parameters-6)
 *   [defineServiceConsumerProperties](#defineserviceconsumerproperties)
-    *   [Parameters](#parameters-8)
+    *   [Parameters](#parameters-7)
 *   [ServiceLogger](#servicelogger)
     *   [autostart](#autostart-1)
     *   [name](#name-1)
     *   [endpoints](#endpoints-1)
 *   [ServiceProviderMixin](#serviceprovidermixin)
-    *   [Parameters](#parameters-9)
+    *   [Parameters](#parameters-8)
 *   [DESCRIPTION](#description)
 *   [Service](#service)
-    *   [Parameters](#parameters-10)
+    *   [Parameters](#parameters-9)
     *   [extendetName](#extendetname)
     *   [stateChanged](#statechanged)
-        *   [Parameters](#parameters-11)
+        *   [Parameters](#parameters-10)
     *   [rejectWrongState](#rejectwrongstate)
-        *   [Parameters](#parameters-12)
+        *   [Parameters](#parameters-11)
     *   [timeoutForTransition](#timeoutfortransition)
-        *   [Parameters](#parameters-13)
-    *   [\_start](#\_start)
-    *   [\_stop](#\_stop)
-    *   [\_restart](#\_restart)
+        *   [Parameters](#parameters-12)
+    *   [\_start](#_start)
+    *   [\_stop](#_stop)
+    *   [\_restart](#_restart)
     *   [restartIfRunning](#restartifrunning)
     *   [toStringAttributes](#tostringattributes)
     *   [isServiceProvider](#isserviceprovider)
     *   [toString](#tostring)
     *   [toJSONWithOptions](#tojsonwithoptions)
-        *   [Parameters](#parameters-14)
+        *   [Parameters](#parameters-13)
     *   [name](#name-2)
     *   [autostart](#autostart-2)
-    *   [\_configure](#\_configure)
-        *   [Parameters](#parameters-15)
+    *   [\_configure](#_configure)
+        *   [Parameters](#parameters-14)
     *   [configure](#configure-1)
-        *   [Parameters](#parameters-16)
+        *   [Parameters](#parameters-15)
     *   [log](#log)
-        *   [Parameters](#parameters-17)
+        *   [Parameters](#parameters-16)
     *   [configurationAttributes](#configurationattributes)
     *   [endpoints](#endpoints-2)
 *   [StandaloneServiceProvider](#standaloneserviceprovider)
@@ -99,29 +94,6 @@ Default set of endpoints to create.
 
 Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** {} empty set
 
-## InitializationContext
-
-Keeps track of all in flight object creations and loose ends during config initialization.
-
-## InitializationContext
-
-### Parameters
-
-*   `serviceProvider` **ServiceProvider** 
-*   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
-
-    *   `options.logLevel` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-
-### Properties
-
-*   `outstandingServices` **[Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[Service](#service)>>** 
-*   `outstandingFactories` **[Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)>>** 
-*   `outstandingEndpointConnections` **[Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<Endpoint>>** 
-
-## serviceProvider
-
-if config belongs to the provider we represent ourselfs
-
 ## ServiceConfig
 
 **Extends Service**
@@ -132,8 +104,8 @@ or preserves them until a maching service becomes avaliable.
 
 ### Parameters
 
-*   `config`  
-*   `ic`  
+*   `config` &#x20;
+*   `ic` &#x20;
 
 ### Properties
 
@@ -146,7 +118,7 @@ Deliver configuration for a given service.
 #### Parameters
 
 *   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** service name
-*   `config` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+*   `config` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 
 ### clearPreserved
 
@@ -163,13 +135,13 @@ Set config entry.
 #### Parameters
 
 *   `key` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** path to the value
-*   `value` **any** 
+*   `value` **any**&#x20;
 
 ### configure
 
 #### Parameters
 
-*   `config` **([Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array) | [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object))** 
+*   `config` **([Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array) | [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object))**&#x20;
 
 ### autostart
 
@@ -188,8 +160,8 @@ When *a* and *b* are arrays of values only the none duplicates are appendend to 
 
 ### Parameters
 
-*   `a` **any** 
-*   `b` **any** 
+*   `a` **any**&#x20;
+*   `b` **any**&#x20;
 
 Returns **any** merged b into a
 
@@ -202,7 +174,7 @@ Assign services based on a configuration.
 *   `target` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** object
 *   `config` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** service defintion
 *   `provider` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** service provider
-*   `waitUntilFactoryPresent` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** 
+*   `waitUntilFactoryPresent` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)**&#x20;
 
 ## ServiceLogger
 
@@ -234,7 +206,7 @@ By default a service provider has two build in services
 
 ### Parameters
 
-*   `superclass`  
+*   `superclass` &#x20;
 *   `serviceLoggerClass` **Class** where the logging houtd go (optional, default `ServiceLogger`)
 *   `serviceConfigClass` **Class** where the config comes from (optional, default `ServiceConfig`)
 
@@ -245,22 +217,22 @@ Key of the service description.
 ## Service
 
 **Extends EndpointsMixin(StateTransitionMixin(LogLevelMixin(class {}), prepareActions({
-  start: {
-    stopped: rsfDefault
-  },
-  restart: {
-    stopped: rsfDefault,
-    running: {
-      target: "running",
-      during: "restarting",
-      timeout
-    }
-  },
-  stop: {
-    running: ssfDefault,
-    starting: ssfDefault,
-    failed: ssfDefault
-  }
+&#x20; start: {
+&#x20;   stopped: rsfDefault
+&#x20; },
+&#x20; restart: {
+&#x20;   stopped: rsfDefault,
+&#x20;   running: {
+&#x20;     target: "running",
+&#x20;     during: "restarting",
+&#x20;     timeout
+&#x20;   }
+&#x20; },
+&#x20; stop: {
+&#x20;   running: ssfDefault,
+&#x20;   starting: ssfDefault,
+&#x20;   failed: ssfDefault
+&#x20; }
 }), "stopped"))**
 
 Service
@@ -273,21 +245,21 @@ All services have at least three endpoints:
 
 ### Parameters
 
-*   `config` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+*   `config` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 
-    *   `config.name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-    *   `config.logLevel` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+    *   `config.name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+    *   `config.logLevel` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
     *   `config.autostart` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** defaults to false
     *   `config.description` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** human readable description
     *   `config.endpoints` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** will be merged with the build in ones
-*   `ic` **[InitializationContext](#initializationcontext)** 
+*   `ic` **InitializationContext**&#x20;
 
 ### extendetName
 
 Used in human readable state messages.
 Besides the actual service name it may contain additional short hints.
 
-Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 
 ### stateChanged
 
@@ -296,9 +268,9 @@ Emits a serviceStateChanged event to the owner.
 
 #### Parameters
 
-*   `origin`  
-*   `oldState` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-*   `newState` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+*   `origin` &#x20;
+*   `oldState` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+*   `newState` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 
 ### rejectWrongState
 
@@ -318,7 +290,7 @@ Deliver transition timeout.
 
 #### Parameters
 
-*   `transition` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+*   `transition` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 
 Returns **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** milliseconds before throwing for a long running transition
 
@@ -348,7 +320,7 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 
 Mapping of properties used in toString.
 
-Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 
 ### isServiceProvider
 
@@ -368,7 +340,7 @@ Deliver json representation.
 
 #### Parameters
 
-*   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+*   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 
     *   `options.includeRuntimeInfo` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** include runtime informtion like state
     *   `options.includeDefaults` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** include default endpoints
@@ -401,7 +373,7 @@ or simply assign the attribute value.
 
 #### Parameters
 
-*   `config` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+*   `config` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 
 Returns **[Set](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Set)** of modified attributes
 
@@ -414,7 +386,7 @@ will be called.
 
 #### Parameters
 
-*   `config` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+*   `config` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** fillfills when config is applied
 
@@ -434,10 +406,9 @@ Meta information for the config attributes.
 *   default optional default value of the attribute
 *   needsRestart optional modification requires a service restart
 *   setter(newValue,attribute) optional function to be used if simple value assignment is not enough
+    The Service class only defines the logLevel, and start/stop/restart timeout attribute
 
-The Service class only defines the logLevel, and start/stop/restart timeout attribute
-
-Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 
 ### endpoints
 
