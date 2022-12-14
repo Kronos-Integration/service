@@ -31,9 +31,9 @@
   "dependencies": {
     "@kronos-integration/endpoint": "^9.4.36",
     "@kronos-integration/interceptor": "^10.2.29",
-    "loglevel-mixin": "^6.1.4",
+    "loglevel-mixin": "^6.1.5",
     "model-attributes": "^4.2.1",
-    "remove-sensible-values": "^1.2.1",
+    "remove-sensible-values": "^1.2.2",
     "statetransition-mixin": "^8.0.3"
   },
   "devDependencies": {
