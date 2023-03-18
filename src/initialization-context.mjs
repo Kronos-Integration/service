@@ -4,7 +4,7 @@ import {
   Endpoint,
   DummyReceiveEndpoint
 } from "@kronos-integration/endpoint";
-import { Service } from "./service.mjs";
+import { Service } from "./service.mjs";
 
 /**
  * Keeps track of all in flight object creations and loose ends during config initialization.

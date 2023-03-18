@@ -1,7 +1,7 @@
 import { Interceptor } from "@kronos-integration/interceptor";
-import { Service } from "./service.mjs";
+import { Service } from "./service.mjs";
 import { ServiceLogger } from "./service-logger.mjs";
-import { ServiceConfig } from "./service-config.mjs";
+import { ServiceConfig } from "./service-config.mjs";
 import { InitializationContext } from "./initialization-context.mjs";
 
 /**
