@@ -18,13 +18,14 @@ export function ServiceProviderMixin(
   serviceConfigClass = ServiceConfig
 ) {
   return class ServiceProvider extends superclass {
+    listeners = {};
+    interceptorFactories = {};
+    serviceFactories = {};
+    services = {};
+
     constructor(config, ic = new InitializationContext()) {
       super(Array.isArray(config) ? config[0] : config, ic);
 
-      this.listeners = {};
-      this.interceptorFactories = {};
-      this.serviceFactories = {};
-      this.services = {};
       this.ic = ic;
 
       ic.logLevel = this.logLevel;
