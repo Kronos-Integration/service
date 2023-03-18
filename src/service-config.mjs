@@ -1,5 +1,5 @@
 import { removeSensibleValues } from "remove-sensible-values";
-import { Service } from "./service.mjs";
+import { Service } from "./service.mjs";
 import { keyValue2Object } from "./util.mjs";
 
 /**
@@ -20,11 +20,7 @@ export class ServiceConfig extends Service {
     return "Config providing service";
   }
 
-  constructor(config, ic) {
-    super(config, ic);
-
-    this.preservedConfigs = new Map();
-  }
+  preservedConfigs = new Map();
 
   /**
    * Deliver configuration for a given service.
