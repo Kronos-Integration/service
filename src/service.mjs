@@ -7,11 +7,6 @@ import {
 } from "model-attributes";
 import { EndpointsMixin } from "./endpoints-mixin.mjs";
 
-/**
- * Key of the service description.
- */
-const DESCRIPTION = Symbol("description");
-
 const _ca = createAttributes({
   description: {
     type: "string",
@@ -146,6 +141,8 @@ export class Service extends EndpointsMixin(
     };
   }
 
+  #description;
+
   constructor(config, ic) {
     super();
 
@@ -192,11 +189,11 @@ export class Service extends EndpointsMixin(
   }
 
   get description() {
-    return this[DESCRIPTION] || this.constructor.description;
+    return this.#description || this.constructor.description;
   }
 
   set description(desc) {
-    this[DESCRIPTION] = desc;
+    this.#description = desc;
   }
 
   /**
