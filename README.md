@@ -23,38 +23,36 @@ Base service implementation
     *   [Parameters](#parameters)
 *   [endpoints](#endpoints)
 *   [ServiceConfig](#serviceconfig)
-    *   [Parameters](#parameters-1)
     *   [Properties](#properties)
     *   [configFor](#configfor)
-        *   [Parameters](#parameters-2)
+        *   [Parameters](#parameters-1)
     *   [clearPreserved](#clearpreserved)
-        *   [Parameters](#parameters-3)
+        *   [Parameters](#parameters-2)
     *   [configureValue](#configurevalue)
-        *   [Parameters](#parameters-4)
+        *   [Parameters](#parameters-3)
     *   [configure](#configure)
-        *   [Parameters](#parameters-5)
+        *   [Parameters](#parameters-4)
     *   [autostart](#autostart)
     *   [name](#name)
 *   [merge](#merge)
-    *   [Parameters](#parameters-6)
+    *   [Parameters](#parameters-5)
 *   [defineServiceConsumerProperties](#defineserviceconsumerproperties)
-    *   [Parameters](#parameters-7)
+    *   [Parameters](#parameters-6)
 *   [ServiceLogger](#servicelogger)
     *   [autostart](#autostart-1)
     *   [name](#name-1)
     *   [endpoints](#endpoints-1)
 *   [ServiceProviderMixin](#serviceprovidermixin)
-    *   [Parameters](#parameters-8)
-*   [DESCRIPTION](#description)
+    *   [Parameters](#parameters-7)
 *   [Service](#service)
-    *   [Parameters](#parameters-9)
+    *   [Parameters](#parameters-8)
     *   [extendetName](#extendetname)
     *   [stateChanged](#statechanged)
-        *   [Parameters](#parameters-10)
+        *   [Parameters](#parameters-9)
     *   [rejectWrongState](#rejectwrongstate)
-        *   [Parameters](#parameters-11)
+        *   [Parameters](#parameters-10)
     *   [timeoutForTransition](#timeoutfortransition)
-        *   [Parameters](#parameters-12)
+        *   [Parameters](#parameters-11)
     *   [\_start](#_start)
     *   [\_stop](#_stop)
     *   [\_restart](#_restart)
@@ -63,15 +61,15 @@ Base service implementation
     *   [isServiceProvider](#isserviceprovider)
     *   [toString](#tostring)
     *   [toJSONWithOptions](#tojsonwithoptions)
-        *   [Parameters](#parameters-13)
+        *   [Parameters](#parameters-12)
     *   [name](#name-2)
     *   [autostart](#autostart-2)
     *   [\_configure](#_configure)
-        *   [Parameters](#parameters-14)
+        *   [Parameters](#parameters-13)
     *   [configure](#configure-1)
-        *   [Parameters](#parameters-15)
+        *   [Parameters](#parameters-14)
     *   [log](#log)
-        *   [Parameters](#parameters-16)
+        *   [Parameters](#parameters-15)
     *   [configurationAttributes](#configurationattributes)
     *   [endpoints](#endpoints-2)
 *   [StandaloneServiceProvider](#standaloneserviceprovider)
@@ -101,11 +99,6 @@ Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 Config providing service.
 Dispatches config requests to services;
 or preserves them until a maching service becomes avaliable.
-
-### Parameters
-
-*   `config` &#x20;
-*   `ic` &#x20;
 
 ### Properties
 
@@ -209,10 +202,6 @@ By default a service provider has two build in services
 *   `superclass` &#x20;
 *   `serviceLoggerClass` **Class** where the logging houtd go (optional, default `ServiceLogger`)
 *   `serviceConfigClass` **Class** where the config comes from (optional, default `ServiceConfig`)
-
-## DESCRIPTION
-
-Key of the service description.
 
 ## Service
 
