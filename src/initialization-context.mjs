@@ -20,11 +20,13 @@ export const InitializationContext = LogLevelMixin(
    * @property {Map<string,Promise<Endpoint>>} outstandingEndpointConnections
    */
   class InitializationContext {
+
+    outstandingServices = new Map();
+    outstandingFactories = new Map();
+    outstandingEndpointConnections = new Map();
+
     constructor(serviceProvider, options) {
       this.serviceProvider = serviceProvider;
-      this.outstandingServices = new Map();
-      this.outstandingFactories = new Map();
-      this.outstandingEndpointConnections = new Map();
     }
 
     /**
