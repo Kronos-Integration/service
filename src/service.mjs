@@ -148,9 +148,7 @@ export class Service extends EndpointsMixin(
 
     const owner = ic.ownerOfService(this);
     if (owner !== undefined) {
-      Object.defineProperty(this, "owner", {
-        value: owner
-      });
+      this.owner = owner;
     }
 
     if (config === undefined) {
