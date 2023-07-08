@@ -226,8 +226,8 @@ export const InitializationContext = LogLevelMixin(
 
     /**
      * - if there is already a service for the given name configure it and we are done
-     * - if there is already an outstanding declaration ongoing wait until it is done configure it done
-     * - otherewise declare this action as a new outstanding service declaration
+     * - if there is already an outstanding declaration ongoing wait until it is done configure it then
+     * - otherwise declare this action as a new outstanding service declaration
      * @param {Object} config
      * @param {string} name service name
      * @return {Service}
