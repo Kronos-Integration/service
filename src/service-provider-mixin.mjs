@@ -167,7 +167,7 @@ export function ServiceProviderMixin(
     }
 
     getService(name) {
-      return this.services && this.services[name];
+      return this.services?.[name];
     }
 
     async declareService(config) {
