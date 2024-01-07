@@ -97,8 +97,8 @@ Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 **Extends Service**
 
 Config providing service.
-Dispatches config requests to services;
-or preserves them until a maching service becomes avaliable.
+Dispatches config requests to services.
+Also preserves them until a maching service becomes avaliable.
 
 ### Properties
 
