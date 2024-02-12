@@ -47,6 +47,7 @@ Base service implementation
     *   [Parameters](#parameters-7)
 *   [Service](#service)
     *   [Parameters](#parameters-8)
+    *   [Properties](#properties-1)
     *   [extendetName](#extendetname)
     *   [stateChanged](#statechanged)
         *   [Parameters](#parameters-9)
@@ -199,8 +200,8 @@ By default a service provider has two build in services
 ### Parameters
 
 *   `superclass` &#x20;
-*   `serviceLoggerClass` **Class** where the logging houtd go (optional, default `ServiceLogger`)
-*   `serviceConfigClass` **Class** where the config comes from (optional, default `ServiceConfig`)
+*   `serviceLoggerClass`   (optional, default `ServiceLogger`)
+*   `serviceConfigClass`   (optional, default `ServiceConfig`)
 
 ## Service
 
@@ -241,6 +242,10 @@ All services have at least three endpoints:
     *   `config.description` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** human readable description
     *   `config.endpoints` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** will be merged with the build in ones
 *   `ic` **InitializationContext**&#x20;
+
+### Properties
+
+*   `endpoints` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 
 ### extendetName
 
