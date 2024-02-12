@@ -1,4 +1,5 @@
 import {
+  Endpoint,
   SendEndpoint,
   SendEndpointDefault,
   SendReceiveEndpoint,
@@ -7,12 +8,13 @@ import {
   ReceiveEndpointDefault,
   ReceiveEndpointSelfConnectedDefault
 } from "@kronos-integration/endpoint";
+import { InitializationContext } from "./initialization-context.mjs";
 
 /**
  * Endpoint accessor mixin.
  * Manages endpoints in a container.
- * @param {Class} superclass class to be extended
- * @return {Class} extended class
+ * @param {new() => superclass} superclass class to be extended
+ * @return {new() => superclass} extended class
  */
 export function EndpointsMixin(superclass) {
   return class EndpointsMixin extends superclass {
@@ -41,6 +43,7 @@ export function EndpointsMixin(superclass) {
      * @param {string} name of the endpoint
      * @param {Object} definition endpoints definition
      * @param {string|Function} definition.receive name of method or property
+     * @param {Endpoint} definition.connected
      * @param {InitializationContext} ic
      * @return {Object} suitable to pass as options to the endpoint factory
      */
@@ -75,6 +78,8 @@ export function EndpointsMixin(superclass) {
      * @param {any} definition.receive defined will result in a ReceiveEndpoint
      * @param {boolean} definition.out true will result in a SendEndpoint
      * @param {boolean} definition.default true will result in a (Send|Receive)DefaultEndpoint
+     * @param {boolean} definition.multi true will result in a MultiSendEndpoint
+     * @param {Endpoint[]|string} definition.connected true will result in a MultiSendEndpoint
      * @param {InitializationContext} ic
      * @return {Object} endpoint factory
      */
