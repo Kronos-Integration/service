@@ -9,8 +9,8 @@ import { InitializationContext } from "./initialization-context.mjs";
  * By default a service provider has two build in services
  * 'logger' and 'config'.
  *
- * @param {Class} serviceLoggerClass where the logging houtd go
- * @param {Class} serviceConfigClass where the config comes from
+ * @param {new(Object,InitializationContext) => serviceLoggerClass} serviceLoggerClass where the logging houtd go
+ * @param {new(Object,InitializationContext) => serviceConfigClass} serviceConfigClass where the config comes from
  */
 export function ServiceProviderMixin(
   superclass,
@@ -106,8 +106,8 @@ export function ServiceProviderMixin(
      * Registers a interceptor factory for later use by
      * @see {instantiateInterceptor}.
      *
-     * @param {Class} factory
-     * @returns {Class} factory
+     * @param {new() => factory} factory
+     * @returns {new() => factory} factory
      */
     registerInterceptorFactory(factory) {
       this.interceptorFactories[factory.name] = factory;
@@ -181,7 +181,7 @@ export function ServiceProviderMixin(
      * If a service for the name is already present and it has a matching type
      * then its configure() is called and returned.
      * Otherwise a new service will be created eventually replacing an already existing service with the same name.
-     * @param {object} config with
+     * @param {object} configs with
      *     name - the service name
      *     type - the service factory name - defaults to config.name
      * @return {Promise<Object>} resolving to the declared services

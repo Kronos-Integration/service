@@ -162,7 +162,7 @@ export const InitializationContext = LogLevelMixin(
 
     /**
      *
-     * @param {string|class} type name if type
+     * @param {string|(new() => type)} type name if type
      */
     async getServiceFactory(type) {
       const sp = this.serviceProvider;
@@ -230,7 +230,7 @@ export const InitializationContext = LogLevelMixin(
      * - otherwise declare this action as a new outstanding service declaration
      * @param {Object} config
      * @param {string} name service name
-     * @return {Service}
+     * @return {Promise<Service|undefined>}
      */
     async declareService(config, name) {      
       const sp = this.serviceProvider;

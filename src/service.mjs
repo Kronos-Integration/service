@@ -6,6 +6,7 @@ import {
   setAttributes
 } from "model-attributes";
 import { EndpointsMixin } from "./endpoints-mixin.mjs";
+import { InitializationContext } from "./initialization-context.mjs";
 
 const _ca = createAttributes({
   description: {
@@ -78,6 +79,8 @@ const ssfDefault = {
  * @param {string} config.description human readable description
  * @param {Object} config.endpoints will be merged with the build in ones
  * @param {InitializationContext} ic
+ * 
+ * @property {Object} endpoints
  */
 export class Service extends EndpointsMixin(
   StateTransitionMixin(
