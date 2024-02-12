@@ -21,9 +21,9 @@ export const InitializationContext = LogLevelMixin(
    */
   class InitializationContext {
 
-    outstandingServices = new Map();
-    outstandingFactories = new Map();
-    outstandingEndpointConnections = new Map();
+    /** @type {Map<string,Promise<Service>>} */ outstandingServices = new Map();
+    /** @type {Map<string,Promise<Function>>} */ outstandingFactories = new Map();
+    /** @type {Map<string,Promise<Endpoint>>} */ outstandingEndpointConnections = new Map();
 
     constructor(serviceProvider, options) {
       this.serviceProvider = serviceProvider;
@@ -32,7 +32,7 @@ export const InitializationContext = LogLevelMixin(
     /**
      * Forward to the serviceProvider.
      * @param {string} level the log level
-     * @param {Object} arg log content
+     * @param {Object} args log content
      */
     log(level, ...args) {
       if (this.serviceProvider) {

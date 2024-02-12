@@ -25,7 +25,7 @@ export class ServiceConfig extends Service {
   /**
    * Deliver configuration for a given service.
    * @param {string} name service name
-   * @param {object} config
+   * @param {Object} config
    */
   async configFor(name, config) {
     this.trace(`configFor ${name}`);
