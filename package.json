@@ -6,7 +6,9 @@
     "provenance": true
   },
   "exports": {
-    ".": "./src/module.mjs"
+    ".": {
+      "default": "./src/module.mjs"
+    }
   },
   "description": "Base service implementation",
   "contributors": [
