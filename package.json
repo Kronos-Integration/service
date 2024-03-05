@@ -33,7 +33,7 @@
     "lint:tsc": "tsc --allowJs --checkJs --noEmit -t esnext -m esnext --module nodenext --moduleResolution nodenext ./src**/*.mjs"
   },
   "dependencies": {
-    "@kronos-integration/endpoint": "^9.5.2",
+    "@kronos-integration/endpoint": "^9.5.3",
     "@kronos-integration/interceptor": "^10.3.0",
     "loglevel-mixin": "^7.2.1",
     "model-attributes": "^4.2.2",
