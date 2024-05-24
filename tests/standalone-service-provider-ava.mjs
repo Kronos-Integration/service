@@ -92,7 +92,7 @@ test.only("declareService delayed timeout", async t => {
     await declarations;
     t.true(false);
   } catch (e) {
-    t.is(e.message, "timeout waiting for test");
+    t.is(e.message, "timeout waiting for service test");
   }
 });
 
