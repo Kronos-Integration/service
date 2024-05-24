@@ -210,7 +210,7 @@ export const InitializationContext = LogLevelMixin(
           };
 
           outstandingFactory.timeout = setTimeout(() => {
-            const message = `timeout waiting for ${type}`;
+            const message = `timeout waiting for service ${type}`;
             this.warn(message);
             reject(new Error(message));
           }, 1000 * 10);
