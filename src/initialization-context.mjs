@@ -232,7 +232,7 @@ export const InitializationContext = LogLevelMixin(
      * @param {string} name service name
      * @return {Promise<Service|undefined>}
      */
-    async declareService(config, name) {      
+    async declareService(config={}, name) {      
       const sp = this.serviceProvider;
       let service = sp.getService(name);
 
