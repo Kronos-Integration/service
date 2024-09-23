@@ -89,15 +89,20 @@ export function ServiceProviderMixin(
     /**
      * Register service or interceptor factories.
      *
-     * @param {Function[]} factories
+     * @param {[Function|string]} factories
      */
-    registerFactories(factories) {
-      for (const f of factories) {
-        const p = f.prototype;
-        if (p instanceof Interceptor) {
-          this.registerInterceptorFactory(f);
-        } else if (p instanceof Service) {
-          this.registerServiceFactory(f);
+    async registerFactories(factories) {
+      for (let factory of factories) {
+        if(typeof factory === 'string') {
+          const module = await import(factory);
+          factory = new module.default();
+        }
+
+        const prototype = factory.prototype;
+        if (prototype instanceof Interceptor) {
+          this.registerInterceptorFactory(factory);
+        } else if (prototype instanceof Service) {
+          this.registerServiceFactory(factory);
         }
       }
     }
