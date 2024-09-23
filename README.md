@@ -67,18 +67,16 @@ The transitions are:
     *   [autostart](#autostart-1)
     *   [name](#name-1)
     *   [endpoints](#endpoints-1)
-*   [ServiceProviderMixin](#serviceprovidermixin)
-    *   [Parameters](#parameters-7)
 *   [Service](#service)
-    *   [Parameters](#parameters-8)
+    *   [Parameters](#parameters-7)
     *   [Properties](#properties-1)
     *   [extendetName](#extendetname)
     *   [stateChanged](#statechanged)
-        *   [Parameters](#parameters-9)
+        *   [Parameters](#parameters-8)
     *   [rejectWrongState](#rejectwrongstate)
-        *   [Parameters](#parameters-10)
+        *   [Parameters](#parameters-9)
     *   [timeoutForTransition](#timeoutfortransition)
-        *   [Parameters](#parameters-11)
+        *   [Parameters](#parameters-10)
     *   [\_start](#_start)
     *   [\_stop](#_stop)
     *   [\_restart](#_restart)
@@ -87,15 +85,15 @@ The transitions are:
     *   [isServiceProvider](#isserviceprovider)
     *   [toString](#tostring)
     *   [toJSONWithOptions](#tojsonwithoptions)
-        *   [Parameters](#parameters-12)
+        *   [Parameters](#parameters-11)
     *   [name](#name-2)
     *   [autostart](#autostart-2)
     *   [\_configure](#_configure)
-        *   [Parameters](#parameters-13)
+        *   [Parameters](#parameters-12)
     *   [configure](#configure-1)
-        *   [Parameters](#parameters-14)
+        *   [Parameters](#parameters-13)
     *   [log](#log)
-        *   [Parameters](#parameters-15)
+        *   [Parameters](#parameters-14)
     *   [configurationAttributes](#configurationattributes)
     *   [endpoints](#endpoints-2)
 *   [StandaloneServiceProvider](#standaloneserviceprovider)
@@ -214,18 +212,6 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 Adds a log input endpoint to the set of Service endpoints.
 
 Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** predefined endpoints
-
-## ServiceProviderMixin
-
-Provide services and hold service configuration.
-By default a service provider has two build in services
-'logger' and 'config'.
-
-### Parameters
-
-*   `superclass` &#x20;
-*   `serviceLoggerClass`   (optional, default `ServiceLogger`)
-*   `serviceConfigClass`   (optional, default `ServiceConfig`)
 
 ## Service
 
