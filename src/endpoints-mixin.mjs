@@ -54,15 +54,17 @@ export function EndpointsMixin(superclass) {
         const receive = definition.receive;
 
         if (typeof receive === "string") {
-          if (typeof this[receive] === "function") {
-            definition.receive = (...args) => this[receive](...args);
-          } else {
-            if (this[receive] === undefined) {
-              throw new Error(
-                `No sucht method or property ${this.name}.${receive}`
-              );
-            }
-            definition.receive = () => this[receive];
+          switch(typeof this[receive]) {
+            case "function":
+               definition.receive = (...args) => this[receive](...args);
+            break;
+            default:
+               definition.receive = () => this[receive];
+            break; 
+            case "undefined":
+               throw new Error(
+                    `No sucht method or property ${this.name}.${receive}`
+               );
           }
         }
       }
@@ -193,9 +195,7 @@ export function EndpointsMixin(superclass) {
             const serviceProvider = this.owner;
             const service = serviceName.length === 0 ? serviceProvider : serviceProvider.getService(serviceName);
 
-            return service
-              ? service.endpointForExpression(suffixExpression)
-              : undefined;
+            return service?.endpointForExpression(suffixExpression);
           }
 
           if (from !== undefined) {
