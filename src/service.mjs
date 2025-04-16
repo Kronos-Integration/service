@@ -79,7 +79,7 @@ const ssfDefault = {
  * @param {string} config.description human readable description
  * @param {Object} config.endpoints will be merged with the build in ones
  * @param {InitializationContext} ic
- * 
+ *
  * @property {Object} endpoints
  */
 export class Service extends EndpointsMixin(
@@ -368,16 +368,13 @@ export class Service extends EndpointsMixin(
       Object.assign(json, atts);
     }
 
-    for (const endpointName in this.endpoints) {
-      const ep = this.endpoints[endpointName];
-
-      function add(ep) {
+    for (const [endpointName, ep] of Object.entries(this.endpoints)) {
+      const add = ep => {
         if (json.endpoints === undefined) {
           json.endpoints = {};
         }
         json.endpoints[endpointName] = ep.toJSONWithOptions(options);
-      }
-
+      };
       if (ep.isDefault) {
         if (options.includeDefaults) {
           add(ep);
