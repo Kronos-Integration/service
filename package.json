@@ -51,7 +51,7 @@
     "typescript": "^5.7.0-beta"
   },
   "engines": {
-    "node": ">=22.11.0"
+    "node": ">=22.15.0"
   },
   "repository": {
     "type": "git",
