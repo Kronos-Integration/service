@@ -128,7 +128,7 @@ export function ServiceProviderMixin(
      * Instanciates an interceptor from its definition data.
      * @see {interceptorFactories}
      * @param {Object} definition data
-     * @returns {Interceptor}
+     * @returns {Interceptor|undefined}
      */
     instantiateInterceptor(definition) {
       const factory = this.interceptorFactories[definition.type];
