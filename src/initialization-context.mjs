@@ -43,7 +43,7 @@ export const InitializationContext = LogLevelMixin(
     }
 
     /**
-     * Wait for (Service) factory to be declared when aced for a service.
+     * Wait for (Service) factory to be declared when asced for a service.
      *
      * @return {boolean} true we wait until a factory is known
      */
