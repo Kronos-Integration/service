@@ -1,12 +1,11 @@
 export function keyValue2Object(key, value) {
   const path = key.split(/\./);
-
   const config = {};
 
   let c = config;
 
   do {
-    let slot = path.shift();
+    const slot = path.shift();
     if (path.length === 0) {
       c[slot] = value;
       break;
