@@ -17,14 +17,14 @@ const _ca = createAttributes({
     description: `logging level one of: ${Object.keys(defaultLogLevels)}`,
     default: defaultLogLevels.info,
     type: "string",
-    setter(newValue) {
+    set(newValue) {
       if (newValue !== undefined) {
         this.logLevel = newValue;
         return true;
       }
       return false;
     },
-    getter() {
+    get() {
       return this.logLevel.name;
     }
   },
