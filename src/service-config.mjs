@@ -132,7 +132,7 @@ export function merge(a, b) {
     return b;
   }
 
-  if (b.constructor && b.constructor.name === "Buffer") {
+  if (b.constructor?.name === "Buffer") {
     return b;
   }
 
