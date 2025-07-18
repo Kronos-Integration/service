@@ -93,9 +93,6 @@ export class ServiceConfig extends Service {
     );
   }
 
-  async getCredential(key) {
-  }
-
   /**
    * We always start immediate.
    * @return {boolean} true

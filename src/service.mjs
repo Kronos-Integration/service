@@ -445,9 +445,7 @@ export class Service extends EndpointsMixin(
    * @return {Promise} fillfills when config is applied
    */
   async configure(config) {
-    const modified = this._configure(config);
-
-    for (const a of modified) {
+    for (const a of this._configure(config)) {
       if (a.needsRestart) {
         return this.restartIfRunning();
       }
