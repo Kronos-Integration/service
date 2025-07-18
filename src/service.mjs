@@ -1,14 +1,14 @@
 import { defaultLogLevels, LogLevelMixin, makeLogEvent } from "loglevel-mixin";
 import { prepareActions, StateTransitionMixin } from "statetransition-mixin";
 import {
-  createAttributes,
+  prepareAttributesDefinitions,
   getAttributes,
   setAttributes
 } from "model-attributes";
 import { EndpointsMixin } from "./endpoints-mixin.mjs";
 import { InitializationContext } from "./initialization-context.mjs";
 
-const _ca = createAttributes({
+const _ca = prepareAttributesDefinitions({
   description: {
     type: "string",
     description: "human readable description of the service"

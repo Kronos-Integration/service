@@ -4,7 +4,6 @@ import {
   StandaloneServiceProvider,
   InitializationContext
 } from "@kronos-integration/service";
-
 import { data } from "./fixtures/data.mjs";
 
 class MyInitializationContext extends InitializationContext {

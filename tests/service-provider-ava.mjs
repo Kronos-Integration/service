@@ -1,8 +1,6 @@
 import test from "ava";
-
 import { TestServiceProvider, makeServices } from "./helpers/test-service-provider.mjs";
 import { TestService } from "./helpers/test-service.mjs";
-
 import { InitializationContext } from "@kronos-integration/service";
 
 test("service provider additional service", async t => {

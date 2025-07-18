@@ -1,6 +1,5 @@
 import test from "ava";
 import { TestService } from "./helpers/test-service.mjs";
-
 import {
   Service,
   ServiceProviderMixin,

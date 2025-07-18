@@ -1,7 +1,5 @@
 import test from "ava";
-
 import { Interceptor } from "@kronos-integration/interceptor";
-
 import { TestServiceWithoutAdditionalEndpoints } from "./helpers/test-service-without-additional-configs.mjs";
 import { makeServices } from "./helpers/test-service-provider.mjs";
 import { TestService } from "./helpers/test-service.mjs";
