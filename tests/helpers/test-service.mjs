@@ -1,4 +1,4 @@
-import { createAttributes } from "model-attributes";
+import { prepareAttributesDefinitions } from "pacc";
 import { Service } from "@kronos-integration/service";
 import { setTimeout } from "timers/promises";
 
@@ -32,7 +32,7 @@ export class TestService extends Service {
 
   static get configurationAttributes() {
     return Object.assign(
-      createAttributes({
+      prepareAttributesDefinitions({
         key3: {
           needsRestart: true,
           private: true

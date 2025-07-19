@@ -1,4 +1,4 @@
-import { createAttributes } from "model-attributes";
+import { prepareAttributesDefinitions } from "pacc";
 import { Service } from "@kronos-integration/service";
 
 export class TestServiceWithoutAdditionalEndpoints extends Service {
@@ -8,7 +8,7 @@ export class TestServiceWithoutAdditionalEndpoints extends Service {
   
     static get configurationAttributes() {
       return Object.assign(
-        createAttributes({
+        prepareAttributesDefinitions({
           key3: {
             needsRestart: true
           },

@@ -4,7 +4,7 @@ import {
   prepareAttributesDefinitions,
   getAttributes,
   setAttributes
-} from "model-attributes";
+} from "pacc";
 import { EndpointsMixin } from "./endpoints-mixin.mjs";
 import { InitializationContext } from "./initialization-context.mjs";
 
@@ -417,8 +417,8 @@ export class Service extends EndpointsMixin(
     const modified = new Set();
     setAttributes(
       this,
-      this.configurationAttributes,
       config,
+      this.configurationAttributes,
       (ca, path, value) => {
         this.trace(level => {
           if (ca.private) {

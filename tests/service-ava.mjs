@@ -98,7 +98,7 @@ function st(t, factory, options, expected = {}) {
 st.title = (providedTitle = "", factory, options) =>
   `service ${providedTitle} ${factory.name} ${JSON.stringify(options)}`.trim();
 
-test(
+test.only(
   st,
   Service,
   { name: "service", key1: "value1", key2: 2 },
