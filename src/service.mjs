@@ -8,7 +8,7 @@ import {
 import { EndpointsMixin } from "./endpoints-mixin.mjs";
 import { InitializationContext } from "./initialization-context.mjs";
 
-const _ca = prepareAttributesDefinitions({
+const CONFIG_ATTRIBUTES = prepareAttributesDefinitions({
   description: {
     type: "string",
     description: "human readable description of the service"
@@ -123,7 +123,7 @@ export class Service extends EndpointsMixin(
    * @return {Object}
    */
   static get configurationAttributes() {
-    return _ca;
+    return CONFIG_ATTRIBUTES;
   }
 
   /**
