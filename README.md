@@ -91,7 +91,7 @@ The transitions are:
         *   [Parameters](#parameters-13)
     *   [log](#log)
         *   [Parameters](#parameters-14)
-    *   [configurationAttributes](#configurationattributes)
+    *   [attributes](#attributes)
     *   [endpoints](#endpoints-2)
 *   [StandaloneServiceProvider](#standaloneserviceprovider)
     *   [name](#name-3)
@@ -366,7 +366,7 @@ Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 
 Takes attribute values from config parameters
 and copies them over to the object.
-Copying is done according to configurationAttributes.
+Copying is done according to attributes.
 Which means we loop over all configuration attributes.
 and then for each attribute decide if we use the default, call a setter function
 or simply assign the attribute value.
@@ -399,7 +399,7 @@ Adds service name to the log event.
 *   `level` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** the log level
 *   `arg` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** log content
 
-### configurationAttributes
+### attributes
 
 Meta information for the config attributes.
 
