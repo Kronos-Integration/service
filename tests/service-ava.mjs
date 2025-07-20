@@ -65,8 +65,8 @@ function st(t, factory, options, expected = {}) {
   }
 
   for (const [name, c] of Object.entries(expected.configuration)) {
-    t.truthy(s1.configurationAttributes[name], `${name} configuration`);
-    t.is(s1.configurationAttributes[name].name, name);
+    t.truthy(s1.attributes[name], `${name} configuration`);
+    t.is(s1.attributes[name].name, name);
     if (c.value !== undefined) {
       t.is(s1[name], c.value, `${name} value`);
     }

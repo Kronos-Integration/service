@@ -30,7 +30,7 @@ export class TestService extends Service {
     };
   }
 
-  static get configurationAttributes() {
+  static get attributes() {
     return Object.assign(
       prepareAttributesDefinitions({
         key3: {
@@ -39,7 +39,7 @@ export class TestService extends Service {
         },
         key4: {}
       }),
-      Service.configurationAttributes
+      Service.attributes
     );
   }
 

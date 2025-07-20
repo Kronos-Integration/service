@@ -6,7 +6,7 @@ export class TestServiceWithoutAdditionalEndpoints extends Service {
       return "test-without-additional-endpoints";
     }
   
-    static get configurationAttributes() {
+    static get attributes() {
       return Object.assign(
         prepareAttributesDefinitions({
           key3: {
@@ -14,7 +14,7 @@ export class TestServiceWithoutAdditionalEndpoints extends Service {
           },
           key4: {}
         }),
-        Service.configurationAttributes
+        Service.attributes
       );
     }
   }

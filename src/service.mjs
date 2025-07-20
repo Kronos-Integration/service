@@ -3,16 +3,14 @@ import { prepareActions, StateTransitionMixin } from "statetransition-mixin";
 import {
   prepareAttributesDefinitions,
   getAttributes,
-  setAttributes
+  setAttributes,
+  description_attribute
 } from "pacc";
 import { EndpointsMixin } from "./endpoints-mixin.mjs";
 import { InitializationContext } from "./initialization-context.mjs";
 
-const CONFIG_ATTRIBUTES = prepareAttributesDefinitions({
-  description: {
-    type: "string",
-    description: "human readable description of the service"
-  },
+const ATTRIBUTES = prepareAttributesDefinitions({
+  description: description_attribute,
   logLevel: {
     description: `logging level one of: ${Object.keys(defaultLogLevels)}`,
     default: defaultLogLevels.info,
@@ -122,8 +120,8 @@ export class Service extends EndpointsMixin(
    * The Service class only defines the logLevel, and start/stop/restart timeout attribute
    * @return {Object}
    */
-  static get configurationAttributes() {
-    return CONFIG_ATTRIBUTES;
+  static get attributes() {
+    return ATTRIBUTES;
   }
 
   /**
@@ -181,8 +179,8 @@ export class Service extends EndpointsMixin(
     return this.owner.instantiateInterceptor(options);
   }
 
-  get configurationAttributes() {
-    return this.constructor.configurationAttributes;
+  get attributes() {
+    return this.constructor.attributes;
   }
 
   get type() {
@@ -357,7 +355,7 @@ export class Service extends EndpointsMixin(
     }
 
     if (options.includeConfig) {
-      let atts = getAttributes(this, this.configurationAttributes);
+      let atts = getAttributes(this, this.attributes);
 
       if (!options.includePrivate) {
         atts = Object.fromEntries(
@@ -406,7 +404,7 @@ export class Service extends EndpointsMixin(
   /**
    * Takes attribute values from config parameters
    * and copies them over to the object.
-   * Copying is done according to configurationAttributes.
+   * Copying is done according to attributes.
    * Which means we loop over all configuration attributes.
    * and then for each attribute decide if we use the default, call a setter function
    * or simply assign the attribute value.
@@ -418,7 +416,7 @@ export class Service extends EndpointsMixin(
     setAttributes(
       this,
       config,
-      this.configurationAttributes,
+      this.attributes,
       (ca, path, value) => {
         this.trace(level => {
           if (ca.private) {
