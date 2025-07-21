@@ -9,44 +9,6 @@ import {
 import { EndpointsMixin } from "./endpoints-mixin.mjs";
 import { InitializationContext } from "./initialization-context.mjs";
 
-const ATTRIBUTES = prepareAttributesDefinitions({
-  description: description_attribute,
-  logLevel: {
-    description: `logging level one of: ${Object.keys(defaultLogLevels)}`,
-    default: defaultLogLevels.info,
-    type: "string",
-    set(newValue) {
-      if (newValue !== undefined) {
-        this.logLevel = newValue;
-        return true;
-      }
-      return false;
-    },
-    get() {
-      return this.logLevel.name;
-    }
-  },
-  timeout: {
-    attributes: {
-      start: {
-        description: "service start timeout",
-        type: "duration",
-        default: 20
-      },
-      stop: {
-        description: "service stop timeout",
-        type: "duration",
-        default: 20
-      },
-      restart: {
-        description: "service restart timeout",
-        type: "duration",
-        default: 20
-      }
-    }
-  }
-});
-
 const timeout = 30000;
 
 const rsfDefault = {
@@ -120,9 +82,43 @@ export class Service extends EndpointsMixin(
    * The Service class only defines the logLevel, and start/stop/restart timeout attribute
    * @return {Object}
    */
-  static get attributes() {
-    return ATTRIBUTES;
-  }
+  static attributes = prepareAttributesDefinitions({
+    description: description_attribute,
+    logLevel: {
+      description: `logging level one of: ${Object.keys(defaultLogLevels)}`,
+      default: defaultLogLevels.info,
+      type: "string",
+      set(newValue) {
+        if (newValue !== undefined) {
+          this.logLevel = newValue;
+          return true;
+        }
+        return false;
+      },
+      get() {
+        return this.logLevel.name;
+      }
+    },
+    timeout: {
+      attributes: {
+        start: {
+          description: "service start timeout",
+          type: "duration",
+          default: 20
+        },
+        stop: {
+          description: "service stop timeout",
+          type: "duration",
+          default: 20
+        },
+        restart: {
+          description: "service restart timeout",
+          type: "duration",
+          default: 20
+        }
+      }
+    }
+  });
 
   /**
    * Definition of the predefined endpoints.
@@ -413,24 +409,19 @@ export class Service extends EndpointsMixin(
    */
   _configure(config) {
     const modified = new Set();
-    setAttributes(
-      this,
-      config,
-      this.attributes,
-      (ca, path, value) => {
-        this.trace(level => {
-          if (ca.private) {
-            value = "***";
-          }
-          return {
-            message: `config ${this.name}.${path}: ${JSON.stringify(value)}`,
-            attribute: path,
-            value: value
-          };
-        });
-        modified.add(ca);
-      }
-    );
+    setAttributes(this, config, this.attributes, (ca, path, value) => {
+      this.trace(level => {
+        if (ca.private) {
+          value = "***";
+        }
+        return {
+          message: `config ${this.name}.${path}: ${JSON.stringify(value)}`,
+          attribute: path,
+          value: value
+        };
+      });
+      modified.add(ca);
+    });
     return modified;
   }
 
