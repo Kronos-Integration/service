@@ -441,6 +441,10 @@ export class Service extends EndpointsMixin(
     }
   }
 
+  async getCredential(key) {
+    return this.owner.getCredential(this.name + "." + key, "utf8");
+  }
+
   /**
    * Adds service name to the log event.
    * @param {string} level the log level
