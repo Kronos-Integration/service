@@ -15,4 +15,6 @@ export class StandaloneServiceProvider extends ServiceProviderMixin(Service) {
   static get description() {
     return "This service to control services";
   }
+
+  async getCredential(key) {}
 }
