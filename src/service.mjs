@@ -4,7 +4,8 @@ import {
   prepareAttributesDefinitions,
   getAttributes,
   setAttributes,
-  description_attribute
+  description_attribute,
+  timeout_attribute
 } from "pacc";
 import { EndpointsMixin } from "./endpoints-mixin.mjs";
 import { InitializationContext } from "./initialization-context.mjs";
@@ -102,18 +103,18 @@ export class Service extends EndpointsMixin(
     timeout: {
       attributes: {
         start: {
+          ...timeout_attribute,
           description: "service start timeout",
-          type: "duration",
           default: 20
         },
         stop: {
+          ...timeout_attribute,
           description: "service stop timeout",
-          type: "duration",
           default: 20
         },
         restart: {
+          ...timeout_attribute,
           description: "service restart timeout",
-          type: "duration",
           default: 20
         }
       }
