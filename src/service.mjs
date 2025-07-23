@@ -5,6 +5,7 @@ import {
   getAttributes,
   setAttributes,
   description_attribute,
+  default_attribute,
   timeout_attribute
 } from "pacc";
 import { EndpointsMixin } from "./endpoints-mixin.mjs";
@@ -86,9 +87,9 @@ export class Service extends EndpointsMixin(
   static attributes = prepareAttributesDefinitions({
     description: description_attribute,
     logLevel: {
+      ...default_attribute,
       description: `logging level one of: ${Object.keys(defaultLogLevels)}`,
       default: defaultLogLevels.info,
-      type: "string",
       set(newValue) {
         if (newValue !== undefined) {
           this.logLevel = newValue;
