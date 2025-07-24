@@ -1,4 +1,4 @@
-import { removeSensibleValues } from "remove-sensible-values";
+import { getAttributes } from "pacc";
 import { Service } from "./service.mjs";
 import { keyValue2Object } from "./util.mjs";
 
@@ -70,19 +70,28 @@ export class ServiceConfig extends Service {
     }
 
     const update = async (name, c) => {
-      const s = this.owner.services[name];
-      if (s === undefined) {
+      const service = this.owner.services[name];
+      if (service === undefined) {
         delete c.name;
 
         const merged = merge(this.preservedConfigs.get(name), c);
         this.trace(
-          `Preserve config ${name} ${JSON.stringify(
-            removeSensibleValues(merged)
-          )}`
+          level =>
+            `Preserve config ${name} ${JSON.stringify(
+              getAttributes(
+                Object.fromEntries(
+                  Object.entries(service.attributes).filter(
+                    ([n, a]) => !a.private
+                  )
+                ),
+                service.attributes
+              )
+            )}`
         );
+
         this.preservedConfigs.set(name, merged);
       } else {
-        return s.configure(c);
+        return service.configure(c);
       }
     };
 
