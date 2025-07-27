@@ -90,9 +90,7 @@ export class Service extends EndpointsMixin(
       ...default_attribute,
       description: `logging level one of: ${Object.keys(defaultLogLevels)}`,
       default: defaultLogLevels.info,
-      get() {
-        return this.logLevel.name;
-      }
+      get: () => this.logLevel.name
     },
     timeout: {
       attributes: {
