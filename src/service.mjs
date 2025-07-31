@@ -88,7 +88,8 @@ export class Service extends EndpointsMixin(
     description: description_attribute,
     logLevel: {
       ...default_attribute,
-      description: `logging level one of: ${Object.keys(defaultLogLevels)}`,
+      description: "logging level",
+      values: Object.keys(defaultLogLevels),
       default: defaultLogLevels.info,
       get: () => this.logLevel.name
     },
