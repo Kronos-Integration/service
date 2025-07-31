@@ -110,7 +110,7 @@ export function EndpointsMixin(superclass) {
      * Also creates interceptors if they are present in the definition.
      * @param {string} name of the new endpoint
      * @param {Object|string} definition endpoint attributes or alias expression
-     * @param {string} [definition.target] expression pointing to the connected endpoint
+     * @param {string?} [definition.target] expression pointing to the connected endpoint
      * @param {InitializationContext} ic
      * @return {Endpoint} newly created endpoint
      */
@@ -180,22 +180,19 @@ export function EndpointsMixin(superclass) {
     /**
      * Find Endpoint for a given expression.
      * Default implementation only supports direct named endpoints.
+     * If no matching Endpoint can be identified endpointOnDemand() is consulted.
      * @param {string|Endpoint} expression to identify endpoint
      * @param {Endpoint} from to identify endpoint
-     * @return {Endpoint} for a given expression
+     * @return {Endpoint?} for a given expression
      */
     endpointForExpression(expression, from) {
       if (typeof expression === "string") {
         const endpoint = this.endpoints[expression];
         if (endpoint === undefined) {
-          const m = expression.match(/^service\(([^\)]*)\).([^\[]*)/);
+          const m = expression.match(/^service\((?<service>[^\)]*)\).(?<suffix>[^\[]*)/);
           if (m) {
-            const serviceName = m[1];
-            const suffixExpression = m[2];
-            const serviceProvider = this.owner;
-            const service = serviceName.length === 0 ? serviceProvider : serviceProvider.getService(serviceName);
-
-            return service?.endpointForExpression(suffixExpression);
+            const service = m.groups.service.length === 0 ? this.owner : this.owner.getService(m.groups.service);
+            return service?.endpointForExpression(m.groups.suffix);
           }
 
           if (from !== undefined) {
@@ -203,11 +200,22 @@ export function EndpointsMixin(superclass) {
               return from;
             }
           }
+
+          return this.owner.endpointOnDemand(expression, from);
         }
 
         return endpoint;
       }
       return expression;
+    }
+
+    /**
+     * Create endpint for a givne expression.
+     * @param {string|Endpoint} expression to identify endpoint
+     * @param {Endpoint} from to identify endpoint
+     * @return {Endpoint?} for a given expression
+     */
+    endpointOnDemand(expression, from) {
     }
   };
 }
