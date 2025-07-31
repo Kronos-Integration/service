@@ -54,17 +54,17 @@ export function EndpointsMixin(superclass) {
         const receive = definition.receive;
 
         if (typeof receive === "string") {
-          switch(typeof this[receive]) {
+          switch (typeof this[receive]) {
             case "function":
-               definition.receive = (...args) => this[receive](...args);
-            break;
+              definition.receive = (...args) => this[receive](...args);
+              break;
             default:
-               definition.receive = () => this[receive];
-            break; 
+              definition.receive = () => this[receive];
+              break;
             case "undefined":
-               throw new Error(
-                    `No sucht method or property ${this.name}.${receive}`
-               );
+              throw new Error(
+                `No sucht method or property ${this.name}.${receive}`
+              );
           }
         }
       }
@@ -189,10 +189,18 @@ export function EndpointsMixin(superclass) {
       if (typeof expression === "string") {
         const endpoint = this.endpoints[expression];
         if (endpoint === undefined) {
-          const m = expression.match(/^service\((?<service>[^\)]*)\).(?<suffix>[^\[]*)/);
+          const m = expression.match(
+            /^(?<fn>[a-z]+)\((?<arg>[^\)]*)\).(?<suffix>[^\[]*)/
+          );
           if (m) {
-            const service = m.groups.service.length === 0 ? this.owner : this.owner.getService(m.groups.service);
-            return service?.endpointForExpression(m.groups.suffix);
+            switch (m.groups.fn) {
+              case "service":
+                const service =
+                  m.groups.arg.length === 0
+                    ? this.owner
+                    : this.owner.getService(m.groups.arg);
+                return service?.endpointForExpression(m.groups.suffix);
+            }
           }
 
           if (from !== undefined) {
@@ -215,7 +223,6 @@ export function EndpointsMixin(superclass) {
      * @param {Endpoint} from to identify endpoint
      * @return {Endpoint?} for a given expression
      */
-    endpointOnDemand(expression, from) {
-    }
+    endpointOnDemand(expression, from) {}
   };
 }
