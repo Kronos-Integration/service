@@ -234,11 +234,7 @@ export class Service extends EndpointsMixin(
    * @return {number} milliseconds before throwing for a long running transition
    */
   timeoutForTransition(transition) {
-    const timeout = this.timeout[transition.name];
-
-    return timeout === undefined
-      ? super.timeoutForTransition(transition)
-      : timeout * 1000;
+    return this.timeout[transition.name] * 1000 || super.timeoutForTransition(transition);
   }
 
   /**
