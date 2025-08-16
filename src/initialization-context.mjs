@@ -168,7 +168,11 @@ export const InitializationContext = LogLevelMixin(
       const sp = this.serviceProvider;
 
       if (type instanceof Function) {
-        return sp.serviceFactories[type.name] || sp.registerServiceFactory(type);
+        const factory = sp.serviceFactories[type.name];
+        if (factory !== undefined) {
+          return factory;
+        }
+        return sp.registerServiceFactory(type);
       }
 
       const factory = sp.serviceFactories[type];
@@ -184,7 +188,7 @@ export const InitializationContext = LogLevelMixin(
       if (this.waitForFactories) {
         try {
           const module = await import(type);
-          if (module.default?.prototype instanceof Service) {
+          if (module.default && module.default.prototype instanceof Service) {
             sp.registerServiceFactory(type, module.default);
             return module.default;
           }
