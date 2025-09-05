@@ -36,7 +36,7 @@
     "lint:typescript": "tsc --allowJs --checkJs --noEmit --resolveJsonModule --target es2024 --lib es2024 -m esnext --module nodenext --moduleResolution nodenext ./src**/*.mjs"
   },
   "dependencies": {
-    "@kronos-integration/endpoint": "^10.1.7",
+    "@kronos-integration/endpoint": "^10.1.8",
     "@kronos-integration/interceptor": "^12.1.9",
     "loglevel-mixin": "^7.2.5",
     "pacc": "^4.9.0",
