@@ -199,7 +199,11 @@ export function EndpointsMixin(superclass) {
                   m.groups.arg.length === 0
                     ? this.owner
                     : this.owner.getService(m.groups.arg);
-                return service?.endpointForExpression(m.groups.suffix);
+
+                return (
+                  service?.endpointForExpression(m.groups.suffix) ||
+                  service?.endpointOnDemand(m.groups.suffix, from)
+                );
             }
           }
 
