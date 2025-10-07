@@ -399,7 +399,7 @@ export class Service extends EndpointsMixin(
    * and then for each attribute decide if we use the default, call a setter function
    * or simply assign the attribute value.
    * @param {Object} config
-   * @return {Set} of modified attributes
+   * @return {Set<string>} of modified attributes
    */
   _configure(config) {
     const modified = new Set();
@@ -425,7 +425,7 @@ export class Service extends EndpointsMixin(
    * If attribute with needsRestart are touched the restartIfRunning method
    * will be called.
    * @param {Object} config
-   * @return {Promise} fillfills when config is applied
+   * @return {Promise<undefined>} fillfills when config is applied
    */
   async configure(config) {
     for (const a of this._configure(config)) {
@@ -435,6 +435,11 @@ export class Service extends EndpointsMixin(
     }
   }
 
+  /**
+   * 
+   * @param {string} key 
+   * @returns {Promise<string|Uint8Array>}
+   */
   async getCredential(key) {
     return this.owner.getCredential(this.name + "." + key, "utf8");
   }
