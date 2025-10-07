@@ -89,8 +89,10 @@ The transitions are:
         *   [Parameters](#parameters-12)
     *   [configure](#configure-1)
         *   [Parameters](#parameters-13)
-    *   [log](#log)
+    *   [getCredential](#getcredential)
         *   [Parameters](#parameters-14)
+    *   [log](#log)
+        *   [Parameters](#parameters-15)
     *   [attributes](#attributes)
     *   [endpoints](#endpoints-2)
 *   [StandaloneServiceProvider](#standaloneserviceprovider)
@@ -375,7 +377,7 @@ or simply assign the attribute value.
 
 *   `config` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 
-Returns **[Set](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Set)** of modified attributes
+Returns **[Set](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Set)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** of modified attributes
 
 ### configure
 
@@ -388,7 +390,15 @@ will be called.
 
 *   `config` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** fillfills when config is applied
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[undefined](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined)>** fillfills when config is applied
+
+### getCredential
+
+#### Parameters
+
+*   `key` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) | [Uint8Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array))>**&#x20;
 
 ### log
 
