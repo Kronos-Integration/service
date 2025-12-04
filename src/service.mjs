@@ -155,12 +155,6 @@ export class Service extends EndpointsMixin(
       Object.defineProperties(this, properties);
     }
 
-    if (process.env.LOGLEVEL) {
-      this.logLevel = config.logLevel = process.env.LOGLEVEL;
-    } else if (process.env.DEBUG) {
-      this.logLevel = config.logLevel = "debug";
-    }
-
     this.createEndpointsFromConfig(config.endpoints, ic);
     this._configure(config);
   }

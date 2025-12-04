@@ -188,46 +188,6 @@ test("service create with logLevel", t => {
   t.is(s2.logLevel, "info");
 });
 
-test("service create with DEBUG=1", t => {
-  process.env.DEBUG = 1;
-
-  const s1 = new Service(
-    {
-      key1: "value1"
-    },
-    ic
-  );
-
-  t.is(s1.logLevel, "debug");
-
-  const s2 = new Service(
-    {
-      key1: "value1",
-      logLevel: "warn"
-    },
-    ic
-  );
-
-  t.is(s2.logLevel, "debug");
-
-  delete process.env.DEBUG;
-});
-
-test("service create with LOGLEVEL=trace", t => {
-  process.env.LOGLEVEL = "trace";
-
-  const s1 = new Service(
-    {
-      key1: "value1"
-    },
-    ic
-  );
-
-  t.is(s1.logLevel, "trace");
-
-  delete process.env.LOGLEVEL;
-});
-
 test("service derived configuration", async t => {
   const s1 = new TestService(
     {
