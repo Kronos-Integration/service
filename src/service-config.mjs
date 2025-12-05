@@ -1,4 +1,3 @@
-import { getAttributes } from "pacc";
 import { Service } from "./service.mjs";
 import { keyValue2Object } from "./util.mjs";
 
@@ -76,17 +75,7 @@ export class ServiceConfig extends Service {
 
         const merged = merge(this.preservedConfigs.get(name), c);
         this.trace(
-          level =>
-            `Preserve config ${name} ${JSON.stringify(
-              getAttributes(
-                Object.fromEntries(
-                  Object.entries(service.attributes).filter(
-                    ([n, a]) => !a.private
-                  )
-                ),
-                service.attributes
-              )
-            )}`
+          level => `Preserve config ${name} ${JSON.stringify(merged)}`
         );
 
         this.preservedConfigs.set(name, merged);
