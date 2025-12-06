@@ -91,8 +91,10 @@ The transitions are:
         *   [Parameters](#parameters-13)
     *   [getCredential](#getcredential)
         *   [Parameters](#parameters-14)
-    *   [log](#log)
+    *   [getCredentials](#getcredentials)
         *   [Parameters](#parameters-15)
+    *   [log](#log)
+        *   [Parameters](#parameters-16)
     *   [attributes](#attributes)
     *   [endpoints](#endpoints-2)
 *   [StandaloneServiceProvider](#standaloneserviceprovider)
@@ -399,6 +401,16 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 *   `key` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) | [Uint8Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array))>**&#x20;
+
+### getCredentials
+
+Retrieve all credential attribute values.
+
+#### Parameters
+
+*   `filter`   (optional, default `(name,attribute)=>attribute.credential`)
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>**&#x20;
 
 ### log
 
