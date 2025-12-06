@@ -1,6 +1,7 @@
 import { defaultLogLevels, LogLevelMixin, makeLogEvent } from "loglevel-mixin";
 import { prepareActions, StateTransitionMixin } from "statetransition-mixin";
 import {
+  attributeIterator,
   prepareAttributesDefinitions,
   getAttributes,
   setAttributes,
@@ -430,12 +431,29 @@ export class Service extends EndpointsMixin(
   }
 
   /**
-   * 
-   * @param {string} key 
+   *
+   * @param {string} key
    * @returns {Promise<string|Uint8Array>}
    */
   async getCredential(key) {
     return this.owner.getCredential(this.name + "." + key, "utf8");
+  }
+
+  /**
+   * Retrieve all credential attribute values.
+   * @returns {Promise<Object>}
+   */
+  async getCredentials(filter = (name, attribute) => attribute.credential) {
+    const credentials = {};
+    for (const [path, attribute] of attributeIterator(
+      this.attributes,
+      filter
+    )) {
+      const name = path.join(".");
+      credentials[name] = await this.getCredential(name);
+    }
+
+    return credentials;
   }
 
   /**
