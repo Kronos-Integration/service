@@ -25,16 +25,14 @@ export class ServiceConfig extends Service {
    * Deliver configuration for a given service.
    * @param {string} name service name
    * @param {Object} config
+   * @returns {Promise<Object>}
    */
   async configFor(name, config) {
-    this.trace(`configFor ${name}`);
-
     await this.start();
 
     const pc = this.preservedConfigs.get(name);
     if (pc !== undefined) {
       config = config === undefined ? pc : merge(config, pc);
-      this.trace(`using preserved config ${name}`);
     }
 
     this.preservedConfigs.set(name, config);
