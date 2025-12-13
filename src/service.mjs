@@ -35,13 +35,6 @@ const ssfDefault = {
  * - log _out_: log events
  * - config _in_: configuration request
  * - command _in_: administrative actions to be executed by the step
- * @param {Object} config
- * @param {string} config.name
- * @param {string} config.logLevel
- * @param {boolean} config.autostart defaults to false
- * @param {string} config.description human readable description
- * @param {Object} config.endpoints will be merged with the build in ones
- * @param {InitializationContext} ic
  *
  * @property {Object} endpoints
  */
@@ -135,6 +128,15 @@ export class Service extends EndpointsMixin(
 
   #description;
 
+  /**
+   * @param {Object} config
+   * @param {string} config.name
+   * @param {string} config.logLevel
+   * @param {boolean} config.autostart defaults to false
+   * @param {string} config.description human readable description
+   * @param {Object} config.endpoints will be merged with the build in ones
+   * @param {InitializationContext} ic
+   */
   constructor(config, ic) {
     super();
 
