@@ -467,7 +467,7 @@ export class Service extends EndpointsMixin(
   async storePersistentCredentials() {
     for (const [path, attribute] of attributeIterator(
       this.attributes,
-      (name, attribute) => attribute.credential && attribute.persistant
+      (name, attribute) => attribute.credential && attribute.persistent
     )) {
       try {
         const name = path.join(".");
