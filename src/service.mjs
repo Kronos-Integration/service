@@ -7,7 +7,8 @@ import {
   setAttributes,
   description_attribute,
   default_attribute,
-  timeout_attribute
+  timeout_attribute,
+  object_attribute
 } from "pacc";
 import { EndpointsMixin } from "./endpoints-mixin.mjs";
 import { InitializationContext } from "./initialization-context.mjs";
@@ -88,6 +89,7 @@ export class Service extends EndpointsMixin(
       get: () => this.logLevel.name
     },
     timeout: {
+      ...object_attribute,
       attributes: {
         start: {
           ...timeout_attribute,
