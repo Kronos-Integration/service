@@ -5,6 +5,7 @@ import {
   prepareAttributesDefinitions,
   getAttributes,
   setAttributes,
+  setAttribute,
   description_attribute,
   default_attribute,
   timeout_attribute,
@@ -245,6 +246,8 @@ export class Service extends EndpointsMixin(
    * Opens all endpoint connections.
    */
   async _start() {
+    await this.storePersistentCredentials();
+
     for (const e of Object.values(this.endpoints)) {
       e.openConnections();
     }
@@ -459,6 +462,25 @@ export class Service extends EndpointsMixin(
     }
 
     return credentials;
+  }
+
+  async storePersistentCredentials() {
+    for (const [path, attribute] of attributeIterator(
+      this.attributes,
+      (name, attribute) => attribute.credential && attribute.persistant
+    )) {
+      try {
+        const name = path.join(".");
+        const credential = await this.getCredential(name);
+
+        if (credential) {
+          this.trace("store credential", name);
+          setAttribute(this, name, credential, attribute);
+        }
+      } catch (err) {
+        this.error(err);
+      }
+    }
   }
 
   /**
