@@ -270,7 +270,7 @@ Emits a serviceStateChanged event to the owner.
 
 #### Parameters
 
-*   `origin` &#x20;
+*   `origin` **any**&#x20;
 *   `oldState` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 *   `newState` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 
