@@ -474,7 +474,7 @@ export class Service extends EndpointsMixin(
         const credential = await this.getCredential(name);
 
         if (credential) {
-          this.trace("store credential", name);
+          this.trace({ message: "store credential", credential: name });
           setAttribute(this, name, credential, attribute);
         }
       } catch (err) {
