@@ -70,13 +70,7 @@ export class ServiceConfig extends Service {
       const service = this.owner.services[name];
       if (service === undefined) {
         delete c.name;
-
-        const merged = merge(this.preservedConfigs.get(name), c);
-        this.trace(
-          level => `Preserve config ${name} ${JSON.stringify(merged)}`
-        );
-
-        this.preservedConfigs.set(name, merged);
+        this.preservedConfigs.set(name, merge(this.preservedConfigs.get(name), c));
       } else {
         return service.configure(c);
       }
