@@ -196,13 +196,14 @@ export class Service extends EndpointsMixin(
   /**
    * Called when the service state changes.
    * Emits a serviceStateChanged event to the owner.
+   * @param {any} origin
    * @param {string} oldState
    * @param {string} newState
    */
   stateChanged(origin, oldState, newState) {
     this.owner.serviceStateChanged(this, oldState, newState);
     this.trace({
-      message: `${this.extendetName}: transitioned from ${oldState} to ${newState}`,
+      message: `${this.extendetName}: ${oldState} -> ${newState}`,
       from: oldState,
       state: newState
     });
