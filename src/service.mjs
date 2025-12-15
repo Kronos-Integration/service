@@ -464,6 +464,9 @@ export class Service extends EndpointsMixin(
     return credentials;
   }
 
+  /**
+   * Load and store persistent credentials in the service attributes.
+   */
   async storePersistentCredentials() {
     for (const [path, attribute] of attributeIterator(
       this.attributes,
@@ -474,7 +477,7 @@ export class Service extends EndpointsMixin(
         const credential = await this.getCredential(name);
 
         if (credential) {
-          this.trace({ message: "store credential", credential: name });
+          this.trace({ message: `store credential ${name}`, credential: name });
           setAttribute(this, name, credential, attribute);
         }
       } catch (err) {
