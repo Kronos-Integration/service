@@ -95,6 +95,7 @@ The transitions are:
         *   [Parameters](#parameters-14)
     *   [getCredentials](#getcredentials)
         *   [Parameters](#parameters-15)
+    *   [storePersistentCredentials](#storepersistentcredentials)
     *   [log](#log)
         *   [Parameters](#parameters-16)
     *   [attributes](#attributes)
@@ -409,6 +410,10 @@ Retrieve all credential attribute values.
 *   `filter`   (optional, default `(name,attribute)=>attribute.credential`)
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>**&#x20;
+
+### storePersistentCredentials
+
+Load and store persistent credentials in the service attributes.
 
 ### log
 
