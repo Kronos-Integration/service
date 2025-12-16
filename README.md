@@ -310,14 +310,14 @@ Closes all endpoint connections.
 Restart action.
 default implementation does a \_stop() and a \_start()
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** fulfills after start
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<any>** fulfills after start
 
 ### restartIfRunning
 
 Restarts if in running mode.
 Otherwise does nothing.
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** resolves when restart is done (or immediate if no restart triggered)
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<any>** resolves when restart is done (or immediate if no restart triggered)
 
 ### toStringAttributes
 
@@ -407,13 +407,15 @@ Retrieve all credential attribute values.
 
 #### Parameters
 
-*   `filter`   (optional, default `(name,attribute)=>attribute.credential`)
+*   `filter` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)**  (optional, default `(name,attribute)=>attribute.credential`)
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>**&#x20;
 
 ### storePersistentCredentials
 
 Load and store persistent credentials in the service attributes.
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[undefined](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined)>**&#x20;
 
 ### log
 
