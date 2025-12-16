@@ -63,19 +63,21 @@ The transitions are:
 *   [defineServiceConsumerProperties](#defineserviceconsumerproperties)
     *   [Parameters](#parameters-6)
 *   [ServiceLogger](#servicelogger)
+    *   [logEntry](#logentry)
+        *   [Parameters](#parameters-7)
     *   [autostart](#autostart-1)
     *   [name](#name-1)
     *   [endpoints](#endpoints-1)
 *   [Service](#service)
-    *   [Parameters](#parameters-7)
+    *   [Parameters](#parameters-8)
     *   [Properties](#properties-1)
     *   [extendetName](#extendetname)
     *   [stateChanged](#statechanged)
-        *   [Parameters](#parameters-8)
-    *   [rejectWrongState](#rejectwrongstate)
         *   [Parameters](#parameters-9)
-    *   [timeoutForTransition](#timeoutfortransition)
+    *   [rejectWrongState](#rejectwrongstate)
         *   [Parameters](#parameters-10)
+    *   [timeoutForTransition](#timeoutfortransition)
+        *   [Parameters](#parameters-11)
     *   [\_start](#_start)
     *   [\_stop](#_stop)
     *   [\_restart](#_restart)
@@ -84,20 +86,20 @@ The transitions are:
     *   [isServiceProvider](#isserviceprovider)
     *   [toString](#tostring)
     *   [toJSONWithOptions](#tojsonwithoptions)
-        *   [Parameters](#parameters-11)
+        *   [Parameters](#parameters-12)
     *   [name](#name-2)
     *   [autostart](#autostart-2)
     *   [\_configure](#_configure)
-        *   [Parameters](#parameters-12)
-    *   [configure](#configure-1)
         *   [Parameters](#parameters-13)
-    *   [getCredential](#getcredential)
+    *   [configure](#configure-1)
         *   [Parameters](#parameters-14)
-    *   [getCredentials](#getcredentials)
+    *   [getCredential](#getcredential)
         *   [Parameters](#parameters-15)
+    *   [getCredentials](#getcredentials)
+        *   [Parameters](#parameters-16)
     *   [storePersistentCredentials](#storepersistentcredentials)
     *   [log](#log)
-        *   [Parameters](#parameters-16)
+        *   [Parameters](#parameters-17)
     *   [attributes](#attributes)
     *   [endpoints](#endpoints-2)
 *   [StandaloneServiceProvider](#standaloneserviceprovider)
@@ -202,6 +204,14 @@ Assign services based on a configuration.
 **Extends Service**
 
 Log receiving service.
+
+### logEntry
+
+#### Parameters
+
+*   `entry` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+
+    *   `entry.severity` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 
 ### autostart
 
