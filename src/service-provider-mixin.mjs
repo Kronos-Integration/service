@@ -9,9 +9,9 @@ import { InitializationContext } from "./initialization-context.mjs";
  * By default a service provider has two build in services
  * 'logger' and 'config'.
  *
- * @param {Function} superclass
- * @param {new(Object,InitializationContext) => serviceLoggerClass} serviceLoggerClass where the logging houtd go
- * @param {new(Object,InitializationContext) => serviceConfigClass} serviceConfigClass where the config comes from
+ * @param {typeof Service} superclass
+ * @param {typeof ServiceLogger} serviceLoggerClass where the logging houtd go
+ * @param {typeof ServiceConfig} serviceConfigClass where the config comes from
  */
 export function ServiceProviderMixin(
   superclass,
@@ -24,6 +24,11 @@ export function ServiceProviderMixin(
     serviceFactories = {};
     /** @typedef {Object} */ services = {};
 
+    /**
+     *
+     * @param {Object} config
+     * @param {InitializationContext} [ic]
+     */
     constructor(config, ic = new InitializationContext()) {
       super(Array.isArray(config) ? config[0] : config, ic);
 
@@ -48,6 +53,11 @@ export function ServiceProviderMixin(
       configService.configure(config);
     }
 
+    /**
+     *
+     * @param {string} name
+     * @param  {...any} args
+     */
     emit(name, ...args) {
       const listeners = this.listeners[name];
       if (listeners) {
@@ -90,7 +100,7 @@ export function ServiceProviderMixin(
     /**
      * Register service or interceptor factories.
      *
-     * @param {[Function|string]} factories
+     * @param {[typeof Service|string]} factories
      */
     async registerFactories(factories) {
       for (let factory of factories) {
@@ -112,8 +122,8 @@ export function ServiceProviderMixin(
      * Registers a interceptor factory for later use by
      * @see {instantiateInterceptor}.
      *
-     * @param {new() => factory} factory
-     * @returns {new() => factory} factory
+     * @param {typeof Interceptor} factory
+     * @returns {typeof Interceptor} factory
      */
     registerInterceptorFactory(factory) {
       this.interceptorFactories[factory.name] = factory;
@@ -121,6 +131,10 @@ export function ServiceProviderMixin(
       return factory;
     }
 
+    /**
+     *
+     * @param {typeof Interceptor} factory
+     */
     unregisterInterceptorFactory(factory) {
       delete this.interceptorFactories[factory.name];
     }
@@ -140,25 +154,51 @@ export function ServiceProviderMixin(
       }
     }
 
+    /**
+     *
+     * @param {Service} service
+     * @param {string} oldState
+     * @param {string} newState
+     */
     serviceStateChanged(service, oldState, newState) {
       this.emit("serviceStateChanged", service, oldState, newState);
     }
 
+    /**
+     *
+     * @param {typeof Service} factory
+     * @returns {Promise<typeof Service>}
+     */
     async registerServiceFactory(factory) {
       this.serviceFactories[factory.name] = factory;
       this.emit("serviceFactoryRegistered", factory);
       return factory;
     }
 
+    /**
+     *
+     * @param {typeof Service} factory
+     * @returns {Promise<any>}
+     */
     async unregisterServiceFactory(factory) {
       delete this.serviceFactories[factory.name];
     }
 
+    /**
+     *
+     * @param {Service} service
+     * @returns {Promise<Service>}
+     */
     async registerService(service) {
       this.services[service.name] = service;
       return service;
     }
 
+    /**
+     *
+     * @param {string} serviceName
+     * @returns {Promise<any>}
+     */
     async unregisterService(serviceName) {
       const service = this.services[serviceName];
 
