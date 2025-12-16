@@ -449,6 +449,7 @@ export class Service extends EndpointsMixin(
 
   /**
    * Retrieve all credential attribute values.
+   * @param {Function} filter
    * @returns {Promise<Object>}
    */
   async getCredentials(filter = (name, attribute) => attribute.credential) {
@@ -466,6 +467,7 @@ export class Service extends EndpointsMixin(
 
   /**
    * Load and store persistent credentials in the service attributes.
+   * @return {Promise<undefined>}
    */
   async storePersistentCredentials() {
     for (const [path, attribute] of attributeIterator(
