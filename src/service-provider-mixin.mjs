@@ -1,3 +1,4 @@
+import { prepareAttributesDefinitions, version_attribute } from "pacc";
 import { Interceptor } from "@kronos-integration/interceptor";
 import { Service } from "./service.mjs";
 import { ServiceLogger } from "./service-logger.mjs";
@@ -19,6 +20,13 @@ export function ServiceProviderMixin(
   serviceConfigClass = ServiceConfig
 ) {
   return class ServiceProvider extends superclass {
+    static attributes = prepareAttributesDefinitions(
+      {
+        version: version_attribute
+      },
+      superclass.attributes
+    );
+
     listeners = {};
     interceptorFactories = {};
     serviceFactories = {};
