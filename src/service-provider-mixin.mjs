@@ -9,6 +9,7 @@ import { InitializationContext } from "./initialization-context.mjs";
  * By default a service provider has two build in services
  * 'logger' and 'config'.
  *
+ * @param {Function} superclass
  * @param {new(Object,InitializationContext) => serviceLoggerClass} serviceLoggerClass where the logging houtd go
  * @param {new(Object,InitializationContext) => serviceConfigClass} serviceConfigClass where the config comes from
  */
@@ -21,7 +22,7 @@ export function ServiceProviderMixin(
     listeners = {};
     interceptorFactories = {};
     serviceFactories = {};
-    services = {};
+    /** @typedef {Object} */ services = {};
 
     constructor(config, ic = new InitializationContext()) {
       super(Array.isArray(config) ? config[0] : config, ic);
@@ -93,7 +94,7 @@ export function ServiceProviderMixin(
      */
     async registerFactories(factories) {
       for (let factory of factories) {
-        if(typeof factory === 'string') {
+        if (typeof factory === "string") {
           const module = await import(factory);
           factory = new module.default();
         }
@@ -171,10 +172,21 @@ export function ServiceProviderMixin(
         : Object.keys(this.services).sort();
     }
 
+    /**
+     *
+     * @param {string} name
+     * @returns {Service|undefined}
+     */
     getService(name) {
       return this.services?.[name];
     }
 
+    /**
+     *
+     * @param {Object} config
+     * @param {string} config.name
+     * @returns {Promise<Service>}
+     */
     async declareService(config) {
       const name = config.name;
       const services = await this.declareServices({ [name]: config });
@@ -223,7 +235,7 @@ export function ServiceProviderMixin(
 
     /**
      * Stop all services.
-     * @return {Promise} that resolves when all services are stopped
+     * @return {Promise<any>} that resolves when all services are stopped
      */
     async _stop() {
       await Promise.all(
