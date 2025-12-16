@@ -133,11 +133,11 @@ export class Service extends EndpointsMixin(
 
   /**
    * @param {Object} config
-   * @param {string} config.name
-   * @param {string} config.logLevel
-   * @param {boolean} config.autostart defaults to false
-   * @param {string} config.description human readable description
-   * @param {Object} config.endpoints will be merged with the build in ones
+   * @param {string} [config.name]
+   * @param {string} [config.logLevel]
+   * @param {boolean} [config.autostart] defaults to false
+   * @param {string} [config.description] human readable description
+   * @param {Object} [config.endpoints] will be merged with the build in ones
    * @param {InitializationContext} ic
    */
   constructor(config, ic) {
@@ -265,7 +265,7 @@ export class Service extends EndpointsMixin(
   /**
    * Restart action.
    * default implementation does a _stop() and a _start()
-   * @return {Promise} fulfills after start
+   * @return {Promise<any>} fulfills after start
    */
   async _restart() {
     await this._stop();
@@ -275,7 +275,7 @@ export class Service extends EndpointsMixin(
   /**
    * Restarts if in running mode.
    * Otherwise does nothing.
-   * @returns {Promise} resolves when restart is done (or immediate if no restart triggered)
+   * @returns {Promise<any>} resolves when restart is done (or immediate if no restart triggered)
    */
   async restartIfRunning() {
     if (this.state === "running") {
