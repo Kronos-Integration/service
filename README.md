@@ -403,7 +403,7 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 
 ### getCredentials
 
-Retrieve all credential attribute values.
+Retrieve all (filtered) credential attribute values.
 
 #### Parameters
 
