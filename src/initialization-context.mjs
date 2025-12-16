@@ -162,7 +162,7 @@ export const InitializationContext = LogLevelMixin(
 
     /**
      *
-     * @param {string|(new() => type)} type name if type
+     * @param {string|typeof Service} type name if type
      */
     async getServiceFactory(type) {
       const sp = this.serviceProvider;
