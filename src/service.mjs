@@ -448,7 +448,7 @@ export class Service extends EndpointsMixin(
   }
 
   /**
-   * Retrieve all credential attribute values.
+   * Retrieve all (filtered) credential attribute values.
    * @param {Function} filter
    * @returns {Promise<Object>}
    */
