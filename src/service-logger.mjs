@@ -27,6 +27,11 @@ export class ServiceLogger extends Service {
     return e;
   }
 
+  /**
+   * 
+   * @param {Object} entry 
+   * @param {string} entry.severity
+   */
   async logEntry(entry)
   {
     if (entry.severity === 'error') {
