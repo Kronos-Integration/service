@@ -31,6 +31,7 @@ export function ServiceProviderMixin(
       return {
         ...super.endpoints,
         info: {
+          in: true,
           receive: "info"
         }
       };

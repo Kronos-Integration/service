@@ -63,7 +63,7 @@ test("outEndpoints", t => {
 
   t.truthy(o.endpoints.log.send);
 
-  t.deepEqual(o.outEndpoints, [o.endpoints.log, o.endpoints.info]);
+  t.deepEqual(o.outEndpoints, [o.endpoints.log]);
 });
 
 test("inEndpoints", t => {
