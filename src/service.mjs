@@ -391,7 +391,7 @@ export class Service extends EndpointsMixin(
    * @return {boolean} false
    */
   get autostart() {
-    return false;
+    return this.isServiceProvider;
   }
 
   /**
