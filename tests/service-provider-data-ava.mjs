@@ -31,8 +31,12 @@ class MyInitializationContext extends InitializationContext {
 test("service provider declare services", async t => {
   const sp = new StandaloneServiceProvider({}, new MyInitializationContext());
 
+  sp.version = "1.2.3";
+
   await sp.declareServices(data);
 
+  t.is(sp.info().version,"1.2.3");
+  
   t.is(Object.values(sp.services).length, 12);
 
   t.is(sp.services.logger.name, "logger");

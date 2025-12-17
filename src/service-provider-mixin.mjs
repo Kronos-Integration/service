@@ -27,6 +27,15 @@ export function ServiceProviderMixin(
       superclass.attributes
     );
 
+    static get endpoints() {
+      return {
+        ...super.endpoints,
+        info: {
+          receive: "info"
+        }
+      };
+    }
+
     listeners = {};
     interceptorFactories = {};
     serviceFactories = {};
@@ -103,6 +112,16 @@ export function ServiceProviderMixin(
      */
     get isServiceProvider() {
       return true;
+    }
+
+    info() {
+      return this.toJSONWithOptions({
+        includeRuntimeInfo: false,
+        includeDefaults: true,
+        includeName: true,
+        includeConfig: true,
+        includePrivate: false
+      });
     }
 
     /**

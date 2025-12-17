@@ -26,7 +26,7 @@ const ic = new InitializationContext(o);
 
 o.addEndpoint(new SendEndpoint("s1"));
 o.addEndpoint(new ReceiveEndpoint("r1"));
-const s1 = new Service({ name: "s1" }, ic, 's1');
+const s1 = new Service({ name: "s1" }, ic, "s1");
 o.registerService(s1);
 
 function eet(t, model, expression, from, name) {
@@ -63,14 +63,14 @@ test("outEndpoints", t => {
 
   t.truthy(o.endpoints.log.send);
 
-  t.deepEqual(o.outEndpoints, [o.endpoints.log]);
+  t.deepEqual(o.outEndpoints, [o.endpoints.log, o.endpoints.info]);
 });
 
 test("inEndpoints", t => {
   const o = new Owner();
   t.deepEqual(
     o.inEndpoints.map(e => e.name),
-    ["config"]
+    ["config", "info"]
   );
 });
 
