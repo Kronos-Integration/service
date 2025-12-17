@@ -10,6 +10,7 @@ import {
 test("basics", t => {
   const ssm = new StandaloneServiceProvider();
   t.true(ssm.isServiceProvider);
+  t.true(ssm.autostart);
   t.true(ssm.toJSON().serviceProvider);
 });
 

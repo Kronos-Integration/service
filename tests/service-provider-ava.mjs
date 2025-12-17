@@ -6,6 +6,10 @@ import { InitializationContext } from "@kronos-integration/service";
 test("service provider additional service", async t => {
   const sp = new TestServiceProvider();
   const ic = new InitializationContext(sp);
+
+  t.true(sp.isServiceProvider);
+  t.true(sp.autostart);
+
   await sp.start();
   await sp.registerService(new TestService({ name: "test1" }, ic));
 
