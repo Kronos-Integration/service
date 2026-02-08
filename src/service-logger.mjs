@@ -1,15 +1,14 @@
-import { Service } from './service.mjs';
+import { Service } from "./service.mjs";
 
 /**
  * Log receiving service.
  */
 export class ServiceLogger extends Service {
-
   /**
    * @return {string} 'logger'
    */
   static get name() {
-    return 'logger';
+    return "logger";
   }
 
   static get description() {
@@ -21,23 +20,36 @@ export class ServiceLogger extends Service {
    * @return {Object} predefined endpoints
    */
   static get endpoints() {
-    const e = {...super.endpoints};
-    e.log.connected = 'self';
-    e.log.receive = 'logEntry';
+    const e = { ...super.endpoints };
+    e.log.connected = "self";
+    e.log.receive = "logEntry";
     return e;
   }
 
   /**
-   * 
-   * @param {Object} entry 
+   *
+   * @param {Object} entry
    * @param {string} entry.severity
    */
-  async logEntry(entry)
-  {
-    if (entry.severity === 'error') {
-      console.error(entry);
-    } else {
-      console.log(entry);
+  async logEntry(entry) {
+    switch (entry.severity) {
+      case "error":
+        console.error(entry);
+        break;
+      case "warn":
+        console.warn(entry);
+        break;
+      case "trace":
+        console.trace(entry);
+        break;
+      case "info":
+        console.info(entry);
+        break;
+      case "debug":
+        console.debug(entry);
+        break;
+      default:
+        console.log(entry);
     }
   }
 
@@ -50,6 +62,6 @@ export class ServiceLogger extends Service {
   }
 
   get name() {
-    return 'logger';
+    return "logger";
   }
 }
