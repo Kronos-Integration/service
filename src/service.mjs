@@ -361,9 +361,7 @@ export class Service extends EndpointsMixin(
 
     for (const [endpointName, ep] of Object.entries(this.endpoints)) {
       const add = ep => {
-        if (json.endpoints === undefined) {
-          json.endpoints = {};
-        }
+        json.endpoints ??= {};
         json.endpoints[endpointName] = ep.toJSONWithOptions(options);
       };
       if (ep.isDefault) {
