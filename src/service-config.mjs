@@ -115,11 +115,7 @@ export function merge(a, b) {
     return [...a, b];
   }
 
-  if (Array.isArray(b)) {
-    return b;
-  }
-
-  if (b.constructor?.name === "Buffer") {
+  if (b.constructor?.name === "Buffer" || Array.isArray(b)) {
     return b;
   }
 
