@@ -35,7 +35,7 @@ test("service provider declare services", async t => {
 
   await sp.declareServices(data);
 
-  t.is(sp.info().version,"1.2.3");
+  t.is(sp.serviceInfo().version,"1.2.3");
   
   t.is(Object.values(sp.services).length, 12);
 

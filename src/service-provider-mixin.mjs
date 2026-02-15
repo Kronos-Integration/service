@@ -32,7 +32,7 @@ export function ServiceProviderMixin(
         ...super.endpoints,
         info: {
           in: true,
-          receive: "info"
+          receive: "serviceInfo"
         }
       };
     }
@@ -115,7 +115,7 @@ export function ServiceProviderMixin(
       return true;
     }
 
-    info() {
+    serviceInfo() {
       return this.toJSONWithOptions({
         includeRuntimeInfo: false,
         includeDefaults: true,
