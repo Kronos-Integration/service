@@ -89,7 +89,7 @@ export const InitializationContext = LogLevelMixin(
           new DummyReceiveEndpoint(endpoint.name, endpoint.owner)
         );
 
-        this.addOutstandingEndpointConnection(endpoint, connected);
+      this.outstandingEndpointConnections.set(endpoint, connected);
       }
     }
 
@@ -112,15 +112,6 @@ export const InitializationContext = LogLevelMixin(
       if (from !== undefined) {
         return from.owner.endpointForExpression(expression);
       }
-    }
-
-    /**
-     *
-     * @param {Endpoint} endpoint
-     * @param {string} connected
-     */
-    addOutstandingEndpointConnection(endpoint, connected) {
-      this.outstandingEndpointConnections.set(endpoint, connected);
     }
 
     /**
