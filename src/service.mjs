@@ -84,6 +84,7 @@ export class Service extends EndpointsMixin(
     description: description_attribute,
     logLevel: {
       ...default_attribute,
+      name: "logLevel",
       description: "logging level",
       values: Object.keys(defaultLogLevels),
       default: defaultLogLevels.info,
@@ -91,6 +92,7 @@ export class Service extends EndpointsMixin(
     },
     timeout: {
       ...object_attribute,
+      name: "timeout",
       attributes: {
         start: {
           ...timeout_attribute,
@@ -450,7 +452,7 @@ export class Service extends EndpointsMixin(
    * @param {Function} filter
    * @returns {Promise<Object>}
    */
-  async getCredentials(filter = (name, attribute) => attribute.credential) {
+  async getCredentials(filter = attribute => attribute.credential) {
     const credentials = {};
     for (const [path, attribute] of attributeIterator(
       this.attributes,
@@ -470,7 +472,7 @@ export class Service extends EndpointsMixin(
   async storePersistentCredentials() {
     for (const [path, attribute] of attributeIterator(
       this.attributes,
-      (name, attribute) => attribute.credential && attribute.persistent
+      attribute => attribute.credential && attribute.persistent
     )) {
       try {
         const name = path.join(".");
