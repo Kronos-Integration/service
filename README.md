@@ -416,7 +416,7 @@ Retrieve all (filtered) credential attribute values.
 
 #### Parameters
 
-*   `filter` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)**  (optional, default `(name,attribute)=>attribute.credential`)
+*   `filter` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)**  (optional, default `attribute=>attribute.credential`)
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>**&#x20;
 
