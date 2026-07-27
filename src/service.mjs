@@ -96,16 +96,19 @@ export class Service extends EndpointsMixin(
       attributes: {
         start: {
           ...timeout_attribute,
+          name: "start",
           description: "service start timeout",
           default: 20
         },
         stop: {
           ...timeout_attribute,
+          name: "stop",
           description: "service stop timeout",
           default: 20
         },
         restart: {
           ...timeout_attribute,
+          name: "restart",
           description: "service restart timeout",
           default: 20
         }
