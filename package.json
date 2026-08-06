@@ -34,10 +34,10 @@
     "lint:docs": "documentation lint ./src**/*.mjs"
   },
   "dependencies": {
-    "@kronos-integration/endpoint": "^11.1.7",
-    "@kronos-integration/interceptor": "^13.3.6",
-    "loglevel-mixin": "^7.2.11",
-    "pacc": "^11.0.2",
+    "@kronos-integration/endpoint": "^11.1.8",
+    "@kronos-integration/interceptor": "^13.3.7",
+    "loglevel-mixin": "^7.2.12",
+    "pacc": "^11.0.3",
     "statetransition-mixin": "^8.1.4"
   },
   "devDependencies": {
