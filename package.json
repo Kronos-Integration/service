@@ -37,7 +37,7 @@
     "@kronos-integration/endpoint": "^11.1.8",
     "@kronos-integration/interceptor": "^13.3.7",
     "loglevel-mixin": "^7.2.12",
-    "pacc": "^11.1.2",
+    "pacc": "^11.2.0",
     "statetransition-mixin": "^8.1.4"
   },
   "devDependencies": {
