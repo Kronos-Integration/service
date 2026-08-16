@@ -183,7 +183,7 @@ export class Service extends EndpointsMixin(
   }
 
   get description() {
-    return this.#description || this.constructor.description;
+    return this.#description ?? this.constructor.description;
   }
 
   set description(desc) {
