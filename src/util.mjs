@@ -4,19 +4,21 @@ export function keyValue2Object(key, value) {
 
   let c = config;
 
-  do {
+  while (true) {
     const slot = path.shift();
+
+    if (slot === "constructor" || slot === '__proto__') {
+      return config;
+    }
+
     if (path.length === 0) {
       c[slot] = value;
-      break;
+
+      return config;
     }
 
-    if (c[slot] === undefined) {
-      c[slot] = {};
-    }
+    c[slot] ??= {};
 
     c = c[slot];
-  } while (true);
-
-  return config;
+  }
 }

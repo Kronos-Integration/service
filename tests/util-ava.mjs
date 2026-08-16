@@ -3,6 +3,7 @@ import { keyValue2Object } from "../src/util.mjs";
 
 function kvot(t, k, v, e) {
   t.deepEqual(keyValue2Object(k, v), e);
+  t.is(Object.ppBullseye, undefined);
 }
 
 kvot.title = (providedTitle = "", k, v, o) =>
@@ -10,3 +11,12 @@ kvot.title = (providedTitle = "", k, v, o) =>
 
 test(kvot, "a.b", 1, { a: { b: 1 } });
 test(kvot, "a", 1, { a: 1 });
+
+test(kvot, "constructor.prototype.ppBullseye", "vulnerable_test_value", {});
+test(kvot, "constructor.__proto__.ppBullseye", "vulnerable_test_value", {});
+test(kvot, "prototype.ppBullseye", "vulnerable_test_value", {
+  prototype: { ppBullseye:"vulnerable_test_value"}
+});
+test(kvot, "__proto__.ppBullseye", "vulnerable_test_value", {
+  __proto__: { ppBullseye:"vulnerable_test_value"}
+});
