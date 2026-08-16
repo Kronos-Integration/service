@@ -252,8 +252,7 @@ export const InitializationContext = LogLevelMixin(
       config.name = name;
 
       // service factory not present? wait until one arrives
-      const type = config.type || config.name;
-
+      const type = config.type ?? config.name;
       const clazz = await this.getServiceFactory(type);
 
       if (clazz) {
