@@ -34,9 +34,9 @@
     "lint:docs": "documentation lint ./src**/*.mjs"
   },
   "dependencies": {
-    "@kronos-integration/endpoint": "^11.1.10",
+    "@kronos-integration/endpoint": "^11.2.0",
     "@kronos-integration/interceptor": "^13.3.7",
-    "loglevel-mixin": "^7.2.12",
+    "loglevel-mixin": "^7.3.0",
     "pacc": "^11.2.2",
     "statetransition-mixin": "^8.1.4"
   },
@@ -47,7 +47,7 @@
     "semantic-release": "^25.0.9"
   },
   "engines": {
-    "node": ">=26.2.0"
+    "node": ">=26.7.0"
   },
   "repository": {
     "type": "git",
