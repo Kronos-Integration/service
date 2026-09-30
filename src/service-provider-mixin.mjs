@@ -289,7 +289,7 @@ export function ServiceProviderMixin(
     }
 
     /**
-     * Start all registered services which hanving autostart set.
+     * Start all registered services having autostart set.
      */
     async _start() {
       await super._start();
