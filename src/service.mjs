@@ -7,7 +7,7 @@ import {
   setAttributes,
   setAttribute,
   description_attribute,
-  default_attribute,
+  enum_string_attribute_writable,
   timeout_attribute,
   object_attribute
 } from "pacc";
@@ -83,10 +83,10 @@ export class Service extends EndpointsMixin(
   static attributes = prepareAttributesDefinitions({
     description: description_attribute,
     logLevel: {
-      ...default_attribute,
+      ...enum_string_attribute_writable,
       name: "logLevel",
       description: "logging level",
-      values: Object.keys(defaultLogLevels),
+      values: new Set(Object.keys(defaultLogLevels)),
       default: defaultLogLevels.info,
       get: () => this.logLevel.name
     },
