@@ -8,7 +8,7 @@ import {
   setAttribute,
   description_attribute,
   enum_string_attribute_writable,
-  timeout_attribute,
+  timeout_attribute_writable,
   object_attribute
 } from "pacc";
 import { EndpointsMixin } from "./endpoints-mixin.mjs";
@@ -93,26 +93,17 @@ export class Service extends EndpointsMixin(
     timeout: {
       ...object_attribute,
       name: "timeout",
-      attributes: {
-        start: {
-          ...timeout_attribute,
-          name: "start",
-          description: "service start timeout",
-          default: 20
-        },
-        stop: {
-          ...timeout_attribute,
-          name: "stop",
-          description: "service stop timeout",
-          default: 20
-        },
-        restart: {
-          ...timeout_attribute,
-          name: "restart",
-          description: "service restart timeout",
-          default: 20
-        }
-      }
+      attributes: Object.fromEntries(
+        ["start", "stop", "restart"].map(name => [
+          name,
+          {
+            ...timeout_attribute_writable,
+            name,
+            description: `service ${name} timeout`,
+            default: 20
+          }
+        ])
+      )
     }
   });
 
