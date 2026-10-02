@@ -1,4 +1,4 @@
-import { prepareAttributesDefinitions } from "pacc";
+import { prepareAttributesDefinitions, default_attribute_writable } from "pacc";
 import { Service } from "@kronos-integration/service";
 import { setTimeout } from "timers/promises";
 
@@ -34,10 +34,15 @@ export class TestService extends Service {
     return Object.assign(
       prepareAttributesDefinitions({
         key3: {
+          ...default_attribute_writable,
+          name: "key3",
           needsRestart: true,
           private: true
         },
-        key4: {}
+        key4: {
+          ...default_attribute_writable,
+          name: "key4"
+        }
       }),
       Service.attributes
     );

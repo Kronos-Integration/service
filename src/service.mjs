@@ -1,15 +1,22 @@
 import { defaultLogLevels, LogLevelMixin, makeLogEvent } from "loglevel-mixin";
 import { prepareActions, StateTransitionMixin } from "statetransition-mixin";
 import {
+  addType,
+  extract,
   attributeIterator,
   prepareAttributesDefinitions,
-  getAttributes,
   setAttributes,
   setAttribute,
-  description_attribute,
+  description_attribute_writable,
+  name_attribute,
   enum_string_attribute_writable,
   timeout_attribute_writable,
-  object_attribute
+  type_attribute,
+  state_attribute,
+  object_attribute,
+  default_collection_attribute,
+  boolean_attribute,
+  SCOPE_RUNTIME
 } from "pacc";
 import { EndpointsMixin } from "./endpoints-mixin.mjs";
 import { InitializationContext } from "./initialization-context.mjs";
@@ -81,14 +88,29 @@ export class Service extends EndpointsMixin(
    * @return {Object}
    */
   static attributes = prepareAttributesDefinitions({
-    description: description_attribute,
+    name: name_attribute,
+    description: description_attribute_writable,
     logLevel: {
       ...enum_string_attribute_writable,
       name: "logLevel",
       description: "logging level",
       values: new Set(Object.keys(defaultLogLevels)),
       default: defaultLogLevels.info,
+      scope: SCOPE_RUNTIME,
       get: () => this.logLevel.name
+    },
+    state: {
+      ...state_attribute,
+      scope: SCOPE_RUNTIME
+    },
+    type: type_attribute,
+    isServiceProvider: {
+      ...boolean_attribute,
+      skipEmpty: true,
+      skipDefault: true,
+      default: false,
+      name: "isServiceProvider",
+      externalName: "serviceProvider"
     },
     timeout: {
       ...object_attribute,
@@ -104,8 +126,17 @@ export class Service extends EndpointsMixin(
           }
         ])
       )
+    },
+    endpoints: {
+      ...default_collection_attribute,
+      name: "endpoints"
+      //  type: "Endpoint"
     }
   });
+
+  static {
+    addType(this);
+  }
 
   /**
    * Definition of the predefined endpoints.
@@ -326,34 +357,27 @@ export class Service extends EndpointsMixin(
    * @return {Object} json representation
    */
   toJSONWithOptions(options) {
-    const json = {
-      type: this.type
-    };
+    const json = extract(this, {
+      externalNames: true,
+      filter: attribute => {
+        if (attribute.scope === SCOPE_RUNTIME) {
+          return options.includeRuntimeInfo;
+        }
+        if (attribute.name === "name") {
+          return options.includeName;
+        }
+        if (attribute.name === "type") {
+          return true;
+        }
 
-    if (this.isServiceProvider) {
-      json.serviceProvider = true;
-    }
-
-    if (options.includeName) {
-      json.name = this.name;
-    }
-
-    if (options.includeRuntimeInfo) {
-      json.state = this.state;
-      json.logLevel = this.logLevel;
-    }
-
-    if (options.includeConfig) {
-      let atts = getAttributes(this, this.attributes);
-
-      if (!options.includePrivate) {
-        atts = Object.fromEntries(
-          Object.entries(atts).filter(([k, v]) => !v.private)
+        return (
+          options.includeConfig &&
+          (options.includePrivate || !attribute.private)
         );
       }
+    });
 
-      Object.assign(json, atts);
-    }
+    // console.log("JSON", options, json);
 
     for (const [endpointName, ep] of Object.entries(this.endpoints)) {
       const add = ep => {
