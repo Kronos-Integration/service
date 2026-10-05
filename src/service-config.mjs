@@ -123,6 +123,7 @@ export function merge(a, b) {
     case "function":
     case "string":
     case "number":
+    case "bigint":
     case "boolean":
       return b;
     case "object":
